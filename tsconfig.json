@@ -14,7 +14,8 @@
       "@/assets/*": ["./assets/*"],
       "@/components/*": ["./components/*"],
       "@/pages/*": ["./pages/*"],
-      "@/routes/*": ["./routes/*"]
+      "@/routes/*": ["./routes/*"],
+      "@/data/*": ["./data/*"]
     },
 
     /* Bundler mode */

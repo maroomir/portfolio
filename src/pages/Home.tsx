@@ -1,16 +1,20 @@
 import { Typewriter } from "react-simple-typewriter";
 import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
+import Button from "@/components/Button";
+import data from "@/data/data.json";
 
 function Home() {
+  const { home } = data;
   const navigate = useNavigate();
 
   return (
     <Container>
-      <Greeting>👋 안녕하세요!<br />개발자 Maroomir Yoon 입니다.</Greeting>
+      <h1>{home.name}</h1>
+      <h2>{home.bio}</h2>
       <TypeEffect>
         <Typewriter 
-          words={["Robot Engineer", "AI Engineer", "Equipment Developer", "Machine Vision Developer"]}
+          words={home.Keywords}
           loop={0}
           cursor
           cursorStyle="|"
@@ -29,32 +33,13 @@ export default Home
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100vh;+
   align-items: center;
   justify-content: center;
   gap: 2rem;
 `;
 
-const Greeting = styled.h1`
-  font-size: 2.5rem;
-  font-wieght: bold;
-`;
-
 const TypeEffect = styled.h2`
   font-size: 1.5rem;
   color: #0070f3;
-`;
-
-const Button = styled.button`
-  padding: 0.6rem 1.4rem;
-  font-size: 1rem;
-  background-color: #0070f3;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #0051b3;
-  }
 `;

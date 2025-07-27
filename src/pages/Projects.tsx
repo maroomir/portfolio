@@ -1,19 +1,9 @@
 import styled from "@emotion/styled";
-
-const projects = [
-  {
-    title: 'AI 포트폴리오 웹사이트',
-    description: 'React, Emotion, TypeScript, Vite로 개발한 개인 포트폴리오',
-    link: 'https://github.com/maroomir/portfolio',
-  },
-  {
-    title: 'Machine Vision 모음집',
-    description: 'Cognex, Matrix 등 공장용 머신비전 솔루션을 활용한 개인 개발용 라이브러리 모음집',
-    link: 'https://github.com/maroomir/YoonFactory',
-  }
-];
+import data from "@/data/data.json";
 
 function Projects() {
+  const { projects } = data;
+
   return (
     <Section>
       <Title>My Projects</Title>
@@ -22,7 +12,7 @@ function Projects() {
           <Card key={index}>
             <h3>{project.title}</h3>
             <p>{project.description}</p>
-            <a href={project.link} target="_blank" rel="noopener noreferrer">
+            <a href={project.release.link} target="_blank" rel="noopener noreferrer">
               🔗 GitHub 보기
             </a>
           </Card>

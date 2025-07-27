@@ -1,28 +1,34 @@
 import styled from "@emotion/styled";
+import data from "@/data/data.json"
 
 export default function About() {
+  const { about } = data
   return (
     <Section>
-      <Title>About Me</Title>
+      <h1>About Me</h1>
       <Content>
-        <Intro>
-          안녕하세요! 저는 <strong>Maroomir Yoon</strong>입니다.
-          <br />
-          저는 뭐든 배우면 먼저 만들어보는걸 좋아하는
-          <strong> 도전적인 개발자</strong>입니다.
-        </Intro>
-
-        <SubTitle>기술 스택</SubTitle>
+        <h2>기술 스택</h2>
         <TechList>
-          <li>🟦 C / C++</li>
-          <li>⚛️ C# </li>
-          <li>🎨 Python / Pytorch </li>
+          {about.languages.map((lang) => (
+            <li key={lang}>💻 {lang}</li>
+          ))}
+          {about.skills.map((skill) => (
+            <li key={skill}>🛠️ {skill}</li>
+          ))}
         </TechList>
-
-        <SubTitle>관심 분야</SubTitle>
-        <Paragraph>
-          작성중입니다
-        </Paragraph>
+        <h2>기술 이력</h2>
+        <ResumeList>
+          {about.resume.map((item, idx) => (
+            <ResumeCard key={idx}>
+              <Company>{item.company}</Company>
+              <Department>{item.department}</Department>
+              <Role>{item.rules}</Role>
+              <Period>
+                {item.period[0]} ~ {item.period[1]}
+              </Period>
+            </ResumeCard>
+          ))}
+        </ResumeList>
       </Content>
     </Section>
   );
@@ -34,32 +40,10 @@ const Section = styled.section`
   margin: 0 auto;
 `;
 
-const Title = styled.h2`
-  font-size: 2rem;
-  text-align: center;
-  margin-bottom: 2rem;
-`;
-
-const SubTitle = styled.h3`
-  font-size: 1.25rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-  color: #333;
-`;
-
 const Content = styled.div`
   line-height: 1.8;
   font-size: 1rem;
   color: #444;
-`;
-
-const Intro = styled.p`
-  font-size: 1.1rem;
-  margin-bottom: 2rem;
-`;
-
-const Paragraph = styled.p`
-  margin-bottom: 1rem;
 `;
 
 const TechList = styled.ul`
@@ -71,4 +55,46 @@ const TechList = styled.ul`
     position: relative;
     padding-left: 1.2rem;
   }
+`;
+
+const ResumeList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+`;
+
+const ResumeCard = styled.div`
+  background: linear-gradient(90deg, #e0eafc 0%, #cfdef3 100%);
+  border-radius: 1rem;
+  box-shadow: 0 4px 16px rgba(100, 100, 200, 0.08);
+  padding: 1.5rem 2rem;
+  transition: transform 0.2s;
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 24px rgba(100, 100, 200, 0.15);
+  }
+`;
+
+const Company = styled.h3`
+  margin: 0;
+  font-size: 1.3rem;
+  color: #2a5298;
+`;
+
+const Department = styled.div`
+  font-weight: 500;
+  color: #444;
+  margin-bottom: 0.3rem;
+`;
+
+const Role = styled.div`
+  font-size: 1.05rem;
+  color: #555;
+  margin-bottom: 0.5rem;
+`;
+
+const Period = styled.div`
+  font-size: 0.95rem;
+  color: #888;
 `;

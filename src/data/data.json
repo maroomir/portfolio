@@ -1,0 +1,87 @@
+{
+  "home": {
+    "name": "윤철중",
+    "bio": "하고싶은게 생기면 무작정 개발부터 시작해보는\n호기심 많은 영상처리 개발자",
+    "Keywords": [
+      "Robot Engineer",
+      "AI Engineer",
+      "Factory Automation Developer",
+      "Machine Vision Developer"
+    ]
+  },
+  "about": {
+    "skills": [
+      "ROS2",
+      "Linux",
+      "Tizen",
+      "Pytorch",
+      "WPF",
+      "Mono",
+      "MFC",
+      "OpenCV",
+      "Cognex",
+      "Matrox",
+      "React"
+    ],
+    "languages": [
+      "C++",
+      "C",
+      "C#",
+      "Python",
+      "Java",
+      "Typescript"
+    ],
+    "resume": [
+      {
+        "company": "탑엔지니어링",
+        "department": "기술개발팀",
+        "rules": "산업용 Vision Software 개발자",
+        "period": [
+          "2013/12",
+          "2017/03"
+        ]
+      }
+    ]
+  },
+  "projects": [
+    {
+      "name": "Portfolio",
+      "title": "포트폴리오 웹사이트",
+      "description": "React, Emotion, TypeScript로 개발한 개인 포트폴리오 소개 사이트",
+      "ability": {
+        "language": "Typescript",
+        "framework": [
+          "Node.js",
+          "React",
+          "Vite",
+          "emotion"
+        ]
+      },
+      "release": {
+        "date": "2025/06",
+        "status": "public",
+        "link": "https://github.com/yourname/portfolio"
+      }
+    },
+    {
+      "name": "Mobile wedding invitation",
+      "title": "결혼식 청첩장 사이트",
+      "description": "React, Emotion, TypeScript로 개발한 결혼식 청첩장 사이트",
+      "ability": {
+        "language": "Typescript",
+        "framework": [
+          "Node.js",
+          "React",
+          "Vite",
+          "emotion",
+          "firebase"
+        ]
+      },
+      "release": {
+        "date": "2025/03",
+        "status": "public",
+        "link": "https://github.com/maroomir/mobile-wedding-invitation"
+      }
+    }
+  ]
+}
