@@ -33,13 +33,19 @@ export default Home
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;+
+  height: 100vh;
   align-items: center;
   justify-content: center;
   gap: 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-align: center;
+  padding: 2rem;
 `;
 
 const TypeEffect = styled.h2`
   font-size: 1.5rem;
-  color: #0070f3;
+  color: #ffd700;
+  min-height: 2rem;
+  margin: 1rem 0;
 `;
