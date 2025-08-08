@@ -6,15 +6,17 @@ function Navbar() {
 
   return (
     <Wrapper>
-      <StyledLink to="/" $isActive={location.pathname === "/"}>
-        Home
-      </StyledLink>
-      <StyledLink to="/about" $isActive={location.pathname === "/about"}>
-        About
-      </StyledLink>
-      <StyledLink to="/projects" $isActive={location.pathname === "/projects"}>
-        Projects
-      </StyledLink>
+      <Inner>
+        <StyledLink to="/" $isActive={location.pathname === "/"}>
+          Home
+        </StyledLink>
+        <StyledLink to="/about" $isActive={location.pathname === "/about"}>
+          About
+        </StyledLink>
+        <StyledLink to="/projects" $isActive={location.pathname === "/projects"}>
+          Projects
+        </StyledLink>
+      </Inner>
     </Wrapper>
   );
 }
@@ -23,14 +25,20 @@ export default Navbar;
 
 const Wrapper = styled.nav`
   display: flex;
-  gap: 2rem;
-  padding: 1rem 2rem;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  width: 100%;
+  background: linear-gradient(135deg, #3f51b5 0%, #673ab7 100%);
   position: sticky;
   top: 0;
   z-index: 100;
+`;
+
+const Inner = styled.div`
+  display: flex;
+  gap: 2rem;
+  padding: 1rem 2rem;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 `;
 
 const StyledLink = styled(Link)<{ $isActive: boolean }>`

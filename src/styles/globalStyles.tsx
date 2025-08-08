@@ -7,11 +7,21 @@ const globalStyles = css`
     padding: 0;
   }
 
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+  }
+
   body {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    background-color: #f8f9fa;
     color: #333;
     line-height: 1.6;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
   }
 
   a {

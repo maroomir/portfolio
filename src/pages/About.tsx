@@ -40,49 +40,50 @@ export default function About() {
 }
 
 const Container = styled.div`
+  width: 100vw;
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 2rem;
+  padding: clamp(2rem, 4vw, 3rem) 0;
 `;
 
 const Content = styled.div`
-  max-width: 900px;
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem 0;
+  padding: 0 clamp(1rem, 4vw, 2rem);
 `;
 
 const Title = styled.h1`
   text-align: center;
-  font-size: 3rem;
-  margin-bottom: 3rem;
+  font-size: clamp(2rem, 6vw, 3rem);
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
   color: white;
   font-weight: 700;
 `;
 
 const Section = styled.div`
-  margin-bottom: 3rem;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
 `;
 
 const SectionTitle = styled.h2`
-  font-size: 2rem;
-  margin-bottom: 1.5rem;
+  font-size: clamp(1.25rem, 3.5vw, 1.75rem);
+  margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
   color: #ffd700;
-  text-align: center;
 `;
 
 const TechList = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.5rem);
+  margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
 `;
 
 const TechItem = styled.div`
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1rem;
+  padding: clamp(0.9rem, 2.5vw, 1.5rem);
   border-radius: 12px;
   text-align: center;
   transition: all 0.3s ease;
@@ -97,7 +98,7 @@ const TechItem = styled.div`
 const ResumeList = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
 `;
 
 const ResumeCard = styled.div`
@@ -105,7 +106,7 @@ const ResumeCard = styled.div`
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  padding: 2rem;
+  padding: clamp(1.25rem, 3vw, 2rem);
   transition: all 0.3s ease;
   
   &:hover {
@@ -117,7 +118,7 @@ const ResumeCard = styled.div`
 
 const Company = styled.h3`
   margin: 0;
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 3.5vw, 1.5rem);
   color: white;
   font-weight: 600;
 `;
@@ -126,16 +127,16 @@ const Department = styled.div`
   font-weight: 500;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: 0.5rem;
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2.8vw, 1.1rem);
 `;
 
 const Role = styled.div`
-  font-size: 1.1rem;
-  color: rgba(255, 255, 255, 0.8);
-  margin-bottom: 0.8rem;
+  font-size: clamp(0.95rem, 2.8vw, 1.1rem);
+  color: rgba(255, 255, 255, 0.85);
+  margin-bottom: 0.5rem;
 `;
 
 const Period = styled.div`
-  font-size: 1rem;
+  font-size: clamp(0.9rem, 2.5vw, 1rem);
   color: rgba(255, 255, 255, 0.7);
 `;

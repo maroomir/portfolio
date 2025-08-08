@@ -10,20 +10,22 @@ function Home() {
 
   return (
     <Container>
-      <h1>{home.name}</h1>
-      <h2>{home.bio}</h2>
-      <TypeEffect>
-        <Typewriter 
-          words={home.Keywords}
-          loop={0}
-          cursor
-          cursorStyle="|"
-          typeSpeed={70}
-          deleteSpeed={40}
-          delaySpeed={1500}
-        />
-      </TypeEffect>
-      <Button onClick={() => navigate("/projects")}>프로젝트 보기</Button>
+      <Inner>
+        <h1>{home.name}</h1>
+        <h2>{home.bio}</h2>
+        <TypeEffect>
+          <Typewriter 
+            words={home.Keywords}
+            loop={0}
+            cursor
+            cursorStyle="|"
+            typeSpeed={70}
+            deleteSpeed={40}
+            delaySpeed={1500}
+          />
+        </TypeEffect>
+        <Button onClick={() => navigate("/projects")}>프로젝트 보기</Button>
+      </Inner>
     </Container>    
   );
 }
@@ -33,19 +35,40 @@ export default Home
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  width: 100vw;
+  min-height: 100vh;
   align-items: center;
   justify-content: center;
-  gap: 2rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   text-align: center;
-  padding: 2rem;
+  padding: clamp(2rem, 4vw, 3rem) 0;
+`;
+
+const Inner = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(1rem, 4vw, 2rem);
+  display: grid;
+  justify-items: center;
+  gap: clamp(1.5rem, 4vw, 3rem);
+  
+  h1 {
+    font-size: clamp(2.2rem, 6vw, 3.5rem);
+    font-weight: 700;
+  }
+  
+  h2 {
+    font-size: clamp(1.1rem, 3vw, 1.6rem);
+    line-height: 1.6;
+    opacity: 0.95;
+  }
 `;
 
 const TypeEffect = styled.h2`
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
   color: #ffd700;
   min-height: 2rem;
-  margin: 1rem 0;
+  margin: clamp(1rem, 3vw, 2rem) 0;
 `;
