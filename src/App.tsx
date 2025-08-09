@@ -2,6 +2,7 @@ import { BrowserRouter } from 'react-router-dom'
 import { GlobalStyles } from 'styles/globalStyles'
 import Navbar from '@/components/Navbar'
 import AppRoutes from './routes/AppRoutes';
+import ScrollToTop from '@/components/ScrollToTop';
 
 function App() {
   console.log('App Rendering...')
@@ -9,6 +10,7 @@ function App() {
   return (
     <BrowserRouter>
       <GlobalStyles />
+      <ScrollToTop />
       <Navbar />
       <AppRoutes />
     </BrowserRouter>
