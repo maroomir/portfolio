@@ -1,15 +1,48 @@
 import styled from "@emotion/styled";
+import { useMemo, useState } from "react";
+import Seo from "@/components/Seo";
 import data from "@/data/data.json";
 
 function Projects() {
   const { projects } = data;
 
+  const [query, setQuery] = useState('');
+  const [status, setStatus] = useState<'all' | 'public' | 'private'>('all');
+
+  const filtered = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    return projects.filter((p) => {
+      const statusOk = status === 'all' || p.release.status === status;
+      const text = (p.title + ' ' + p.description).toLowerCase();
+      const textOk = q === '' || text.includes(q);
+      return statusOk && textOk;
+    });
+  }, [projects, query, status]);
+
   return (
     <Container>
+      <Seo title={`프로젝트 | ${data.home?.name} 포트폴리오`} description="프로젝트 목록을 검색하고 필터링할 수 있습니다." />
       <Content>
         <Title>My Projects</Title>
+        <Controls>
+          <SearchInput
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="프로젝트 검색..."
+            aria-label="프로젝트 검색"
+          />
+          <Select
+            value={status}
+            onChange={(e) => setStatus(e.target.value as 'all' | 'public' | 'private')}
+            aria-label="공개 여부 필터"
+          >
+            <option value="all">전체</option>
+            <option value="public">공개</option>
+            <option value="private">비공개</option>
+          </Select>
+        </Controls>
         <ProjectGrid>
-          {projects.map((project, index) => (
+          {filtered.map((project, index) => (
             <Card key={index}>
               <ProjectHeader>
                 <h3>{project.title}</h3>
@@ -66,6 +99,39 @@ const Title = styled.h1`
   margin-bottom: clamp(1.5rem, 4vw, 3rem);
   color: white;
   font-weight: 700;
+`;
+
+const Controls = styled.div`
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: clamp(1rem, 3vw, 1.5rem);
+  flex-wrap: wrap;
+`;
+
+const SearchInput = styled.input`
+  flex: 1 1 280px;
+  min-width: 220px;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  outline: none;
+
+  ::placeholder {
+    color: rgba(255, 255, 255, 0.8);
+  }
+`;
+
+const Select = styled.select`
+  flex: 0 0 auto;
+  padding: 0.6rem 0.9rem;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  outline: none;
 `;
 
 const ProjectGrid = styled.div`

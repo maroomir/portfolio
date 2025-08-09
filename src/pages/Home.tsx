@@ -3,6 +3,7 @@ import styled from "@emotion/styled";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
 import data from "@/data/data.json";
+import Seo from "@/components/Seo";
 
 function Home() {
   const { home } = data;
@@ -10,6 +11,7 @@ function Home() {
 
   return (
     <Container>
+      <Seo title={`홈 | ${home.name} 포트폴리오`} description={home.bio} />
       <Inner>
         <h1>{home.name}</h1>
         <h2>{home.bio}</h2>

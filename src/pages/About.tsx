@@ -1,10 +1,12 @@
 import styled from "@emotion/styled";
 import data from "@/data/data.json"
+import Seo from "@/components/Seo";
 
 export default function About() {
   const { about } = data
   return (
     <Container>
+      <Seo title={`소개 | ${data.home?.name} 포트폴리오`} description="보유 기술과 경력을 소개합니다." />
       <Content>
         <Title>About Me</Title>
         <Section>
