@@ -8,16 +8,44 @@ function Projects() {
 
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'all' | 'public' | 'private'>('all');
+  const [category, setCategory] = useState<string>('all');
+  const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
+
+  const categoryOptions = useMemo(() => {
+    const cats = projects.map(p => (p as any).category);
+    const s = new Set<string>();
+    cats.forEach(c => {
+      if (!c) return;
+      if (Array.isArray(c)) c.forEach(x => x && s.add(String(x)));
+      else s.add(String(c));
+    });
+    return Array.from(s);
+  }, [projects]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return projects.filter((p) => {
-      const statusOk = status === 'all' || p.release.status === status;
-      const text = (p.title + ' ' + p.description).toLowerCase();
-      const textOk = q === '' || text.includes(q);
-      return statusOk && textOk;
+    const getDateKey = (p: any) => {
+      const d = p.release?.date ?? '';
+      const digits = d.toString().replace(/\D/g, '');
+      return digits ? parseInt(digits, 10) : 0;
+    };
+    const sorted = [...projects].sort((a, b) => {
+      const ka = getDateKey(a);
+      const kb = getDateKey(b);
+      if (sort === 'newest') return kb - ka;
+      return ka - kb;
     });
-  }, [projects, query, status]);
+    return sorted.filter((p) => {
+      const statusOk = status === 'all' || p.release?.status === status;
+      const categoryValue = (p as any).category;
+      const categoryOk = category === 'all' || (Array.isArray(categoryValue)
+        ? categoryValue.includes(category)
+        : categoryValue === category);
+      const text = ((p as any).title + ' ' + (p as any).description).toLowerCase();
+      const textOk = q === '' || text.includes(q);
+      return statusOk && categoryOk && textOk;
+    });
+  }, [projects, query, status, category, sort]);
 
   return (
     <Container>
@@ -40,6 +68,16 @@ function Projects() {
             <option value="public">공개</option>
             <option value="private">비공개</option>
           </Select>
+          <CategorySelect value={category} onChange={(e) => setCategory(e.target.value)} aria-label="카테고리 필터">
+            <option value="all">전체</option>
+            {categoryOptions.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </CategorySelect>
+          <SortSelect value={sort} onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')} aria-label="정렬 필터">
+            <option value="newest">최신</option>
+            <option value="oldest">오래된</option>
+          </SortSelect>
         </Controls>
         <ProjectGrid>
           {filtered.map((project, index) => (
@@ -139,6 +177,9 @@ const Select = styled.select`
   color: white;
   outline: none;
 `;
+
+const CategorySelect = styled(Select)``;
+const SortSelect = styled(Select)``;
 
 const ProjectGrid = styled.div`
   display: grid;
