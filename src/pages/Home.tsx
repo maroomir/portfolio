@@ -45,6 +45,12 @@ const Container = styled.div`
   color: white;
   text-align: center;
   padding: clamp(2rem, 4vw, 3rem) 0;
+  padding-top: 88px;
+
+  @media (max-width: 768px) {
+    padding-top: 64px;
+  }
+}
 `;
 
 const Inner = styled.div`

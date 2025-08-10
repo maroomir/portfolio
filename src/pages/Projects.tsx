@@ -84,6 +84,12 @@ const Container = styled.div`
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   padding: clamp(2rem, 4vw, 3rem) 0;
+  padding-top: 88px;
+
+  @media (max-width: 768px) {
+    padding-top: 64px;
+  }
+}
 `;
 
 const Content = styled.div`
