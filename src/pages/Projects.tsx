@@ -1,26 +1,18 @@
 import styled from "@emotion/styled";
 import { useMemo, useState } from "react";
+import { useLocation } from "react-router-dom";
 import Seo from "@/components/Seo";
 import data from "@/data/data.json";
 
 function Projects() {
   const { projects } = data;
 
+  const location = useLocation();
+  const langFilter = new URLSearchParams(location.search).get('lang') ?? '';
+
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'all' | 'public' | 'private'>('all');
-  const [category, setCategory] = useState<string>('all');
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
-
-  const categoryOptions = useMemo(() => {
-    const cats = projects.map(p => (p as any).category);
-    const s = new Set<string>();
-    cats.forEach(c => {
-      if (!c) return;
-      if (Array.isArray(c)) c.forEach(x => x && s.add(String(x)));
-      else s.add(String(c));
-    });
-    return Array.from(s);
-  }, [projects]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -37,15 +29,12 @@ function Projects() {
     });
     return sorted.filter((p) => {
       const statusOk = status === 'all' || p.release?.status === status;
-      const categoryValue = (p as any).category;
-      const categoryOk = category === 'all' || (Array.isArray(categoryValue)
-        ? categoryValue.includes(category)
-        : categoryValue === category);
       const text = ((p as any).title + ' ' + (p as any).description).toLowerCase();
       const textOk = q === '' || text.includes(q);
-      return statusOk && categoryOk && textOk;
+      const langOk = !langFilter || ((p as any).ability?.language === langFilter);
+      return statusOk && textOk && langOk;
     });
-  }, [projects, query, status, category, sort]);
+  }, [projects, query, status, sort, langFilter]);
 
   return (
     <Container>
@@ -68,12 +57,6 @@ function Projects() {
             <option value="public">공개</option>
             <option value="private">비공개</option>
           </Select>
-          <CategorySelect value={category} onChange={(e) => setCategory(e.target.value)} aria-label="카테고리 필터">
-            <option value="all">전체</option>
-            {categoryOptions.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </CategorySelect>
           <SortSelect value={sort} onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')} aria-label="정렬 필터">
             <option value="newest">최신</option>
             <option value="oldest">오래된</option>
@@ -178,7 +161,6 @@ const Select = styled.select`
   outline: none;
 `;
 
-const CategorySelect = styled(Select)``;
 const SortSelect = styled(Select)``;
 
 const ProjectGrid = styled.div`
@@ -201,7 +183,6 @@ const Card = styled.div`
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   }
 `;
-
 const ProjectHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -215,7 +196,6 @@ const ProjectHeader = styled.div`
     font-weight: 600;
   }
 `;
-
 const Status = styled.span<{ $status: string }>`
   font-size: clamp(0.8rem, 2.5vw, 0.95rem);
   padding: 0.4rem 0.8rem;
@@ -225,31 +205,26 @@ const Status = styled.span<{ $status: string }>`
   font-weight: 500;
   border: 1px solid ${props => props.$status === 'public' ? 'rgba(76, 175, 80, 0.3)' : 'rgba(255, 193, 7, 0.3)'};
 `;
-
 const Description = styled.p`
   font-size: clamp(1rem, 2.8vw, 1.1rem);
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
   line-height: 1.6;
 `;
-
 const TechStack = styled.div`
   margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
 `;
-
 const TechLabel = styled.div`
   font-size: clamp(0.95rem, 2.8vw, 1rem);
   font-weight: 600;
   color: rgba(255, 255, 255, 0.9);
   margin-bottom: clamp(0.5rem, 1.5vw, 0.8rem);
 `;
-
 const TechTags = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
 `;
-
 const TechTag = styled.span`
   background: rgba(255, 255, 255, 0.2);
   color: white;
@@ -259,19 +234,16 @@ const TechTag = styled.span`
   font-weight: 500;
   border: 1px solid rgba(255, 255, 255, 0.3);
 `;
-
 const ProjectFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: auto;
 `;
-
 const ReleaseDate = styled.span`
   font-size: clamp(0.9rem, 2.5vw, 1rem);
   color: rgba(255, 255, 255, 0.7);
 `;
-
 const GitHubLink = styled.a`
   font-size: clamp(0.9rem, 2.5vw, 1rem);
   color: #ffd700;

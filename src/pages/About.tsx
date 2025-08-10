@@ -1,6 +1,7 @@
 import styled from "@emotion/styled";
 import data from "@/data/data.json"
 import Seo from "@/components/Seo";
+import { Link } from "react-router-dom";
 
 export default function About() {
   const { about } = data
@@ -16,9 +17,9 @@ export default function About() {
               <GroupTitle>언어</GroupTitle>
               <TechList>
                 {about.languages.map((lang) => (
-                  <TechItem key={lang}>
+                  <LangChip key={lang} to={`/projects?lang=${encodeURIComponent(lang)}`} aria-label={`Filter by language ${lang}`}>
                     <LangIcon /> {lang}
-                  </TechItem>
+                  </LangChip>
                 ))}
               </TechList>
             </TechGroup>
@@ -63,8 +64,10 @@ const LangIcon = () => (
   </svg>
 );
 
+const LangChip = styled(Link)` display:inline-flex; align-items:center; gap:6px; padding:0.4rem 0.8rem; border-radius:999px; background: rgba(255,255,255,0.2); color:white; text-decoration:none; font-weight:600; margin:0 0.25rem 0.25rem 0; `;
+
 const ToolIcon = () => (
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ verticalAlign: 'middle', marginRight: 6 }}>
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ verticalAlign: 'middle', marginRight: 6 }} aria-hidden="true">
     <path d="M14 3l7 7-3 3-7-7 3-3z" />
     <path d="M3 21l6-6" />
   </svg>
