@@ -11,18 +11,32 @@ export default function About() {
         <Title>About Me</Title>
         <Section>
           <SectionTitle>기술 스택</SectionTitle>
-          <TechList>
-            {about.languages.map((lang) => (
-              <TechItem key={lang}>💻 {lang}</TechItem>
-            ))}
-            {about.skills.map((skill) => (
-              <TechItem key={skill}>🛠️ {skill}</TechItem>
-            ))}
-          </TechList>
+          <TechGrid>
+            <TechGroup>
+              <GroupTitle>언어</GroupTitle>
+              <TechList>
+                {about.languages.map((lang) => (
+                  <TechItem key={lang}>
+                    <LangIcon /> {lang}
+                  </TechItem>
+                ))}
+              </TechList>
+            </TechGroup>
+            <TechGroup>
+              <GroupTitle>기술</GroupTitle>
+              <TechList>
+                {about.skills.map((skill) => (
+                  <TechItem key={skill}>
+                    <ToolIcon /> {skill}
+                  </TechItem>
+                ))}
+              </TechList>
+            </TechGroup>
+          </TechGrid>
         </Section>
         
         <Section>
-          <SectionTitle>기술 이력</SectionTitle>
+          <SectionTitle>이력</SectionTitle>
           <ResumeList>
             {about.resume.map((item, idx) => (
               <ResumeCard key={idx}>
@@ -40,6 +54,21 @@ export default function About() {
     </Container>
   );
 }
+
+const LangIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ verticalAlign: 'middle', marginRight: 6 }} aria-hidden="true">
+    <path d="M4 12h16" />
+    <path d="M8 6l-4 6 4 6" />
+    <path d="M16 6l4 6-4 6" />
+  </svg>
+);
+
+const ToolIcon = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ verticalAlign: 'middle', marginRight: 6 }}>
+    <path d="M14 3l7 7-3 3-7-7 3-3z" />
+    <path d="M3 21l6-6" />
+  </svg>
+);
 
 const Container = styled.div`
   width: 100vw;
@@ -80,26 +109,46 @@ const SectionTitle = styled.h2`
   color: #ffd700;
 `;
 
+const TechGrid = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 3rem);
+`;
+
+const TechGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const GroupTitle = styled.h4`
+  font-size: clamp(1.1rem, 3vw, 1.25rem);
+  color: #ffd700;
+  margin-bottom: 0.75rem;
+  font-weight: 700;
+  text-align: left;
+`;
+
 const TechList = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: clamp(0.75rem, 2vw, 1.5rem);
-  margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: clamp(0.75rem, 2vw, 1.25rem);
 `;
 
 const TechItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: start;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: clamp(0.9rem, 2.5vw, 1.5rem);
-  border-radius: 12px;
-  text-align: center;
+  padding: clamp(0.5rem, 1.5vw, 0.9rem);
+  border-radius: 10px;
+  color: white;
   transition: all 0.3s ease;
   
   &:hover {
-    transform: translateY(-4px);
+    transform: translateY(-2px);
     background: rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   }
 `;
 
