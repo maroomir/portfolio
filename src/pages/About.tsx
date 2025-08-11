@@ -27,9 +27,9 @@ export default function About() {
               <GroupTitle>기술</GroupTitle>
               <TechList>
                 {about.skills.map((skill) => (
-                  <TechItem key={skill}>
+                  <TechChip key={skill} to={`/projects?tech=${encodeURIComponent(skill)}`} aria-label={`Filter by tech ${skill}`}>
                     <ToolIcon /> {skill}
-                  </TechItem>
+                  </TechChip>
                 ))}
               </TechList>
             </TechGroup>
@@ -65,6 +65,7 @@ const LangIcon = () => (
 );
 
 const LangChip = styled(Link)` display:inline-flex; align-items:center; gap:6px; padding:0.4rem 0.8rem; border-radius:999px; background: rgba(255,255,255,0.2); color:white; text-decoration:none; font-weight:600; margin:0 0.25rem 0.25rem 0; `;
+const TechChip = styled(Link)` display:inline-flex; align-items:center; gap:6px; padding:0.4rem 0.8rem; border-radius:999px; background: rgba(255,255,255,0.12); color:white; text-decoration:none; font-weight:600; margin:0 0.25rem 0.25rem 0; `;
 
 const ToolIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ verticalAlign: 'middle', marginRight: 6 }} aria-hidden="true">

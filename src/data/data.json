@@ -19,7 +19,6 @@
       "WinForm",
       "Mono",
       "MFC",
-      "Torch",
       "Unity",
       "OpenCV",
       "Cognex",
@@ -405,7 +404,7 @@
       "category": "Deep Learning",
       "ability": {
         "language": "Python",
-        "framework": ["Torch"]
+        "framework": ["Pytorch"]
       },
       "release": {
         "date": "2021/04",
@@ -424,7 +423,7 @@
       "category": "Deep Learning",
       "ability": {
         "language": "Python",
-        "framework": ["Torch"]
+        "framework": ["Pytorch"]
       },
       "release": {
         "date": "2021/06",
@@ -504,7 +503,7 @@
       "category": "Deep Learning",
       "ability": {
         "language": "Python",
-        "framework": ["Torch"]
+        "framework": ["Pytorch"]
       },
       "release": {
         "date": "2021/12",
@@ -523,7 +522,7 @@
       "category": "Deep Learning",
       "ability": {
         "language": "Python",
-        "framework": ["Torch"]
+        "framework": ["Pytorch"]
       },
       "release": {
         "date": "2021/12",
@@ -618,7 +617,7 @@
       "category": "Deep Learning",
       "ability": {
         "language": "python",
-        "framework": ["Torch"]
+        "framework": ["Pytorch"]
       },
       "release": {
         "date": "2022/12",

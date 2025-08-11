@@ -8,11 +8,14 @@ function Projects() {
   const { projects } = data;
 
   const location = useLocation();
-  const langFilter = new URLSearchParams(location.search).get('lang') ?? '';
+  const params = new URLSearchParams(location.search);
+  const langFilter = params.get('lang') ?? '';
+  const techFilter = params.get('tech') ?? '';
 
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'all' | 'public' | 'private'>('all');
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
+  const [activeTechs, setActiveTechs] = useState<string[]>([]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -32,9 +35,12 @@ function Projects() {
       const text = ((p as any).title + ' ' + (p as any).description).toLowerCase();
       const textOk = q === '' || text.includes(q);
       const langOk = !langFilter || ((p as any).ability?.language === langFilter);
-      return statusOk && textOk && langOk;
-    });
-  }, [projects, query, status, sort, langFilter]);
+    const urlTechs = techFilter ? techFilter.split(',').map(s => decodeURIComponent(s)) : [];
+    const effective = [...urlTechs, ...activeTechs];
+    const techOk = effective.length === 0 || effective.some((t: string) => ((p as any).ability?.framework?.includes(t) || (p as any).ability?.language === t));
+    return statusOk && textOk && langOk && techOk;
+  });
+  }, [projects, query, status, sort, langFilter, techFilter, activeTechs]);
 
   return (
     <Container>
@@ -62,6 +68,26 @@ function Projects() {
             <option value="oldest">오래된</option>
           </SortSelect>
         </Controls>
+
+        <ActiveFilters>
+          {/* URL 기반 tech 필터 표시 (읽기 전용) */}
+          {techFilter && (
+            <FilterChip aria-hidden>
+              URL 필터: {decodeURIComponent(techFilter)}
+            </FilterChip>
+          )}
+          {/* 활성화된 태그 필터(토글로 적용/해제 가능) */}
+          {activeTechs.map((t) => (
+            <FilterChip key={t}>
+              {t}
+              <RemoveButton aria-label={`remove ${t}`} onClick={() => setActiveTechs(prev => prev.filter(x => x !== t))}>✕</RemoveButton>
+            </FilterChip>
+          ))}
+          {activeTechs.length > 0 && (
+            <ClearButton onClick={() => setActiveTechs([])}>필터 초기화</ClearButton>
+          )}
+        </ActiveFilters>
+
         <ProjectGrid>
           {filtered.map((project, index) => (
             <Card key={index}>
@@ -78,7 +104,14 @@ function Projects() {
                 <TechTags>
                   <TechTag>{project.ability.language}</TechTag>
                   {project.ability.framework.map((framework, idx) => (
-                    <TechTag key={idx}>{framework}</TechTag>
+                    <TechTag
+                      key={idx}
+                      $active={activeTechs.includes(framework)}
+                      onClick={() => setActiveTechs(prev => prev.includes(framework) ? prev.filter(x => x !== framework) : [...prev, framework])}
+                      aria-pressed={activeTechs.includes(framework)}
+                    >
+                      {framework}
+                    </TechTag>
                   ))}
                 </TechTags>
               </TechStack>
@@ -134,6 +167,44 @@ const Controls = styled.div`
   align-items: center;
   margin-bottom: clamp(1rem, 3vw, 1.5rem);
   flex-wrap: wrap;
+`;
+
+const ActiveFilters = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: clamp(0.75rem, 2vw, 1rem);
+`;
+
+const FilterChip = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  font-weight: 600;
+`;
+
+const RemoveButton = styled.button`
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.9);
+  margin-left: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+`;
+
+const ClearButton = styled.button`
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
 `;
 
 const SearchInput = styled.input`
@@ -228,14 +299,16 @@ const TechTags = styled.div`
   flex-wrap: wrap;
   gap: 0.5rem;
 `;
-const TechTag = styled.span`
-  background: rgba(255, 255, 255, 0.2);
+const TechTag = styled.button<{ $active?: boolean }>`
+  background: ${props => (props.$active ? 'rgba(255, 255, 255, 0.32)' : 'rgba(255, 255, 255, 0.2)')};
   color: white;
   padding: 0.4rem 0.8rem;
   border-radius: 12px;
   font-size: clamp(0.8rem, 2.5vw, 0.9rem);
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid ${props => (props.$active ? 'rgba(255,255,255,0.5)' : 'rgba(255, 255, 255, 0.3)')};
+  cursor: pointer;
+  outline: none;
 `;
 const ProjectFooter = styled.div`
   display: flex;
