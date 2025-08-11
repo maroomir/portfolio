@@ -206,14 +206,43 @@ const Controls = styled.div`
   align-items: center;
   margin-bottom: clamp(1rem, 3vw, 1.5rem);
   flex-wrap: wrap;
+
+  /* 모바일: 컨트롤을 세로로 쌓고 버튼/인풋이 화면 폭을 사용하게 함 */
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+
+    & > ${/* placeholder for Select and SortSelect fallback */ ''}div {
+      width: 100%;
+    }
+  }
 `;
 
 const ActiveFilters = styled.div`
   display: flex;
   gap: 0.5rem;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin-bottom: clamp(0.75rem, 2vw, 1rem);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 0.25rem;
+
+  /* hide native scrollbar visually while remaining accessible */
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.08);
+    border-radius: 999px;
+  }
+
+  @media (min-width: 600px) {
+    flex-wrap: wrap;
+    overflow: visible;
+    padding-bottom: 0;
+  }
 `;
 
 
@@ -282,6 +311,12 @@ const ProjectGrid = styled.div`
   /* 카드가 너무 좁아지지 않도록 최소 너비를 올림 */
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: clamp(1rem, 3vw, 2rem);
+
+  /* 모바일: 한 열 레이아웃으로 카드가 풀폭을 사용하도록 함 */
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
 `;
 
 const Card = styled.div`
@@ -298,6 +333,13 @@ const Card = styled.div`
     transform: translateY(-4px);
     background: rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  @media (max-width: 600px) {
+    min-width: auto;
+    width: 100%;
+    padding: 1rem;
+    border-radius: 12px;
   }
 `;
 const ProjectHeader = styled.div`
