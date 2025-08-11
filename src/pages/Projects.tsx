@@ -16,6 +16,7 @@ function Projects() {
   const [status, setStatus] = useState<'all' | 'public' | 'private'>('all');
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
   const [activeTechs, setActiveTechs] = useState<string[]>([]);
+  const [filterMode, setFilterMode] = useState<'and' | 'or'>('and');
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -37,7 +38,18 @@ function Projects() {
       const langOk = !langFilter || ((p as any).ability?.language === langFilter);
     const urlTechs = techFilter ? techFilter.split(',').map(s => decodeURIComponent(s)) : [];
     const effective = [...urlTechs, ...activeTechs];
-    const techOk = effective.length === 0 || effective.some((t: string) => ((p as any).ability?.framework?.includes(t) || (p as any).ability?.language === t));
+
+    let techOk = true;
+    if (effective.length === 0) {
+      techOk = true;
+    } else if (filterMode === 'and') {
+      // AND: 모든 선택된 기술을 포함해야 통과
+      techOk = effective.every((t: string) => ((p as any).ability?.framework?.includes(t) || (p as any).ability?.language === t));
+    } else {
+      // OR: 하나라도 포함하면 통과
+      techOk = effective.some((t: string) => ((p as any).ability?.framework?.includes(t) || (p as any).ability?.language === t));
+    }
+
     return statusOk && textOk && langOk && techOk;
   });
   }, [projects, query, status, sort, langFilter, techFilter, activeTechs]);
@@ -67,6 +79,28 @@ function Projects() {
             <option value="newest">최신</option>
             <option value="oldest">오래된</option>
           </SortSelect>
+
+          <FilterModeToggle role="tablist" aria-label="필터 매칭 모드">
+            <ModeLabel>매칭</ModeLabel>
+            <ModeButton
+              type="button"
+              $active={filterMode === 'and'}
+              onClick={() => setFilterMode('and')}
+              role="tab"
+              aria-selected={filterMode === 'and'}
+            >
+              AND
+            </ModeButton>
+            <ModeButton
+              type="button"
+              $active={filterMode === 'or'}
+              onClick={() => setFilterMode('or')}
+              role="tab"
+              aria-selected={filterMode === 'or'}
+            >
+              OR
+            </ModeButton>
+          </FilterModeToggle>
         </Controls>
 
         <ActiveFilters>
@@ -205,6 +239,29 @@ const ClearButton = styled.button`
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+`;
+
+const FilterModeToggle = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 0.5rem;
+`;
+
+const ModeLabel = styled.span`
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+`;
+
+const ModeButton = styled.button<{ $active?: boolean }>`
+  padding: 0.35rem 0.6rem;
+  border-radius: 8px;
+  border: 1px solid ${props => (props.$active ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.2)')};
+  background: ${props => (props.$active ? 'rgba(255,255,255,0.12)' : 'transparent')};
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
 `;
 
 const SearchInput = styled.input`
