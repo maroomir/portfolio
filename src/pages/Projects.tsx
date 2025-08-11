@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 import Seo from "@/components/Seo";
 import data from "@/data/data.json";
+import Chip from '@/components/Chip';
 
 function Projects() {
   const { projects } = data;
@@ -106,16 +107,20 @@ function Projects() {
         <ActiveFilters>
           {/* URL 기반 tech 필터 표시 (읽기 전용) */}
           {techFilter && (
-            <FilterChip aria-hidden>
+            <Chip readonly aria-hidden>
               URL 필터: {decodeURIComponent(techFilter)}
-            </FilterChip>
+            </Chip>
           )}
           {/* 활성화된 태그 필터(토글로 적용/해제 가능) */}
           {activeTechs.map((t) => (
-            <FilterChip key={t}>
+            <Chip
+              key={t}
+              active={activeTechs.includes(t)}
+              onClick={() => setActiveTechs(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])}
+              aria-pressed={activeTechs.includes(t)}
+            >
               {t}
-              <RemoveButton aria-label={`remove ${t}`} onClick={() => setActiveTechs(prev => prev.filter(x => x !== t))}>✕</RemoveButton>
-            </FilterChip>
+            </Chip>
           ))}
           {activeTechs.length > 0 && (
             <ClearButton onClick={() => setActiveTechs([])}>필터 초기화</ClearButton>
@@ -138,14 +143,14 @@ function Projects() {
                 <TechTags>
                   <TechTag>{project.ability.language}</TechTag>
                   {project.ability.framework.map((framework, idx) => (
-                    <TechTag
+                    <Chip
                       key={idx}
-                      $active={activeTechs.includes(framework)}
+                      active={activeTechs.includes(framework)}
                       onClick={() => setActiveTechs(prev => prev.includes(framework) ? prev.filter(x => x !== framework) : [...prev, framework])}
                       aria-pressed={activeTechs.includes(framework)}
                     >
                       {framework}
-                    </TechTag>
+                    </Chip>
                   ))}
                 </TechTags>
               </TechStack>
@@ -211,25 +216,6 @@ const ActiveFilters = styled.div`
   margin-bottom: clamp(0.75rem, 2vw, 1rem);
 `;
 
-const FilterChip = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.35rem 0.6rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.12);
-  color: white;
-  font-weight: 600;
-`;
-
-const RemoveButton = styled.button`
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.9);
-  margin-left: 0.5rem;
-  cursor: pointer;
-  font-size: 0.9rem;
-`;
 
 const ClearButton = styled.button`
   background: transparent;
