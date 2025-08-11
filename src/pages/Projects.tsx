@@ -165,7 +165,8 @@ const SortSelect = styled(Select)``;
 
 const ProjectGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  /* 카드가 너무 좁아지지 않도록 최소 너비를 올림 */
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
   gap: clamp(1rem, 3vw, 2rem);
 `;
 
@@ -175,6 +176,8 @@ const Card = styled.div`
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   padding: clamp(1.25rem, 3vw, 2rem);
+  min-width: 360px; /* 카드의 최소 너비를 제한하여 글씨가 넘치지 않게 함 */
+  box-sizing: border-box;
   transition: all 0.3s ease;
   
   &:hover {
