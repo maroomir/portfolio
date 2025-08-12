@@ -41,7 +41,7 @@ export default function About() {
           <ResumeList>
             {about.resume.map((item, idx) => (
               <ResumeCard key={idx}>
-                <Company>{item.company}</Company>
+                <Company to={`/projects?agency=${encodeURIComponent(item.company)}`}>{item.company}</Company>
                 <Department>{item.department}</Department>
                 <Role>{item.role}</Role>
                 <Period>
@@ -177,11 +177,20 @@ const ResumeCard = styled.div`
   }
 `;
 
-const Company = styled.h3`
+const Company = styled(Link)`
+  display: inline-block;
   margin: 0;
   font-size: clamp(1.1rem, 3.5vw, 1.5rem);
   color: white;
-  font-weight: 600;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.15rem 0.35rem;
+  border-radius: 6px;
+
+  &:hover {
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-2px);
+  }
 `;
 
 const Department = styled.div`

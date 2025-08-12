@@ -1,6 +1,6 @@
 import styled from "@emotion/styled";
-import { useMemo, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useMemo, useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import Seo from "@/components/Seo";
 import data from "@/data/data.json";
 import Chip from '@/components/Chip';
@@ -12,12 +12,20 @@ function Projects() {
   const params = new URLSearchParams(location.search);
   const langFilter = params.get('lang') ?? '';
   const techFilter = params.get('tech') ?? '';
+  const agencyFilter = params.get('agency') ?? '';
 
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'all' | 'public' | 'private'>('all');
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
   const [activeTechs, setActiveTechs] = useState<string[]>([]);
   const [filterMode, setFilterMode] = useState<'and' | 'or'>('and');
+
+  const navigate = useNavigate();
+  const [agencySelected, setAgencySelected] = useState<string>(agencyFilter);
+
+  useEffect(() => {
+    setAgencySelected(agencyFilter);
+  }, [agencyFilter]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -40,6 +48,8 @@ function Projects() {
     const urlTechs = techFilter ? techFilter.split(',').map(s => decodeURIComponent(s)) : [];
     const effective = [...urlTechs, ...activeTechs];
 
+    const agencyOk = !agencySelected || ((p as any).agency?.name ?? '').toLowerCase() === agencySelected.toLowerCase();
+
     let techOk = true;
     if (effective.length === 0) {
       techOk = true;
@@ -51,9 +61,9 @@ function Projects() {
       techOk = effective.some((t: string) => ((p as any).ability?.framework?.includes(t) || (p as any).ability?.language === t));
     }
 
-    return statusOk && textOk && langOk && techOk;
+    return statusOk && textOk && langOk && agencyOk && techOk;
   });
-  }, [projects, query, status, sort, langFilter, techFilter, activeTechs]);
+  }, [projects, query, status, sort, langFilter, techFilter, activeTechs, agencySelected]);
 
   return (
     <Container>
@@ -105,12 +115,30 @@ function Projects() {
         </Controls>
 
         <ActiveFilters>
+          {/* URL 기반 agency 필터 또는 내부 선택된 agency 표시 */}
+          {agencySelected && (
+            <Chip
+              active
+              onClick={() => {
+                // clear agency from state and URL
+                setAgencySelected('');
+                const newParams = new URLSearchParams(location.search);
+                newParams.delete('agency');
+                navigate(`${location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`, { replace: true });
+              }}
+              aria-pressed={false}
+            >
+              {agencySelected}
+            </Chip>
+          )}
+
           {/* URL 기반 tech 필터 표시 (읽기 전용) */}
           {techFilter && (
             <Chip readonly aria-hidden>
               URL 필터: {decodeURIComponent(techFilter)}
             </Chip>
           )}
+
           {/* 활성화된 태그 필터(토글로 적용/해제 가능) */}
           {activeTechs.map((t) => (
             <Chip

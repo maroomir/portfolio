@@ -51,7 +51,7 @@
         ]
       },
       {
-        "company": "AP 시스템",
+        "company": "AP시스템",
         "department": "장비개발팀",
         "role": "산업용 비전 소프트웨어 개발자",
         "period": [
@@ -64,7 +64,7 @@
         ]
       },
       {
-        "company": "LG 이노텍",
+        "company": "LG이노텍",
         "department": "검사설비담당",
         "role": "산업용 비전 소프트웨어 엔지니어",
         "period": [
@@ -74,7 +74,7 @@
         "highlights": []
       },
       {
-        "company": "LG 전자",
+        "company": "LG전자",
         "department": "로봇개발담당",
         "role": "로보틱스 개발자 & CI 파이프라인 엔지니어",
         "period": [
@@ -165,7 +165,7 @@
       "title": "LC 디스펜서 토출 형상 검사기",
       "description": "LC 디스펜서 공정에서 토출 형상·두께·단차를 측정하고 이상을 검출하는 머신비전 검사기",
       "agency": {
-        "name": "TopEnginerring",
+        "name": "탑엔지니어링",
         "url": "http://topengnet.co.kr"
       },
       "category": "Machine Vision",
@@ -187,7 +187,7 @@
       "title": "LC 노즐 막힘 여부 검사기",
       "description": "LC 디스펜서 노즐의 막힘/편류 여부를 엣지·면적 기반으로 판정하는 검사기",
       "agency": {
-        "name": "TopEnginerring",
+        "name": "탑엔지니어링",
         "url": "http://topengnet.co.kr"
       },
       "category": "Machine Vision",
@@ -209,7 +209,7 @@
       "title": "잉크젯 미세노즐 막힘 여부 검사기",
       "description": "잉크젯 미세노즐의 막힘/편류·토출 불량을 고배율 영상에서 분석하는 검사기",
       "agency": {
-        "name": "TopEnginerring",
+        "name": "탑엔지니어링",
         "url": "http://topengnet.co.kr"
       },
       "category": "Machine Vision",
@@ -231,7 +231,7 @@
       "title": "Align 계산 라이브러리",
       "description": "공정 장비에 모듈로 탑재한 설비용 정렬 및 좌표계 변환 계산 라이브러리(DLL)",
       "agency": {
-        "name": "APSystem",
+        "name": "AP시스템",
         "url": "http://www.apsystems.co.kr"
       },
       "category": "Library",
@@ -250,7 +250,7 @@
       "title": "BPL 정밀 도포 검사기",
       "description": "BPL 도포 라인의 폭·연속성·균일도를 정량화해 불량을 검출하는 정밀 검사기",
       "agency": {
-        "name": "APSystem",
+        "name": "AP시스템",
         "url": "http://www.apsystems.co.kr"
       },
       "category": "Machine Vision",
@@ -272,7 +272,7 @@
       "title": "로봇용 대차 제어 애플리케이션",
       "description": "상태 모니터링 및 위험 상황 감지 기능을 가진 로봇팔 대차 전용 임베디드 소프트웨어",
       "agency": {
-        "name": "LGE",
+        "name": "LG전자",
         "url": "https://www.lge.co.kr/"
       },
       "category": "Rototics Soultion",
@@ -293,7 +293,7 @@
       "title": "산업용 로봇 Vision 통합 검사기",
       "description": "로봇팔과 다중 카메라를 연동해 캘리브레이션, 부품 인식, 치수 검사를 통합 제공하는 비전 시스템",
       "agency": {
-        "name": "LGE",
+        "name": "LG전자",
         "url": "https://www.lge.co.kr/"
       },
       "category": "Rototics Vision",
@@ -315,7 +315,7 @@
       "title": "로봇 바리스타 솔루션",
       "description": "실제 바리스타의 동작 시나리오를 구현한 로봇팔 솔루션",
       "agency": {
-        "name": "LGE",
+        "name": "LG전자",
         "url": "https://www.lge.co.kr/"
       },
       "category": "Robotics Soultion",
@@ -398,7 +398,7 @@
       "title": "FastMRI",
       "description": "fastMRI 데이터셋을 활용한 MRI 재구성 모델 학습·추론 파이프라인",
       "agency": {
-        "name": "YonseiUniversity",
+        "name": "연세대학교",
         "url": "https://www.yonsei.ac.kr/"
       },
       "category": "Deep Learning",
@@ -417,7 +417,7 @@
       "title": "BraTS3D",
       "description": "BraTS 3D 데이터셋 기반 뇌종양 분할 실험 파이프라인",
       "agency": {
-        "name": "YonseiUniversity",
+        "name": "연세대학교",
         "url": "https://www.yonsei.ac.kr/"
       },
       "category": "Deep Learning",
@@ -459,7 +459,7 @@
       "title": "CI/CD 파이프라인 관리 도구",
       "description": "Jenkins 를 활용한 빌드 트리거, 상태 모니터링, 결과 리포트 기능을 제공하는 사내 CI 파이프라인 관리 도구",
       "agency": {
-        "name": "LGE",
+        "name": "LG전자",
         "url": "https://www.lge.co.kr/"
       },
       "category": "CI/CD",
@@ -478,7 +478,7 @@
       "title": "CI/CD 파이프라인 관리 도구",
       "description": "빌드 결과 리포트를 위한 Python 기반 경량 CI/CD 파이프라인 관리 도구",
       "agency": {
-        "name": "LGE",
+        "name": "LG전자",
         "url": "https://www.lge.co.kr/"
       },
       "category": "CI/CD",
@@ -497,7 +497,7 @@
       "title": "드론용 YOLOv5 커스텀 모델",
       "description": "드론용 YOLOv5 커스텀 데이터셋 학습·추론 모델",
       "agency": {
-        "name": "YonseiUniversity",
+        "name": "연세대학교",
         "url": "https://www.yonsei.ac.kr/"
       },
       "category": "Deep Learning",
@@ -516,7 +516,7 @@
       "title": "아이스크림 스쿱 학습 모델",
       "description": "로봇팔의 아이스크림 스쿱 동작의 강화학습 시뮬레이션 모델",
       "agency": {
-        "name": "YonseiUniversity",
+        "name": "연세대학교",
         "url": "https://www.yonsei.ac.kr/"
       },
       "category": "Deep Learning",
@@ -573,7 +573,7 @@
       "title": "메타아트 갤러리",
       "description": "Unity 기반 인터랙티브 3D 전시 공간",
       "agency": {
-        "name": "YonseiUniversity",
+        "name": "연세대학교",
         "url": "https://www.yonsei.ac.kr/"
       },
       "category": "Unity Simulation",
@@ -592,7 +592,7 @@
       "title": "메타아트 서버",
       "description": "텍스트-이미지 생성 실험을 위한 서버 애플리케이션",
       "agency": {
-        "name": "YonseiUniversity",
+        "name": "연세대학교",
         "url": "https://www.yonsei.ac.kr/"
       },
       "category": "Deep Learning",
@@ -611,7 +611,7 @@
       "title": "메타아트 클라이언트",
       "description": "텍스트-이미지 생성 서버와 인터렉티브 전시 공간을 연동하는 클라이언트 애플리케이션",
       "agency": {
-        "name": "YonseiUniversity",
+        "name": "연세대학교",
         "url": "https://www.yonsei.ac.kr/"
       },
       "category": "Deep Learning",
@@ -630,7 +630,7 @@
       "title": "SNPE 기반 객체 검출 모듈",
       "description": "Qualcomm SNPE를 이용해 실시간 스트림 입력과 가속 추론을 지원하는 온디바이스 객체 검출 모듈",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "Deep Learning",
@@ -649,7 +649,7 @@
       "title": "퀄컴 보드 기반 카메라 영상 뷰어",
       "description": "영상 입력을 캡처 및 시각화시키기 위한 위한 뷰어 유틸리티",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "Embedded Solution",
@@ -668,7 +668,7 @@
       "title": "퀄컴 보드 기반 라이다 테스트 유틸리티",
       "description": "LiDAR 데이터 수신, 파싱, 시각화를 위한 테스트 유틸리티",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "Embedded Solution",
@@ -687,7 +687,7 @@
       "title": "ROS2 - Gstream 변환 노드",
       "description": "GStreamer 스트림을 ROS2 이미지 토픽으로 변환하는 노드",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -706,7 +706,7 @@
       "title": "카메라 센서 ROS2 노드",
       "description": "타임스탬프, 캘리브레이션 정보를 관리하는 카메라 프레임 발행용 ROS2 노드",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -725,7 +725,7 @@
       "title": "iToF 센서 ROS2 노드",
       "description": "iToF 카메라의 깊이/암플리튜드 프레임을 시각화하는 ROS 노드",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -744,7 +744,7 @@
       "title": "ROS2 기반 깊이 기반 카메라 런처",
       "description": "스테레오 및 ToF 카메라 관련 노드들을 일괄 관리하는 런처",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -763,7 +763,7 @@
       "title": "ROS2 기반 QR 코드 디텍터 런처",
       "description": "로봇의 QR & ARUCO 마커 디텍팅을 수행하는 런처",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -782,7 +782,7 @@
       "title": "ROS2 기반 SNPE 객체 검출기",
       "description": "SNPE 기반 객체 검출기를 ROS2로 래핑한 노드",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -820,7 +820,7 @@
       "title": "ROS2 DCU 컨트롤러",
       "description": "DCU 제어 관련 ROS2 노드를 생성/관리하는 런처",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -839,7 +839,7 @@
       "title": "배송로봇용 DCU 컨트롤러",
       "description": "배송로봇의 DCU 제어를 위한 ROS2 컨트롤러 노드",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -858,7 +858,7 @@
       "title": "배송로봇용 행동 시나리오 모듈",
       "description": "배송로봇의 도킹/주행/패트롤 등 작업 시나리오를 동작 단위로 구성한 ROS2 동작 노드",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -877,7 +877,7 @@
       "title": "배송로봇용 위치 추적기",
       "description": "오드메트리/IMU/카메라 등 센서를 융합해 배송로봇의 위치를 추정하는 노드",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
@@ -896,7 +896,7 @@
       "title": "AMR 전용 비전 스택",
       "description": "카메라 캡처·전처리·표식/장애물 인식 파이프라인을 제공하는 AMR용 비전 스택",
       "agency": {
-        "name": "Samsung",
+        "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "category": "ROS Application",
