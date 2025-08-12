@@ -19,6 +19,7 @@ function Projects() {
   const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
   const [activeTechs, setActiveTechs] = useState<string[]>([]);
   const [filterMode, setFilterMode] = useState<'and' | 'or'>('and');
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
   const navigate = useNavigate();
   const [agencySelected, setAgencySelected] = useState<string>(agencyFilter);
@@ -71,6 +72,35 @@ function Projects() {
       <Content>
         <Title>My Projects</Title>
         <Controls>
+          {/* 모바일 검색: 아이콘 클릭 시 확장형 입력 표시 (옵션2) */}
+          <MobileSearchButton
+            type="button"
+            aria-label={mobileSearchOpen ? "검색 닫기" : "검색 열기"}
+            onClick={() => setMobileSearchOpen((s) => !s)}
+            aria-expanded={mobileSearchOpen}
+          >
+            🔍
+          </MobileSearchButton>
+
+          {mobileSearchOpen && (
+            <MobileSearchBar role="search" aria-hidden={!mobileSearchOpen}>
+              <MobileSearchInput
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="프로젝트 검색..."
+                aria-label="모바일 프로젝트 검색"
+                autoFocus
+              />
+              <MobileSearchClose
+                type="button"
+                aria-label="검색 닫기"
+                onClick={() => setMobileSearchOpen(false)}
+              >
+                ✕
+              </MobileSearchClose>
+            </MobileSearchBar>
+          )}
+
           <SearchInput
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -202,15 +232,14 @@ export default Projects;
 const Container = styled.div`
   width: 100vw;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
+  color: var(--text);
   padding: clamp(2rem, 4vw, 3rem) 0;
   padding-top: 88px;
 
   @media (max-width: 768px) {
     padding-top: 64px;
   }
-}
 `;
 
 const Content = styled.div`
@@ -312,19 +341,73 @@ const SearchInput = styled.input`
   min-width: 220px;
   padding: 0.6rem 0.9rem;
   border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
+  background: var(--chip-bg, rgba(255, 255, 255, 0.08));
+  color: var(--text, white);
   outline: none;
 
   ::placeholder {
-    color: rgba(255, 255, 255, 0.8);
+    color: rgba(255, 255, 255, 0.72);
   }
 
-  /* 모바일에서는 검색창을 숨겨서 레이아웃이 너무 넓어지는 문제 방지 */
+  /* 데스크톱: 기본 노출, 모바일: 전용 모바일 검색 컴포넌트 사용 */
   @media (max-width: 600px) {
     display: none;
   }
+`;
+
+/* 모바일 전용 검색 UI */
+const MobileSearchButton = styled.button`
+  display: none;
+  background: transparent;
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
+  color: var(--text, white);
+  padding: 0.5rem;
+  border-radius: 10px;
+  cursor: pointer;
+
+  @media (max-width: 600px) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 44px;
+    min-height: 44px;
+  }
+`;
+
+const MobileSearchBar = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+  background: var(--card-bg, rgba(255,255,255,0.04));
+  padding: 0.5rem;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.06));
+  box-sizing: border-box;
+
+  @media (min-width: 601px) {
+    display: none;
+  }
+`;
+
+const MobileSearchInput = styled.input`
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: none;
+  background: transparent;
+  color: var(--text, white);
+  outline: none;
+`;
+
+const MobileSearchClose = styled.button`
+  background: transparent;
+  border: none;
+  color: var(--text, white);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
 `;
 
 const Select = styled.select`
@@ -353,23 +436,22 @@ const ProjectGrid = styled.div`
 `;
 
 const Card = styled.div`
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--card-bg, rgba(255, 255, 255, 0.08));
+  backdrop-filter: blur(6px);
+  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
   border-radius: 16px;
   padding: clamp(1.25rem, 3vw, 2rem);
   min-width: 360px; /* 카드의 최소 너비를 제한하여 글씨가 넘치지 않게 함 */
   box-sizing: border-box;
-  transition: all 0.3s ease;
+  transition: transform 220ms ease, box-shadow 220ms ease;
   
   &:hover {
     transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   }
 
   @media (max-width: 600px) {
-    min-width: auto;
     width: 100%;
     padding: 1rem;
     border-radius: 12px;
