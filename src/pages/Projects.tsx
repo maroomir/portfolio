@@ -320,6 +320,11 @@ const SearchInput = styled.input`
   ::placeholder {
     color: rgba(255, 255, 255, 0.8);
   }
+
+  /* 모바일에서는 검색창을 숨겨서 레이아웃이 너무 넓어지는 문제 방지 */
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const Select = styled.select`
