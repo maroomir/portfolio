@@ -138,23 +138,6 @@ const TechList = styled.div`
   gap: clamp(0.75rem, 2vw, 1.25rem);
 `;
 
-const TechItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: start;
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: clamp(0.5rem, 1.5vw, 0.9rem);
-  border-radius: 10px;
-  color: white;
-  transition: all 0.3s ease;
-  
-  &:hover {
-    transform: translateY(-2px);
-    background: rgba(255, 255, 255, 0.2);
-  }
-`;
 
 const ResumeList = styled.div`
   display: flex;

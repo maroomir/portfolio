@@ -6,7 +6,8 @@
       "ES2024", "DOM", "DOM.Iterable"
     ],
     "module": "ESNext",
-    "skipLibCheck": false,
+    "skipLibCheck": true,
+    "types": ["react", "react-dom"],
 
     /* Path */
     "baseUrl": "./src",
