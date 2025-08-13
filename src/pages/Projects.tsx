@@ -20,6 +20,7 @@ function Projects() {
   const [activeTechs, setActiveTechs] = useState<string[]>([]);
   const [filterMode, setFilterMode] = useState<'and' | 'or'>('and');
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   const navigate = useNavigate();
   const [agencySelected, setAgencySelected] = useState<string>(agencyFilter);
@@ -27,6 +28,19 @@ function Projects() {
   useEffect(() => {
     setAgencySelected(agencyFilter);
   }, [agencyFilter]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return;
+    const mql = window.matchMedia('(max-width: 600px)');
+    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
+    setIsMobile(mql.matches);
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else if ((mql as any).addListener) (mql as any).addListener(onChange);
+    return () => {
+      if (mql.removeEventListener) mql.removeEventListener('change', onChange);
+      else if ((mql as any).removeListener) (mql as any).removeListener(onChange);
+    };
+  }, []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -41,6 +55,7 @@ function Projects() {
       if (sort === 'newest') return kb - ka;
       return ka - kb;
     });
+    const mode = isMobile ? 'and' : filterMode;
     return sorted.filter((p) => {
       const statusOk = status === 'all' || p.release?.status === status;
       const text = ((p as any).title + ' ' + (p as any).description).toLowerCase();
@@ -54,7 +69,7 @@ function Projects() {
     let techOk = true;
     if (effective.length === 0) {
       techOk = true;
-    } else if (filterMode === 'and') {
+    } else if (mode === 'and') {
       // AND: 모든 선택된 기술을 포함해야 통과
       techOk = effective.every((t: string) => ((p as any).ability?.framework?.includes(t) || (p as any).ability?.language === t));
     } else {
@@ -64,7 +79,7 @@ function Projects() {
 
     return statusOk && textOk && langOk && agencyOk && techOk;
   });
-  }, [projects, query, status, sort, langFilter, techFilter, activeTechs, agencySelected]);
+  }, [projects, query, status, sort, langFilter, techFilter, activeTechs, agencySelected, filterMode, isMobile]);
 
   return (
     <Container>
@@ -216,9 +231,11 @@ function Projects() {
               
               <ProjectFooter>
                 <ReleaseDate>📅 {project.release.date}</ReleaseDate>
-                <GitHubLink href={project.release.link} target="_blank" rel="noopener noreferrer">
-                  🔗 GitHub 보기
-                </GitHubLink>
+                {project.release.status === 'public' && project.release.link && (
+                  <GitHubLink href={project.release.link} target="_blank" rel="noopener noreferrer">
+                    🔗 GitHub 보기
+                  </GitHubLink>
+                )}
               </ProjectFooter>
             </Card>
           ))}
@@ -346,6 +363,10 @@ const FilterModeToggle = styled.div`
   align-items: center;
   gap: 0.5rem;
   margin-left: 0.5rem;
+
+  @media (max-width: 600px) {
+    display: none;
+  }
 `;
 
 const ModeLabel = styled.span`

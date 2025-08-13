@@ -40,8 +40,12 @@ export default function About() {
           <SectionTitle>이력</SectionTitle>
           <ResumeList>
             {about.resume.map((item, idx) => (
-              <ResumeCard key={idx}>
-                <Company to={`/projects?agency=${encodeURIComponent(item.company)}`}>{item.company}</Company>
+              <ResumeCard
+                key={idx}
+                to={`/projects?agency=${encodeURIComponent(item.company)}`}
+                aria-label={`${item.company} 프로젝트 보기`}
+              >
+                <Company>{item.company}</Company>
                 <Department>{item.department}</Department>
                 <Role>{item.role}</Role>
                 <Period>
@@ -85,7 +89,6 @@ const Container = styled.div`
   @media (max-width: 768px) {
     padding-top: 64px;
   }
-}
 `;
 
 const Content = styled.div`
@@ -145,35 +148,36 @@ const ResumeList = styled.div`
   gap: clamp(0.75rem, 2vw, 1.5rem);
 `;
 
-const ResumeCard = styled.div`
+const ResumeCard = styled(Link)`
+  display: block;
+  text-decoration: none;
+  color: inherit;
   background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
   padding: clamp(1.25rem, 3vw, 2rem);
   transition: all 0.3s ease;
+  cursor: pointer;
   
   &:hover {
     transform: translateY(-4px);
     background: rgba(255, 255, 255, 0.15);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   }
+
+  &:focus-visible {
+    outline: 2px solid #ffd700;
+    outline-offset: 2px;
+  }
 `;
 
-const Company = styled(Link)`
-  display: inline-block;
+const Company = styled.div`
   margin: 0;
   font-size: clamp(1.1rem, 3.5vw, 1.5rem);
   color: white;
   font-weight: 700;
-  text-decoration: none;
-  padding: 0.15rem 0.35rem;
-  border-radius: 6px;
-
-  &:hover {
-    background: rgba(255,255,255,0.06);
-    transform: translateY(-2px);
-  }
+  padding: 0.15rem 0.35rem 0.35rem 0;
 `;
 
 const Department = styled.div`
