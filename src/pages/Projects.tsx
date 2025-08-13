@@ -70,17 +70,18 @@ function Projects() {
     <Container>
       <Seo title={`프로젝트 | ${data.home?.name} 포트폴리오`} description="프로젝트 목록을 검색하고 필터링할 수 있습니다." />
       <Content>
-        <Title>My Projects</Title>
-        <Controls>
-          {/* 모바일 검색: 아이콘 클릭 시 확장형 입력 표시 (옵션2) */}
-          <MobileSearchButton
+        <TitleRow>
+          <Title>My Projects</Title>
+          <InlineMobileSearchButton
             type="button"
             aria-label={mobileSearchOpen ? "검색 닫기" : "검색 열기"}
             onClick={() => setMobileSearchOpen((s) => !s)}
             aria-expanded={mobileSearchOpen}
           >
             🔍
-          </MobileSearchButton>
+          </InlineMobileSearchButton>
+        </TitleRow>
+        <Controls>
 
           {mobileSearchOpen && (
             <MobileSearchBar role="search" aria-hidden={!mobileSearchOpen}>
@@ -255,6 +256,33 @@ const Title = styled.h1`
   margin-bottom: clamp(1.5rem, 4vw, 3rem);
   color: white;
   font-weight: 700;
+`;
+
+const TitleRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+`;
+
+const InlineMobileSearchButton = styled.button`
+  display: none;
+  background: transparent;
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
+  color: var(--text, white);
+  padding: 0.25rem 0.4rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.95rem;
+
+  @media (max-width: 600px) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+  }
 `;
 
 const Controls = styled.div`

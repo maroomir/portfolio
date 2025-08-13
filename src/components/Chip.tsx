@@ -30,23 +30,41 @@ const Wrapper = styled.button<{ $readonly?: boolean; $active?: boolean }>`
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.35rem 0.6rem;
+  padding: 0.4rem 0.75rem;
   border-radius: 999px;
-  background: ${(props) => (props.$readonly ? "rgba(255,255,255,0.06)" : props.$active ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.12)")};
-  border: 1px solid ${(props) => (props.$active ? "rgba(255,255,255,0.5)" : "rgba(255,255,255,0.06)")};
-  color: var(--muted);
-  font-weight: 600;
+  background: ${(props) =>
+    props.$readonly
+      ? "var(--chip-bg, rgba(255,255,255,0.06))"
+      : props.$active
+      ? "var(--chip-active, rgba(99,102,241,0.20))"
+      : "var(--chip-bg, rgba(255,255,255,0.08))"};
+  color: ${(props) => (props.$active ? "var(--text, #e6edf3)" : "var(--chip-inactive-text, var(--muted))")};
+  border: 1px solid
+    ${(props) => (props.$active ? "var(--chip-active-border, rgba(99,102,241,0.9))" : "var(--glass-border, rgba(255,255,255,0.06))")};
+  box-shadow: ${(props) => (props.$active ? "0 6px 20px rgba(99,102,241,0.18)" : "none")};
+  font-weight: 700;
   cursor: ${(props) => (props.$readonly ? "default" : "pointer")};
-  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+  transition: transform 160ms ease, box-shadow 160ms ease, background 160ms ease, color 160ms ease;
   outline: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 
   &:hover {
     transform: ${(props) => (props.$readonly ? "none" : "translateY(-2px)")};
-    box-shadow: ${(props) => (props.$readonly ? "none" : "0 6px 18px rgba(0,0,0,0.18)")};
+    box-shadow: ${(props) =>
+      props.$readonly
+        ? "none"
+        : props.$active
+        ? "0 8px 26px rgba(99,102,241,0.22)"
+        : "0 6px 18px rgba(0,0,0,0.12)"};
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 4px var(--focus, rgba(99,102,241,0.12));
   }
 
   &:disabled {
-    opacity: 0.7;
+    opacity: 0.65;
     cursor: default;
   }
 `;

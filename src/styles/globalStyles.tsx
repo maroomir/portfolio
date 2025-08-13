@@ -2,13 +2,18 @@ import { css, Global } from "@emotion/react";
 
 const globalStyles = css`
   :root {
-    --bg-gradient-1: #667eea;
-    --bg-gradient-2: #764ba2;
+    --bg-gradient-1: #5b6ee0;
+    --bg-gradient-2: #6b4ba0;
     --primary: #ffd700;
-    --muted: rgba(255,255,255,0.85);
-    --card-bg: rgba(255,255,255,0.08);
-    --glass-border: rgba(255,255,255,0.12);
-    --focus: rgba(255,215,0,0.15);
+    --text: #e6edf3;
+    --muted: #9aa4b2;
+    --card-bg: rgba(255,255,255,0.04);
+    --glass-border: rgba(255,255,255,0.06);
+    --chip-active: rgba(99,102,241,0.24);
+    --chip-bg: rgba(255,255,255,0.10);
+    --chip-inactive-text: #e6edf3;
+    --chip-active-border: rgba(99,102,241,0.95);
+    --focus: rgba(99,102,241,0.18);
     --max-width: 1200px;
   }
 
@@ -28,7 +33,7 @@ const globalStyles = css`
 
   body {
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-    color: var(--muted);
+    color: var(--text);
     line-height: 1.6;
     background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
   }
