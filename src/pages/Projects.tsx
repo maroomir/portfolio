@@ -405,24 +405,6 @@ const SearchInput = styled.input`
   }
 `;
 
-/* 모바일 전용 검색 UI */
-const MobileSearchButton = styled.button`
-  display: none;
-  background: transparent;
-  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
-  color: var(--text, white);
-  padding: 0.5rem;
-  border-radius: 10px;
-  cursor: pointer;
-
-  @media (max-width: 600px) {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 44px;
-    min-height: 44px;
-  }
-`;
 
 const MobileSearchBar = styled.div`
   display: flex;
