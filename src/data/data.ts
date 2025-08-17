@@ -1,3 +1,6 @@
+// Type definitions aligned with src/data/data.json
+// This file defines the full shape of the JSON data used across the app.
+
 export interface IHome {
   name: string;
   bio: string;
@@ -7,26 +10,28 @@ export interface IHome {
 export interface IResume {
   company: string;
   department: string;
-  rules: string;
+  role: string;
   period: string[];
+  highlights?: string[];
 }
 
 export interface IAbout {
   skills: string[];
   languages: string[];
-  interests: string[];
   resume: IResume[];
+  interests?: string[];
 }
 
 export interface IAgency {
   name: string;
-  link: string;
+  url?: string;
+  link?: string;
 }
 
 export interface IRelease {
   date: string;
-  status: 'public' | 'private' | 'Do not have';
-  link: string;
+  status: 'public' | 'private';
+  link?: string;
 }
 
 export interface IAbility {
@@ -38,7 +43,14 @@ export interface IProject {
   name: string;
   title: string;
   description: string;
-  agency: IAgency;
+  agency?: IAgency;
+  category?: string;
   ability: IAbility;
   release: IRelease;
+}
+
+export interface IData {
+  home: IHome;
+  about: IAbout;
+  projects: IProject[];
 }

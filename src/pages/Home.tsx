@@ -17,7 +17,7 @@ function Home() {
         <h2>{home.bio}</h2>
         <TypeEffect>
           <Typewriter 
-            words={home.Keywords}
+            words={home.keywords}
             loop={0}
             cursor
             cursorStyle="|"
