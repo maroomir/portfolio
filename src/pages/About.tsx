@@ -1,10 +1,67 @@
 import styled from "@emotion/styled";
+import { useMemo } from "react";
 import data from "@/data/data.json"
 import Seo from "@/components/Seo";
 import { Link } from "react-router-dom";
 
 export default function About() {
-  const { about } = data
+  const { about, projects } = data
+
+  const langsSorted = useMemo(() => {
+    const counts: Record<string, number> = {};
+    projects.forEach((p: any) => {
+      const lang = p?.ability?.language;
+      if (lang) counts[lang] = (counts[lang] || 0) + 1;
+    });
+    return about.languages
+      .map((l: string, idx: number) => ({ l, idx, count: counts[l] || 0 }))
+      .sort((a, b) => (b.count - a.count) || (a.idx - b.idx))
+      .map(x => x.l);
+  }, [about, projects]);
+
+  const skillsSorted = useMemo(() => {
+    const counts: Record<string, number> = {};
+    projects.forEach((p: any) => {
+      const frameworks = p?.ability?.framework ?? [];
+      frameworks.forEach((f: string) => {
+        if (f) counts[f] = (counts[f] || 0) + 1;
+      });
+    });
+    return about.skills
+      .map((s: string, idx: number) => ({ s, idx, count: counts[s] || 0 }))
+      .sort((a, b) => (b.count - a.count) || (a.idx - b.idx))
+      .map(x => x.s);
+  }, [about, projects]);
+
+  const langCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    projects.forEach((p: any) => {
+      const lang = p?.ability?.language;
+      if (lang) counts[lang] = (counts[lang] || 0) + 1;
+    });
+    return counts;
+  }, [projects]);
+
+  const skillCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    projects.forEach((p: any) => {
+      const frameworks = p?.ability?.framework ?? [];
+      frameworks.forEach((f: string) => {
+        if (f) counts[f] = (counts[f] || 0) + 1;
+      });
+    });
+    return counts;
+  }, [projects]);
+
+  const agencyCounts = useMemo(() => {
+    const counts: Record<string, number> = {};
+    projects.forEach((p: any) => {
+      const agency = (p?.agency?.name ?? '').toString();
+      if (agency) counts[agency] = (counts[agency] || 0) + 1;
+    });
+    return counts;
+  }, [projects]);
+
   return (
     <Container>
       <Seo title={`소개 | ${data.home?.name} 포트폴리오`} description="보유 기술과 경력을 소개합니다." />
@@ -16,9 +73,9 @@ export default function About() {
             <TechGroup>
               <GroupTitle>언어</GroupTitle>
               <TechList>
-                {about.languages.map((lang) => (
+                {langsSorted.map((lang) => (
                   <LangChip key={lang} to={`/projects?lang=${encodeURIComponent(lang)}`} aria-label={`Filter by language ${lang}`}>
-                    <LangIcon /> {lang}
+                    <LangIcon /> {lang}<SmallCount> ({langCounts[lang] ?? 0})</SmallCount>
                   </LangChip>
                 ))}
               </TechList>
@@ -26,9 +83,9 @@ export default function About() {
             <TechGroup>
               <GroupTitle>기술</GroupTitle>
               <TechList>
-                {about.skills.map((skill) => (
+                {skillsSorted.map((skill) => (
                   <TechChip key={skill} to={`/projects?tech=${encodeURIComponent(skill)}`} aria-label={`Filter by tech ${skill}`}>
-                    <ToolIcon /> {skill}
+                    <ToolIcon /> {skill}<SmallCount> ({skillCounts[skill] ?? 0})</SmallCount>
                   </TechChip>
                 ))}
               </TechList>
@@ -45,7 +102,7 @@ export default function About() {
                 to={`/projects?agency=${encodeURIComponent(item.company)}`}
                 aria-label={`${item.company} 프로젝트 보기`}
               >
-                <Company>{item.company}</Company>
+                <Company>{item.company}<SmallCount> ({agencyCounts[item.company] ?? 0})</SmallCount></Company>
                 <Department>{item.department}</Department>
                 <Role>{item.role}</Role>
                 <Period>
@@ -70,6 +127,13 @@ const LangIcon = () => (
 
 const LangChip = styled(Link)` display:inline-flex; align-items:center; gap:6px; padding:0.4rem 0.8rem; border-radius:999px; background: rgba(255,255,255,0.2); color:white; text-decoration:none; font-weight:600; margin:0 0.25rem 0.25rem 0; `;
 const TechChip = styled(Link)` display:inline-flex; align-items:center; gap:6px; padding:0.4rem 0.8rem; border-radius:999px; background: rgba(255,255,255,0.12); color:white; text-decoration:none; font-weight:600; margin:0 0.25rem 0.25rem 0; `;
+const SmallCount = styled.span`
+  font-size: 0.78em;
+  color: rgba(255,255,255,0.9);
+  margin-left: 6px;
+  vertical-align: baseline;
+  opacity: 0.95;
+`;
 
 const ToolIcon = () => (
   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ verticalAlign: 'middle', marginRight: 6 }} aria-hidden="true">
