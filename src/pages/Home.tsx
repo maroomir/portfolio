@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
 import data from "@/data/data.json";
 import Seo from "@/components/Seo";
+import Timeline from "@/components/Timeline";
 
 function Home() {
   const { home } = data;
@@ -27,6 +28,10 @@ function Home() {
           />
         </TypeEffect>
         <Button onClick={() => navigate("/projects")}>프로젝트 보기</Button>
+
+        {/* Timeline: 경력 타임라인 (최신순) */}
+        <Timeline items={data.about.resume} />
+
       </Inner>
     </Container>    
   );
