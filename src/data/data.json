@@ -909,6 +909,25 @@
         "status": "private",
         "link": ""
       }
+    },
+    {
+      "name": "AMRXMS",
+      "title": "AMR 관제 연결 패키지",
+      "description": "로봇 관제 시스템과 연결해 상태 모니터링 및 제어 기능을 제공하는 패키지",
+      "agency": {
+        "name": "삼성전자",
+        "url": "https://www.samsung.com/sec/"
+      },
+      "category": "ROS Application",
+      "ability": {
+        "language": "C++",
+        "framework": ["ROS2", "Tizen", "Linux", "FlatBuffer"]
+      },
+      "release": {
+        "date": "2025/11",
+        "status": "private",
+        "link": ""
+      }
     }
   ]
 }
