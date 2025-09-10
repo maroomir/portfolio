@@ -27,6 +27,7 @@ const globalStyles = css`
     width: 100%;
     height: 100%;
     overflow-x: hidden;
+    overflow-y: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

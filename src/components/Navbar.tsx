@@ -41,7 +41,9 @@ const Inner = styled.div`
   margin: 0 auto;
 `;
 
-const StyledLink = styled(Link)<{ $isActive: boolean }>`
+const StyledLink = styled(Link, {
+  shouldForwardProp: (prop) => prop !== '$isActive'
+})<{ $isActive: boolean }>`
   font-weight: 600;
   color: ${props => props.$isActive ? '#ffd700' : 'white'};
   border-bottom: 2px solid ${props => props.$isActive ? '#ffd700' : 'transparent'};
