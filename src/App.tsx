@@ -5,6 +5,7 @@ import AppRoutes from './routes/AppRoutes';
 import ScrollToTop from '@/components/ScrollToTop';
 import Footer from '@/components/Footer';
 import NavigationController from '@/components/NavigationController';
+import ScrollControls from '@/components/ScrollControls';
 
 function App() {
   console.log('App Rendering...')
@@ -16,6 +17,7 @@ function App() {
       <Navbar />
       <NavigationController />
       <AppRoutes />
+      <ScrollControls />
       <Footer />
     </BrowserRouter>
   );
