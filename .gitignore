@@ -13,7 +13,7 @@ dist-ssr
 *.local
 
 # Editor directories and files
-.vscode/*
+.vscode/
 !.vscode/extensions.json
 .idea
 .DS_Store
@@ -22,3 +22,30 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# --- dependencies & build outputs ---
+node_modules/
+dist/
+
+# --- logs & caches ---
+*.log
+npm-debug.log*
+yarn-error.log
+pnpm-debug.log*
+*.tsbuildinfo
+
+# --- OS / editor junk ---
+.DS_Store
+Thumbs.db
+.idea/
+.history/
+
+# --- vercel local state ---
+.vercel/
+
+# --- vite config artifacts (TS 기준 단일 소스 유지 시) ---
+vite.config.js
+vite.config.d.ts
+
+# --- VS Code: 기본은 무시하되, 특정 파일만 허용하고 싶을 때 ---
+.vscode/*
