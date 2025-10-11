@@ -928,6 +928,28 @@
         "status": "private",
         "link": ""
       }
+    },
+    {
+      "name": "AMRMapEditor",
+      "title": "AMR 주행 맵 편집기",
+      "description": "AMR 주행용 맵 생성 및 편집 기능을 제공하는 GUI 기반 웹 및 데스크탑 애플리케이션",
+      "agency": {
+        "name": "삼성전자",
+        "url": "https://www.samsung.com/sec/"
+      },
+      "category": "Web Application",
+      "ability": {
+        "language": "Typescript",
+        "framework": [
+          "React",
+          "Vite",
+          "Electron"]
+      },
+      "release": {
+        "date": "2025/11",
+        "status": "private",
+        "link": ""
+      }
     }
   ]
 }
