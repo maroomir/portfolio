@@ -233,7 +233,7 @@ function Projects() {
                 <ReleaseDate>📅 {project.release.date}</ReleaseDate>
                 {project.release.status === 'public' && project.release.link && (
                   <GitHubLink href={project.release.link} target="_blank" rel="noopener noreferrer">
-                    🔗 GitHub 보기
+                    🔗 프로젝트 열기
                   </GitHubLink>
                 )}
               </ProjectFooter>

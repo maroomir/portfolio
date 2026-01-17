@@ -157,7 +157,7 @@
       "release": {
         "date": "2025/03",
         "status": "public",
-        "link": "https://github.com/maroomir/mobile-wedding-invitation"
+        "link": "https://yscj-mobile-wedding-invitation.vercel.app/"
       }
     },
     {
@@ -798,7 +798,7 @@
     },
     {
       "name": "yoonimage",
-      "title": "영상 유틸리티 라이브러리",
+      "title": "이미지 처리 유틸리티 라이브러리",
       "description": "컬러 변환·필터·간단한 전처리 기능을 제공하는 C++ 영상 유틸 라이브러리",
       "agency": {
         "name": "maroomir",
@@ -874,8 +874,8 @@
     },
     {
       "name": "ROS2-KAMRPoseEstimator",
-      "title": "배송로봇용 위치 추적기",
-      "description": "오드메트리/IMU/카메라 등 센서를 융합해 배송로봇의 위치를 추정하는 노드",
+      "title": "배송로봇용 마커 기반 위치 초기화 모듈",
+      "description": "실물 ARUCO 마커 또는 QR 마커를 인식해서 배송로봇의 현재 위치를 추정하는 노드",
       "agency": {
         "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
@@ -949,6 +949,25 @@
         "date": "2025/11",
         "status": "private",
         "link": ""
+      }
+    },
+    {
+      "name": "Picktion",
+      "title": "AI 픽션 작성 도구",
+      "description": "React, TypeScript로 개발한 AI 기반 픽션 작성 지원 웹 애플리케이션",
+      "ability": {
+        "language": "Typescript",
+        "framework": [
+          "React",
+          "Vite",
+          "Electron"
+        ]
+      },
+      "category": "Web Site",
+      "release": {
+        "date": "2026/01",
+        "status": "public",
+        "link": "https://picktion.vercel.app/"
       }
     }
   ]
