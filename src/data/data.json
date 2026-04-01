@@ -168,6 +168,7 @@
         "name": "탑엔지니어링",
         "url": "http://topengnet.co.kr"
       },
+      "pinned": true,
       "category": "Machine Vision",
       "ability": {
         "language": "C++",
@@ -297,6 +298,7 @@
         "url": "https://www.lge.co.kr/"
       },
       "category": "Rototics Vision",
+      "pinned": true,
       "ability": {
         "language": "C#",
         "framework": [
@@ -501,6 +503,7 @@
         "url": "https://www.yonsei.ac.kr/"
       },
       "category": "Deep Learning",
+      "pinned": true,
       "ability": {
         "language": "Python",
         "framework": ["Pytorch"]
@@ -558,6 +561,7 @@
         "url": "https://github.com/maroomir/"
       },
       "category": "Unity Simulation",
+      "pinned": true,
       "ability": {
         "language": "C#",
         "framework": ["Unity"]
@@ -847,6 +851,7 @@
         "language": "C++",
         "framework": ["ROS2", "Tizen", "Linux"]
       },
+      "pinned": true,
       "release": {
         "date": "2024/08",
         "status": "private",
@@ -866,6 +871,7 @@
         "language": "C++",
         "framework": ["ROS2", "Tizen", "Linux"]
       },
+      "pinned": true,
       "release": {
         "date": "2024/10",
         "status": "private",
@@ -904,6 +910,7 @@
         "language": "C++",
         "framework": ["ROS2", "Tizen", "Linux", "OpenCV"]
       },
+      "pinned": true,
       "release": {
         "date": "2025/09",
         "status": "private",
@@ -923,6 +930,7 @@
         "language": "C++",
         "framework": ["ROS2", "Tizen", "Linux", "FlatBuffer"]
       },
+      "pinned": true,
       "release": {
         "date": "2025/11",
         "status": "private",
@@ -966,6 +974,40 @@
       "category": "Web Site",
       "release": {
         "date": "2026/01",
+        "status": "public",
+        "link": "https://picktion.vercel.app/"
+      }
+    },
+    {
+      "name": "Picktion",
+      "title": "AI 픽션 작성 도구",
+      "description": "React, TypeScript로 개발한 AI 기반 픽션 작성 지원 웹 애플리케이션",
+      "ability": {
+        "language": "Typescript",
+        "framework": [
+          "React",
+          "Vite",
+          "Electron"
+        ]
+      },
+      "category": "Web Site",
+      "release": {
+        "date": "2026/01",
+        "status": "public",
+        "link": "https://picktion.vercel.app/"
+      }
+    },
+    {
+      "name": "HumanoidVision",
+      "title": "휴머노이드 비전 스택",
+      "description": "카메라 캡처.객체 인식.물체 위치 추정 등 휴머노이드의 눈 역할을 수행하는 비전 스택",
+      "ability": {
+        "language": "C++",
+        "framework": ["ROS2", "Linux", "OpenCV", "Onnx"]
+      },
+      "category": "Web Site",
+      "release": {
+        "date": "2026/03",
         "status": "public",
         "link": "https://picktion.vercel.app/"
       }

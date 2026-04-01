@@ -4,9 +4,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Seo from "@/components/Seo";
 import data from "@/data/data.json";
 import Chip from '@/components/Chip';
+import { keyframes } from "@emotion/react";
 
 function Projects() {
   const { projects } = data;
+  type ProjectItem = (typeof projects)[number];
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -21,6 +23,7 @@ function Projects() {
   const [filterMode, setFilterMode] = useState<'and' | 'or'>('and');
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
   const navigate = useNavigate();
   const [agencySelected, setAgencySelected] = useState<string>(agencyFilter);
@@ -42,6 +45,37 @@ function Projects() {
     };
   }, []);
 
+  useEffect(() => {
+    if (!selectedProject || typeof window === 'undefined') return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setSelectedProject(null);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', handleEscape);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', handleEscape);
+    };
+  }, [selectedProject]);
+
+  const shouldIgnoreCardOpen = (target: EventTarget | null) => {
+    if (!(target instanceof HTMLElement)) return false;
+    return Boolean(target.closest('a, button, input, select, textarea, [data-no-modal="true"]'));
+  };
+
+  const openProjectModal = (project: ProjectItem, target: EventTarget | null) => {
+    if (shouldIgnoreCardOpen(target)) return;
+    setSelectedProject(project);
+  };
+
+  const closeProjectModal = () => setSelectedProject(null);
+
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
     const getDateKey = (p: any) => {
@@ -50,6 +84,8 @@ function Projects() {
       return digits ? parseInt(digits, 10) : 0;
     };
     const sorted = [...projects].sort((a, b) => {
+      const pinnedDiff = Number(Boolean((b as any).pinned)) - Number(Boolean((a as any).pinned));
+      if (pinnedDiff !== 0) return pinnedDiff;
       const ka = getDateKey(a);
       const kb = getDateKey(b);
       if (sort === 'newest') return kb - ka;
@@ -202,13 +238,28 @@ function Projects() {
         </ActiveFilters>
 
         <ProjectGrid>
-          {filtered.map((project, index) => (
-            <Card key={index}>
+          {filtered.map((project) => (
+            <Card
+              key={project.name}
+              role="button"
+              tabIndex={0}
+              onClick={(e) => openProjectModal(project, e.target)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  openProjectModal(project, e.target);
+                }
+              }}
+              aria-label={`${project.title} 상세 보기`}
+            >
               <ProjectHeader>
                 <h3>{project.title}</h3>
-                <Status $status={project.release.status}>
-                  {project.release.status === 'public' ? '🌐 Public' : '🔒 Private'}
-                </Status>
+                <HeaderRight>
+                  {(project as any).pinned && <PinnedBadge>Pinned</PinnedBadge>}
+                  <Status $status={project.release.status}>
+                    {project.release.status === 'public' ? '🌐 Public' : '🔒 Private'}
+                  </Status>
+                </HeaderRight>
               </ProjectHeader>
               <Description>{project.description}</Description>
               
@@ -220,7 +271,10 @@ function Projects() {
                     <Chip
                       key={idx}
                       active={activeTechs.includes(framework)}
-                      onClick={() => setActiveTechs(prev => prev.includes(framework) ? prev.filter(x => x !== framework) : [...prev, framework])}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActiveTechs(prev => prev.includes(framework) ? prev.filter(x => x !== framework) : [...prev, framework]);
+                      }}
                       aria-pressed={activeTechs.includes(framework)}
                     >
                       {framework}
@@ -232,7 +286,12 @@ function Projects() {
               <ProjectFooter>
                 <ReleaseDate>📅 {project.release.date}</ReleaseDate>
                 {project.release.status === 'public' && project.release.link && (
-                  <GitHubLink href={project.release.link} target="_blank" rel="noopener noreferrer">
+                  <GitHubLink
+                    href={project.release.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={(e) => e.stopPropagation()}
+                  >
                     🔗 프로젝트 열기
                   </GitHubLink>
                 )}
@@ -240,6 +299,45 @@ function Projects() {
             </Card>
           ))}
         </ProjectGrid>
+
+        {selectedProject && (
+          <ModalOverlay role="dialog" aria-modal="true" aria-label={`${selectedProject.title} 상세 모달`} onClick={closeProjectModal}>
+            <ModalCard onClick={(e) => e.stopPropagation()}>
+              <ModalHeader>
+                <ModalTitleGroup>
+                  <h2>{selectedProject.title}</h2>
+                  <ModalMeta>
+                    {(selectedProject as any).pinned && <PinnedBadge>Pinned</PinnedBadge>}
+                    <Status $status={selectedProject.release.status}>
+                      {selectedProject.release.status === 'public' ? '🌐 Public' : '🔒 Private'}
+                    </Status>
+                  </ModalMeta>
+                </ModalTitleGroup>
+                <ModalCloseButton type="button" aria-label="모달 닫기" onClick={closeProjectModal}>
+                  ✕
+                </ModalCloseButton>
+              </ModalHeader>
+
+              <ModalBody>
+                <Description>{selectedProject.description}</Description>
+                <ReleaseDate>📅 {selectedProject.release.date}</ReleaseDate>
+
+                {(selectedProject as any).attachments?.length > 0 ? (
+                  <AttachmentGrid>
+                    {(selectedProject as any).attachments.map((attachment: any, idx: number) => (
+                      <AttachmentFigure key={`${selectedProject.name}-attachment-${idx}`}>
+                        <AttachmentImage src={attachment.src} alt={attachment.caption || `${selectedProject.title} 첨부 이미지 ${idx + 1}`} loading="lazy" />
+                        {attachment.caption && <AttachmentCaption>{attachment.caption}</AttachmentCaption>}
+                      </AttachmentFigure>
+                    ))}
+                  </AttachmentGrid>
+                ) : (
+                  <NoAttachmentText>첨부된 이미지가 없습니다.</NoAttachmentText>
+                )}
+              </ModalBody>
+            </ModalCard>
+          </ModalOverlay>
+        )}
       </Content>
     </Container>
   );
@@ -475,6 +573,7 @@ const Card = styled.div`
   min-width: 360px; /* 카드의 최소 너비를 제한하여 글씨가 넘치지 않게 함 */
   box-sizing: border-box;
   transition: transform 220ms ease, box-shadow 220ms ease;
+  cursor: pointer;
   
   &:hover {
     transform: translateY(-4px);
@@ -482,11 +581,31 @@ const Card = styled.div`
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
   }
 
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline-offset: 2px;
+  }
+
   @media (max-width: 600px) {
     width: 100%;
     padding: 1rem;
     border-radius: 12px;
   }
+`;
+
+const HeaderRight = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const PinnedBadge = styled.span`
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  color: #262626;
+  background: #ffd75a;
 `;
 const ProjectHeader = styled.div`
   display: flex;
@@ -562,4 +681,111 @@ const GitHubLink = styled.a`
     color: white;
     text-decoration: underline;
   }
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0, 0, 0, 0.78);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(0.75rem, 2.5vw, 1.5rem);
+`;
+
+const modalPopIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+`;
+
+const ModalCard = styled.div`
+  width: min(960px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+  border-radius: 16px;
+  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
+  background: var(--card-bg, rgba(22, 22, 28, 0.96));
+  padding: clamp(1rem, 3vw, 1.6rem);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  animation: ${modalPopIn} 220ms ease-out;
+`;
+
+const ModalHeader = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+`;
+
+const ModalTitleGroup = styled.div`
+  h2 {
+    margin: 0;
+    color: white;
+    font-size: clamp(1.25rem, 3vw, 1.75rem);
+  }
+`;
+
+const ModalMeta = styled.div`
+  margin-top: 0.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const ModalCloseButton = styled.button`
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  background: transparent;
+  color: white;
+  min-width: 36px;
+  min-height: 36px;
+  cursor: pointer;
+`;
+
+const ModalBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+`;
+
+const AttachmentGrid = styled.div`
+  margin-top: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+`;
+
+const AttachmentFigure = styled.figure`
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.04);
+`;
+
+const AttachmentImage = styled.img`
+  display: block;
+  width: 100%;
+  max-height: 240px;
+  object-fit: cover;
+`;
+
+const AttachmentCaption = styled.figcaption`
+  padding: 0.55rem 0.7rem;
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.88);
+`;
+
+const NoAttachmentText = styled.p`
+  margin: 0.25rem 0 0;
+  color: rgba(255, 255, 255, 0.72);
 `;

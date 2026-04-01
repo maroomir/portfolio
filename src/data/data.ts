@@ -39,12 +39,19 @@ export interface IAbility {
   framework: string[];
 }
 
+export interface IProjectAttachment {
+  src: string;
+  caption?: string;
+}
+
 export interface IProject {
   name: string;
   title: string;
   description: string;
   agency?: IAgency;
   category?: string;
+  pinned?: boolean;
+  attachments?: IProjectAttachment[];
   ability: IAbility;
   release: IRelease;
 }
