@@ -115,7 +115,7 @@ export default function About() {
                   <Department>{item.department}</Department>
                   <Role>{item.role}</Role>
                 </ResumeBody>
-                <ProjectCount>{String(agencyCounts[item.company] ?? 0).padStart(2, "0")} FRAMES →</ProjectCount>
+                <ProjectCount data-project-count>{String(agencyCounts[item.company] ?? 0).padStart(2, "0")} FRAMES →</ProjectCount>
               </ResumeCard>
             ))}
           </ResumeList>
@@ -259,6 +259,11 @@ const ResumeCard = styled(Link)`
     background: var(--surface);
   }
 
+  /* 컴포넌트 선택자는 Emotion babel 플러그인이 없으면 런타임 예외를 던지므로 data 속성으로 지정 */
+  &:hover [data-project-count] {
+    color: var(--accent);
+  }
+
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     gap: 0.5rem;
@@ -299,8 +304,4 @@ const ProjectCount = styled.div`
   letter-spacing: 0.1em;
   color: var(--muted);
   white-space: nowrap;
-
-  ${ResumeCard}:hover & {
-    color: var(--accent);
-  }
 `;
