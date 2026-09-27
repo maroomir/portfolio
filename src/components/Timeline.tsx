@@ -1,20 +1,19 @@
 import { useMemo } from "react";
 import styled from "@emotion/styled";
-import { IResume } from "@/data/data";
+import { IProject, IResume } from "@/data/data";
 import data from "@/data/data.json";
+import { HudLabel } from "@/styles/hud";
 
 /**
- * Timeline
- * - 세로 중심형 타임라인 (데스크탑)
- * - 모바일에서는 단일 열(스택) 형태로 표시
+ * Timeline - 렌즈 눈금자 형태의 경력 타임라인
+ * - 데스크탑: 가로 눈금자 위에 시작 시점 순(오래된 → 최신)으로 배치
+ * - 모바일: 왼쪽 세로 레일에 같은 순서로 스택
  *
  * Props:
  * - items: IResume[]
  *
  * 동작:
- * - 기간(period 배열)의 시작 연도(숫자)를 파싱하여 최신순으로 정렬 후 렌더링
- * - 각 항목에 간단한 등장 애니메이션 적용
- * - 해당 회사에서 수행한 모든 프로젝트를 카드 하단에 나열 (public 프로젝트는 깃허브 링크)
+ * - 각 항목 하단에 해당 회사에서 수행한 프로젝트 제목을 나열 (public 프로젝트는 깃허브 링크)
  * - 하이라이트 및 프로젝트 설명은 표시하지 않음 (요청에 따라 프로젝트 제목만 노출)
  */
 
@@ -23,20 +22,15 @@ type Props = {
 };
 
 export default function Timeline({ items }: Props) {
-  const sorted = useMemo(() => {
-    const getYear = (p?: string[]) => {
-      if (!p || p.length === 0) return 0;
-      const s = p[0];
-      const digits = s?.toString().match(/20\d{2}|19\d{2}/);
-      return digits ? parseInt(digits[0], 10) : 0;
-    };
-    return [...items].sort((a, b) => getYear(b.period) - getYear(a.period));
-  }, [items]);
+  const sorted = useMemo(
+    () => [...items].sort((a, b) => (a.period[0] ?? "").localeCompare(b.period[0] ?? "")),
+    [items]
+  );
 
-  const projects = (data as any).projects || [];
+  const projects = data.projects as IProject[];
   const projectsByCompany = useMemo(() => {
-    const map: Record<string, any[]> = {};
-    projects.forEach((p: any) => {
+    const map: Record<string, IProject[]> = {};
+    projects.forEach((p) => {
       const name = (p.agency?.name ?? "").toLowerCase();
       if (!map[name]) map[name] = [];
       map[name].push(p);
@@ -44,51 +38,49 @@ export default function Timeline({ items }: Props) {
     return map;
   }, [projects]);
 
+  const startYear = sorted[0]?.period[0]?.slice(0, 4);
+  const endYear = sorted[sorted.length - 1]?.period[1]?.slice(0, 4);
+
   return (
-    <Wrapper>
-      <Inner>
-        <Line aria-hidden />
+    <Wrapper aria-label="경력 타임라인">
+      <Header>
+        <HudLabel>Career timeline</HudLabel>
+        <HudLabel>{startYear} ———— {endYear}</HudLabel>
+      </Header>
+      <Ruler $count={sorted.length}>
         {sorted.map((it, idx) => {
           const companyKey = (it.company ?? "").toLowerCase();
           const companyProjects = projectsByCompany[companyKey] || [];
+          const isLatest = idx === sorted.length - 1;
 
           return (
-            <Item
-              key={idx}
-              $side={idx % 2 === 0 ? "left" : "right"}
-              style={{ animationDelay: `${idx * 80}ms` }}
-            >
-              <Dot aria-hidden />
-              <ItemCard>
-                <Company>{it.company}</Company>
-                <Role>
-                  {it.role}
-                  {it.department ? ` · ${it.department}` : ""}
-                </Role>
-                <PeriodText>{(it.period || []).join(" — ")}</PeriodText>
+            <Item key={idx} $isLatest={isLatest} style={{ animationDelay: `${idx * 80}ms` }}>
+              <Period>{it.period[0]}{isLatest ? " →" : ""}</Period>
+              <Company>{it.company}</Company>
+              <Role>
+                {it.role}
+                {it.department ? ` · ${it.department}` : ""}
+              </Role>
 
-                {/* 하이라이트는 표시하지 않음 (요청) */}
-
-                {companyProjects.length > 0 && (
-                  <ProjectsList aria-label={`${it.company} projects`}>
-                    {companyProjects.map((pr: any, pi: number) => (
-                      <ProjectItem key={pi}>
-                        {pr.release?.status === "public" && pr.release?.link ? (
-                          <a href={pr.release.link} target="_blank" rel="noopener noreferrer">
-                            {pr.title}
-                          </a>
-                        ) : (
-                          <span>{pr.title}</span>
-                        )}
-                      </ProjectItem>
-                    ))}
-                  </ProjectsList>
-                )}
-              </ItemCard>
+              {companyProjects.length > 0 && (
+                <ProjectsList aria-label={`${it.company} projects`}>
+                  {companyProjects.map((pr, pi) => (
+                    <ProjectItem key={pi}>
+                      {pr.release?.status === "public" && pr.release?.link ? (
+                        <a href={pr.release.link} target="_blank" rel="noopener noreferrer">
+                          {pr.title}
+                        </a>
+                      ) : (
+                        <span>{pr.title}</span>
+                      )}
+                    </ProjectItem>
+                  ))}
+                </ProjectsList>
+              )}
             </Item>
           );
         })}
-      </Inner>
+      </Ruler>
     </Wrapper>
   );
 }
@@ -97,43 +89,50 @@ export default function Timeline({ items }: Props) {
 
 const Wrapper = styled.section`
   width: 100%;
-  max-width: var(--max-width, 1200px);
-  margin: 2.5rem auto;
-  padding: 0 clamp(1rem, 4vw, 2rem);
-  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 `;
 
-const Inner = styled.div`
-  position: relative;
+const Header = styled.div`
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+`;
+
+/* 가로 눈금자: 상단 선 + 각 항목의 왼쪽 눈금 */
+const Ruler = styled.div<{ $count: number }>`
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-  align-items: start;
-`;
+  grid-template-columns: repeat(${(p) => p.$count}, minmax(0, 1fr));
+  gap: 1rem;
+  border-top: 2px solid var(--line);
 
-/* center vertical line on wide screens */
-const Line = styled.div`
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  transform: translateX(-50%);
-  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.04));
-  z-index: 0;
-
-  @media (max-width: 800px) {
-    left: 24px;
-    transform: none;
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+    border-top: none;
+    border-left: 2px solid var(--line);
+    gap: 1.5rem;
   }
 `;
 
-const Item = styled.div<{ $side?: "left" | "right" }>`
+const Item = styled.div<{ $isLatest?: boolean }>`
   position: relative;
-  z-index: 1;
+  padding-top: 1.25rem;
   display: flex;
-  justify-content: ${(p) => (p.$side === "left" ? "flex-end" : "flex-start")};
-  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+
+  /* 눈금 */
+  &::before {
+    content: "";
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 2px;
+    height: 14px;
+    background: ${(p) => (p.$isLatest ? "var(--accent)" : "var(--dim)")};
+  }
 
   /* entrance animation */
   opacity: 0;
@@ -147,100 +146,65 @@ const Item = styled.div<{ $side?: "left" | "right" }>`
     }
   }
 
-  @media (max-width: 800px) {
-    justify-content: flex-start;
-    padding-left: 56px; /* space for line/dot */
+  @media (max-width: 900px) {
+    padding-top: 0;
+    padding-left: 1.25rem;
+
+    &::before {
+      top: 0.35rem;
+      left: -2px;
+      width: 14px;
+      height: 2px;
+    }
   }
 `;
 
-const Dot = styled.span`
-  position: absolute;
-  left: calc(50% - 6px);
-  top: 14px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: var(--chip-active, rgba(99,102,241,0.24));
-  border: 2px solid var(--chip-active-border, rgba(99,102,241,0.95));
-  box-shadow: 0 6px 18px rgba(99,102,241,0.14);
-
-  @media (max-width: 800px) {
-    left: 20px;
-  }
-`;
-
-const ItemCard = styled.article`
-  background: var(--card-bg, rgba(255,255,255,0.04));
-  border: 1px solid var(--glass-border, rgba(255,255,255,0.06));
-  color: #ffffff;
-  padding: 1rem;
-  border-radius: 12px;
-  width: min(48rem, 46%);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-
-  @media (max-width: 800px) {
-    width: 100%;
-    padding: 0.9rem;
-    border-radius: 10px;
-  }
+const Period = styled.time`
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
 `;
 
 const Company = styled.h3`
-  margin: 0 0 0.25rem 0;
-  font-size: 1.05rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text);
 `;
 
 const Role = styled.div`
-  font-size: 0.95rem;
-  color: #ffffff;
-  margin-bottom: 0.25rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--muted);
 `;
-
-const PeriodText = styled.time`
-  display: block;
-  font-size: 0.9rem;
-  color: #ffffff;
-  margin-bottom: 0.5rem;
-`;
-
-/* 하이라이트 표시 제거 (요청) */
 
 const ProjectsList = styled.div`
-  margin-top: 0.75rem;
+  margin-top: 0.6rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.3rem;
 `;
 
 const ProjectItem = styled.div`
-  font-size: 0.8rem;
-  line-height: 1;
-  text-align: left;
-  margin: 0;
-  padding: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
   display: flex;
   align-items: flex-start;
-  gap: 0.2rem;
+  gap: 0.35rem;
 
   &::before {
     content: "-";
-    color: var(--primary, #ffd700);
-    display: inline-block;
-    width: 1ch;
-    margin-right: 0.35rem;
-    margin-top: 0.1rem;
+    color: var(--accent);
+    flex-shrink: 0;
   }
 
   a,
   span {
-    color: #ffffff;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline;
+    color: var(--text-soft);
   }
   a:hover {
+    color: var(--accent);
     text-decoration: underline;
   }
 `;

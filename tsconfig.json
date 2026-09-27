@@ -16,7 +16,8 @@
       "@/components/*": ["./components/*"],
       "@/pages/*": ["./pages/*"],
       "@/routes/*": ["./routes/*"],
-      "@/data/*": ["./data/*"]
+      "@/data/*": ["./data/*"],
+      "@/styles/*": ["./styles/*"]
     },
 
     /* Bundler mode */

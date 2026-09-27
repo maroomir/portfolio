@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar'
 import AppRoutes from './routes/AppRoutes';
 // import ScrollToTop from '@/components/ScrollToTop'; // ScrollControls가 대체
 import Footer from '@/components/Footer';
+import FrameCorners from '@/components/FrameCorners';
 import NavigationController from '@/components/NavigationController';
 import ScrollControls from '@/components/ScrollControls';
 
@@ -15,6 +16,7 @@ function App() {
       <GlobalStyles />
       {/* <ScrollToTop /> 제거 */}
       <Navbar />
+      <FrameCorners />
       <NavigationController />
       <div id="app-scroll-container" style={{ overflowY: 'auto', height: '100vh' }}>
         <AppRoutes />

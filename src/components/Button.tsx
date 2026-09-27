@@ -1,28 +1,29 @@
 import styled from '@emotion/styled';
 
+/** 앰버 단색의 주요 행동 버튼 (뷰파인더 셔터 느낌의 각진 형태) */
 const Button = styled.button`
-  padding: 0.65rem 1.1rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.12);
-  outline: none;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 2rem;
+  border: 1px solid var(--accent);
+  border-radius: 0;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 1rem;
   font-weight: 700;
+  letter-spacing: 0.04em;
   cursor: pointer;
-  background: transparent;
-  color: var(--muted);
-  text-decoration: none;
-  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+  transition: background 150ms ease, color 150ms ease;
 
-  &:hover {
-    background: rgba(255,255,255,0.08);
-    transform: translateY(-3px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  &::after {
+    content: "→";
+    font-family: var(--font-mono);
   }
 
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  &:hover {
+    background: transparent;
+    color: var(--accent);
   }
 `;
 
