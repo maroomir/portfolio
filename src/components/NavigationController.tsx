@@ -119,26 +119,22 @@ const baseButton = `
   transform: translateY(-50%);
   width: 44px;
   height: 44px;
-  border-radius: 999px;
-  background: rgba(0,0,0,0.36);
-  color: white;
+  border-radius: 0;
+  background: rgba(11, 12, 14, 0.85);
+  color: var(--accent);
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  font-family: var(--font-mono);
   font-size: 1.25rem;
   cursor: pointer;
   z-index: 9999;
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: transform 160ms ease, background 160ms ease, opacity 160ms ease;
-  opacity: 0.92;
+  border: 1px solid var(--line-strong);
+  transition: border-color 160ms ease, color 160ms ease;
 
   &:hover {
-    transform: translateY(-50%) scale(1.06);
-    background: rgba(0,0,0,0.48);
-  }
-
-  &:active {
-    transform: translateY(-50%) scale(0.98);
+    border-color: var(--accent);
+    color: var(--text);
   }
 `;
 

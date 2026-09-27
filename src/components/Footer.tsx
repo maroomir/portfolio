@@ -8,14 +8,17 @@ export default function Footer() {
   return (
     <Wrapper role="contentinfo">
       <Inner>
-        <Left>
-          © {year} {owner}
-        </Left>
-        <Right>
+        <ExposureMeter aria-hidden>
+          <span>-3</span><span>··</span><span>-2</span><span>··</span><span>-1</span><span>··</span>
+          <Zero>0</Zero>
+          <span>··</span><span>+1</span><span>··</span><span>+2</span><span>··</span><span>+3</span>
+        </ExposureMeter>
+        <Row>
+          <span>© {year} {owner}</span>
           <Link href="https://github.com/maroomir" target="_blank" rel="noopener noreferrer" aria-label="GitHub 프로필로 이동">
-            GitHub
+            GITHUB →
           </Link>
-        </Right>
+        </Row>
       </Inner>
     </Wrapper>
   );
@@ -23,38 +26,46 @@ export default function Footer() {
 
 const Wrapper = styled.footer`
   width: 100%;
-  background: rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(8px);
-  color: white;
+  border-top: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
 `;
 
 const Inner = styled.div`
-  max-width: 1200px;
-  padding: 1rem 2rem;
+  max-width: var(--max-width);
+  padding: 1.5rem clamp(1rem, 4vw, 2.5rem);
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+`;
+
+const ExposureMeter = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  color: var(--dim);
+  letter-spacing: 0.15em;
+`;
+
+const Zero = styled.span`
+  color: var(--accent);
+`;
+
+const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
 `;
 
-const Left = styled.div`
-  font-size: 0.95rem;
-  opacity: 0.9;
-`;
-
-const Right = styled.nav`
-  display: flex;
-  gap: 1rem;
-`;
-
 const Link = styled.a`
-  color: #ffd700;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
+  color: var(--accent);
+  transition: color 0.2s ease;
 
   &:hover {
-    color: white;
-    text-decoration: underline;
+    color: var(--text);
   }
 `;

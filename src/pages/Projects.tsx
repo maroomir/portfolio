@@ -5,6 +5,7 @@ import Seo from "@/components/Seo";
 import data from "@/data/data.json";
 import Chip from '@/components/Chip';
 import { keyframes } from "@emotion/react";
+import { HudLabel } from "@/styles/hud";
 
 function Projects() {
   const { projects } = data;
@@ -122,14 +123,17 @@ function Projects() {
       <Seo title={`프로젝트 | ${data.home?.name} 포트폴리오`} description="프로젝트 목록을 검색하고 필터링할 수 있습니다." />
       <Content>
         <TitleRow>
-          <Title>My Projects</Title>
+          <Heading>
+            <HudLabel>Project frames · {String(filtered.length).padStart(2, '0')} / {projects.length}</HudLabel>
+            <Title>Projects</Title>
+          </Heading>
           <InlineMobileSearchButton
             type="button"
             aria-label={mobileSearchOpen ? "검색 닫기" : "검색 열기"}
             onClick={() => setMobileSearchOpen((s) => !s)}
             aria-expanded={mobileSearchOpen}
           >
-            🔍
+            검색
           </InlineMobileSearchButton>
         </TitleRow>
         <Controls>
@@ -252,19 +256,23 @@ function Projects() {
               }}
               aria-label={`${project.title} 상세 보기`}
             >
+              <FrameMeta>
+                <span>FRAME {String(projects.indexOf(project) + 1).padStart(3, '0')}</span>
+                <span>{project.release.date}</span>
+              </FrameMeta>
               <ProjectHeader>
                 <h3>{project.title}</h3>
                 <HeaderRight>
-                  {(project as any).pinned && <PinnedBadge>Pinned</PinnedBadge>}
+                  {(project as any).pinned && <PinnedBadge>PINNED</PinnedBadge>}
                   <Status $status={project.release.status}>
-                    {project.release.status === 'public' ? '🌐 Public' : '🔒 Private'}
+                    {project.release.status === 'public' ? 'PUBLIC' : 'PRIVATE'}
                   </Status>
                 </HeaderRight>
               </ProjectHeader>
               <Description>{project.description}</Description>
               
               <TechStack>
-                <TechLabel>사용 기술:</TechLabel>
+                <TechLabel>Stack</TechLabel>
                 <TechTags>
                   <TechTag>{project.ability.language}</TechTag>
                   {project.ability.framework.map((framework, idx) => (
@@ -284,7 +292,7 @@ function Projects() {
               </TechStack>
               
               <ProjectFooter>
-                <ReleaseDate>📅 {project.release.date}</ReleaseDate>
+                <Category>{project.category}</Category>
                 {project.release.status === 'public' && project.release.link && (
                   <GitHubLink
                     href={project.release.link}
@@ -292,7 +300,7 @@ function Projects() {
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    🔗 프로젝트 열기
+                    OPEN →
                   </GitHubLink>
                 )}
               </ProjectFooter>
@@ -307,9 +315,9 @@ function Projects() {
                 <ModalTitleGroup>
                   <h2>{selectedProject.title}</h2>
                   <ModalMeta>
-                    {(selectedProject as any).pinned && <PinnedBadge>Pinned</PinnedBadge>}
+                    {(selectedProject as any).pinned && <PinnedBadge>PINNED</PinnedBadge>}
                     <Status $status={selectedProject.release.status}>
-                      {selectedProject.release.status === 'public' ? '🌐 Public' : '🔒 Private'}
+                      {selectedProject.release.status === 'public' ? 'PUBLIC' : 'PRIVATE'}
                     </Status>
                   </ModalMeta>
                 </ModalTitleGroup>
@@ -320,7 +328,7 @@ function Projects() {
 
               <ModalBody>
                 <Description>{selectedProject.description}</Description>
-                <ReleaseDate>📅 {selectedProject.release.date}</ReleaseDate>
+                <ReleaseDate>{selectedProject.release.date}</ReleaseDate>
 
                 {(selectedProject as any).attachments?.length > 0 ? (
                   <AttachmentGrid>
@@ -345,58 +353,65 @@ function Projects() {
 
 export default Projects;
 
-const Container = styled.div`
-  width: 100vw;
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--bg-gradient-1) 0%, var(--bg-gradient-2) 100%);
-  color: var(--text);
-  padding: clamp(2rem, 4vw, 3rem) 0;
-  padding-top: 88px;
 
-  @media (max-width: 768px) {
-    padding-top: 64px;
-  }
+const Container = styled.div`
+  width: 100%;
+  min-height: 100vh;
+  padding: calc(var(--nav-height) + clamp(2rem, 5vw, 4rem)) 0 clamp(2rem, 4vw, 3rem);
 `;
 
 const Content = styled.div`
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 clamp(1rem, 4vw, 2rem);
+  padding: 0 clamp(1rem, 4vw, 2.5rem);
+`;
+
+const Heading = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
 `;
 
 const Title = styled.h1`
-  text-align: center;
-  font-size: clamp(2rem, 6vw, 3rem);
-  margin-bottom: clamp(1.5rem, 4vw, 3rem);
-  color: white;
-  font-weight: 700;
+  font-size: clamp(2.5rem, 6vw, 4rem);
 `;
 
 const TitleRow = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: center;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 0.5rem;
-  margin-bottom: clamp(1.5rem, 4vw, 3rem);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+`;
+
+const controlBase = `
+  padding: 0.6rem 0.9rem;
+  border-radius: 0;
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  outline: none;
+
+  &:focus-visible {
+    border-color: var(--accent);
+    outline: none;
+  }
 `;
 
 const InlineMobileSearchButton = styled.button`
   display: none;
-  background: transparent;
-  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
-  color: var(--text, white);
-  padding: 0.25rem 0.4rem;
-  border-radius: 8px;
+  ${controlBase}
+  padding: 0.45rem 0.7rem;
   cursor: pointer;
-  font-size: 0.95rem;
 
   @media (max-width: 600px) {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 32px;
-    min-height: 32px;
+    min-height: 36px;
   }
 `;
 
@@ -412,10 +427,6 @@ const Controls = styled.div`
     flex-direction: column;
     align-items: stretch;
     gap: 0.5rem;
-
-    & > ${/* placeholder for Select and SortSelect fallback */ ''}div {
-      width: 100%;
-    }
   }
 `;
 
@@ -434,8 +445,7 @@ const ActiveFilters = styled.div`
     height: 8px;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.08);
-    border-radius: 999px;
+    background: var(--line-strong);
   }
 
   @media (min-width: 600px) {
@@ -445,15 +455,17 @@ const ActiveFilters = styled.div`
   }
 `;
 
-
 const ClearButton = styled.button`
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 0.35rem 0.6rem;
-  border-radius: 8px;
+  ${controlBase}
+  padding: 0.3rem 0.7rem;
+  font-size: 0.75rem;
+  color: var(--muted);
   cursor: pointer;
-  font-weight: 600;
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 `;
 
 const FilterModeToggle = styled.div`
@@ -467,34 +479,23 @@ const FilterModeToggle = styled.div`
   }
 `;
 
-const ModeLabel = styled.span`
-  font-size: 0.95rem;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 600;
-`;
+const ModeLabel = styled(HudLabel)``;
 
 const ModeButton = styled.button<{ $active?: boolean }>`
+  ${controlBase}
   padding: 0.35rem 0.6rem;
-  border-radius: 8px;
-  border: 1px solid ${props => (props.$active ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.2)')};
-  background: ${props => (props.$active ? 'rgba(255,255,255,0.12)' : 'transparent')};
-  color: white;
+  border-color: ${props => (props.$active ? 'var(--accent)' : 'var(--line-strong)')};
+  color: ${props => (props.$active ? 'var(--accent)' : 'var(--muted)')};
   cursor: pointer;
-  font-weight: 700;
 `;
 
 const SearchInput = styled.input`
+  ${controlBase}
   flex: 1 1 280px;
   min-width: 220px;
-  padding: 0.6rem 0.9rem;
-  border-radius: 10px;
-  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
-  background: var(--chip-bg, rgba(255, 255, 255, 0.08));
-  color: var(--text, white);
-  outline: none;
 
   ::placeholder {
-    color: rgba(255, 255, 255, 0.72);
+    color: var(--muted);
   }
 
   /* 데스크톱: 기본 노출, 모바일: 전용 모바일 검색 컴포넌트 사용 */
@@ -503,17 +504,14 @@ const SearchInput = styled.input`
   }
 `;
 
-
 const MobileSearchBar = styled.div`
   display: flex;
   gap: 0.5rem;
   align-items: center;
   width: 100%;
-  background: var(--card-bg, rgba(255,255,255,0.04));
-  padding: 0.5rem;
-  border-radius: 10px;
-  border: 1px solid var(--glass-border, rgba(255,255,255,0.06));
-  box-sizing: border-box;
+  background: var(--surface);
+  padding: 0.25rem 0.5rem;
+  border: 1px solid var(--line-strong);
 
   @media (min-width: 601px) {
     display: none;
@@ -522,40 +520,35 @@ const MobileSearchBar = styled.div`
 
 const MobileSearchInput = styled.input`
   flex: 1;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
+  padding: 0.5rem 0.5rem;
   border: none;
   background: transparent;
-  color: var(--text, white);
+  color: var(--text);
+  font-family: var(--font-mono);
   outline: none;
 `;
 
 const MobileSearchClose = styled.button`
   background: transparent;
   border: none;
-  color: var(--text, white);
+  color: var(--muted);
   font-size: 1rem;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
 `;
 
 const Select = styled.select`
+  ${controlBase}
   flex: 0 0 auto;
-  padding: 0.6rem 0.9rem;
-  border-radius: 10px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  background: rgba(255, 255, 255, 0.15);
-  color: white;
-  outline: none;
+  cursor: pointer;
 `;
 
 const SortSelect = styled(Select)``;
 
 const ProjectGrid = styled.div`
   display: grid;
-  /* 카드가 너무 좁아지지 않도록 최소 너비를 올림 */
   grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-  gap: clamp(1rem, 3vw, 2rem);
+  gap: 1.5rem;
 
   /* 모바일: 한 열 레이아웃으로 카드가 풀폭을 사용하도록 함 */
   @media (max-width: 600px) {
@@ -565,120 +558,146 @@ const ProjectGrid = styled.div`
 `;
 
 const Card = styled.div`
-  background: var(--card-bg, rgba(255, 255, 255, 0.08));
-  backdrop-filter: blur(6px);
-  border: 1px solid var(--glass-border, rgba(255, 255, 255, 0.08));
-  border-radius: 16px;
-  padding: clamp(1.25rem, 3vw, 2rem);
-  min-width: 360px; /* 카드의 최소 너비를 제한하여 글씨가 넘치지 않게 함 */
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 1.4rem;
   box-sizing: border-box;
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  transition: border-color 220ms ease;
   cursor: pointer;
-  
+
   &:hover {
-    transform: translateY(-4px);
-    background: rgba(255, 255, 255, 0.06);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-color: var(--accent);
   }
 
   &:focus-visible {
-    outline: 2px solid rgba(255, 255, 255, 0.8);
+    outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
 
   @media (max-width: 600px) {
-    width: 100%;
     padding: 1rem;
-    border-radius: 12px;
   }
+`;
+
+const FrameMeta = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--accent);
 `;
 
 const HeaderRight = styled.div`
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  flex-shrink: 0;
+`;
+
+const badgeBase = `
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid;
 `;
 
 const PinnedBadge = styled.span`
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.25rem 0.5rem;
-  border-radius: 999px;
-  color: #262626;
-  background: #ffd75a;
+  ${badgeBase}
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
 `;
+
 const ProjectHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
-  
+  gap: 0.75rem;
+
   h3 {
     margin: 0;
-    font-size: clamp(1.1rem, 3.5vw, 1.5rem);
-    color: white;
-    font-weight: 600;
+    font-family: var(--font-body);
+    font-size: 1.1rem;
+    font-weight: 700;
   }
 `;
+
 const Status = styled.span<{ $status: string }>`
-  font-size: clamp(0.8rem, 2.5vw, 0.95rem);
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-  background-color: ${props => props.$status === 'public' ? 'rgba(76, 175, 80, 0.2)' : 'rgba(255, 193, 7, 0.2)'};
-  color: ${props => props.$status === 'public' ? '#4caf50' : '#ffc107'};
-  font-weight: 500;
-  border: 1px solid ${props => props.$status === 'public' ? 'rgba(76, 175, 80, 0.3)' : 'rgba(255, 193, 7, 0.3)'};
+  ${badgeBase}
+  color: ${props => (props.$status === 'public' ? '#7ee787' : 'var(--muted)')};
+  border-color: ${props => (props.$status === 'public' ? 'rgba(126, 231, 135, 0.4)' : 'var(--line-strong)')};
 `;
+
 const Description = styled.p`
-  font-size: clamp(1rem, 2.8vw, 1.1rem);
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
-  line-height: 1.6;
+  font-size: 0.9rem;
+  color: var(--muted);
+  line-height: 1.55;
 `;
+
 const TechStack = styled.div`
-  margin-bottom: clamp(0.75rem, 2vw, 1.5rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 `;
-const TechLabel = styled.div`
-  font-size: clamp(0.95rem, 2.8vw, 1rem);
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: clamp(0.5rem, 1.5vw, 0.8rem);
-`;
+
+const TechLabel = styled(HudLabel)``;
+
 const TechTags = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
 `;
-const TechTag = styled.button<{ $active?: boolean }>`
-  background: ${props => (props.$active ? 'rgba(255, 255, 255, 0.32)' : 'rgba(255, 255, 255, 0.2)')};
-  color: white;
-  padding: 0.4rem 0.8rem;
-  border-radius: 12px;
-  font-size: clamp(0.8rem, 2.5vw, 0.9rem);
-  font-weight: 500;
-  border: 1px solid ${props => (props.$active ? 'rgba(255,255,255,0.5)' : 'rgba(255, 255, 255, 0.3)')};
-  cursor: pointer;
-  outline: none;
+
+const TechTag = styled.span`
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.7rem;
+  background: var(--text);
+  color: var(--bg);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
 `;
+
 const ProjectFooter = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.75rem;
   margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--line);
 `;
+
+const Category = styled.span`
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dim);
+`;
+
 const ReleaseDate = styled.span`
-  font-size: clamp(0.9rem, 2.5vw, 1rem);
-  color: rgba(255, 255, 255, 0.7);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
 `;
+
 const GitHubLink = styled.a`
-  font-size: clamp(0.9rem, 2.5vw, 1rem);
-  color: #ffd700;
-  text-decoration: none;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  transition: color 0.2s ease;
+
   &:hover {
-    color: white;
+    color: var(--text);
     text-decoration: underline;
   }
 `;
@@ -698,7 +717,7 @@ const ModalOverlay = styled.div`
 const modalPopIn = keyframes`
   from {
     opacity: 0;
-    transform: translateY(8px) scale(0.96);
+    transform: translateY(8px) scale(0.98);
   }
   to {
     opacity: 1;
@@ -710,11 +729,10 @@ const ModalCard = styled.div`
   width: min(960px, 100%);
   max-height: 90vh;
   overflow-y: auto;
-  border-radius: 16px;
-  border: 1px solid var(--glass-border, rgba(255,255,255,0.08));
-  background: var(--card-bg, rgba(22, 22, 28, 0.96));
+  border: 1px solid var(--line-strong);
+  background: var(--surface);
   padding: clamp(1rem, 3vw, 1.6rem);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.6);
   animation: ${modalPopIn} 220ms ease-out;
 `;
 
@@ -729,7 +747,7 @@ const ModalHeader = styled.div`
 const ModalTitleGroup = styled.div`
   h2 {
     margin: 0;
-    color: white;
+    font-family: var(--font-body);
     font-size: clamp(1.25rem, 3vw, 1.75rem);
   }
 `;
@@ -738,17 +756,20 @@ const ModalMeta = styled.div`
   margin-top: 0.5rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.4rem;
 `;
 
 const ModalCloseButton = styled.button`
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 10px;
-  background: transparent;
-  color: white;
+  ${controlBase}
   min-width: 36px;
   min-height: 36px;
+  padding: 0;
   cursor: pointer;
+
+  &:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
 `;
 
 const ModalBody = styled.div`
@@ -766,10 +787,9 @@ const AttachmentGrid = styled.div`
 
 const AttachmentFigure = styled.figure`
   margin: 0;
-  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  background: var(--bg);
 `;
 
 const AttachmentImage = styled.img`
@@ -781,11 +801,12 @@ const AttachmentImage = styled.img`
 
 const AttachmentCaption = styled.figcaption`
   padding: 0.55rem 0.7rem;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.85rem;
+  color: var(--text-soft);
 `;
 
 const NoAttachmentText = styled.p`
   margin: 0.25rem 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.85rem;
+  color: var(--muted);
 `;

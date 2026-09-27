@@ -1,37 +1,31 @@
 import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import Seo from "@/components/Seo";
+import { HudLabel } from "@/styles/hud";
 
 export default function NotFound() {
   return (
     <Container>
       <Seo title="페이지를 찾을 수 없음 | 404" description="요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다." />
       <Content>
-        <Title>404 - 페이지를 찾을 수 없어요</Title>
+        <HudLabel>No signal · Error 404</HudLabel>
+        <Title>페이지를 찾을 수 없어요</Title>
         <Description>
           요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.
         </Description>
-        <HomeLink to="/">🏠 홈으로 돌아가기</HomeLink>
+        <HomeLink to="/">홈으로 돌아가기 →</HomeLink>
       </Content>
     </Container>
   );
 }
 
 const Container = styled.div`
-  width: 100vw;
+  width: 100%;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(2rem, 4vw, 3rem) 0;
-  padding-top: 88px;
-
-  @media (max-width: 768px) {
-    padding-top: 64px;
-  }
-}
+  padding: calc(var(--nav-height) + 2rem) 0 2rem;
 `;
 
 const Content = styled.div`
@@ -39,36 +33,34 @@ const Content = styled.div`
   max-width: 720px;
   margin: 0 auto;
   padding: 0 clamp(1rem, 4vw, 2rem);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
   text-align: center;
 `;
 
 const Title = styled.h1`
+  font-family: var(--font-body);
   font-size: clamp(2rem, 6vw, 3rem);
-  margin-bottom: clamp(1rem, 3vw, 1.5rem);
-  font-weight: 800;
 `;
 
 const Description = styled.p`
-  font-size: clamp(1rem, 3vw, 1.25rem);
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+  font-size: clamp(1rem, 3vw, 1.15rem);
+  color: var(--text-soft);
   line-height: 1.6;
 `;
 
 const HomeLink = styled(Link)`
   display: inline-block;
   padding: 0.8em 1.5em;
-  border-radius: 25px;
-  border: 2px solid white;
-  background: transparent;
-  color: white;
+  border: 1px solid var(--accent);
+  color: var(--accent);
   font-weight: 700;
-  transition: all 0.3s ease;
+  transition: background 0.2s ease, color 0.2s ease;
 
   &:hover {
-    background: white;
-    color: #667eea;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    background: var(--accent);
+    color: var(--bg);
   }
 `;

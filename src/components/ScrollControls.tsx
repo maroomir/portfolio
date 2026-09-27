@@ -121,36 +121,29 @@ const FloatingGroup = styled.div`
 const FloatingButton = styled.button`
   width: 44px;
   height: 44px;
-  border-radius: 999px;
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+  background: rgba(11, 12, 14, 0.85);
+  color: var(--accent);
+  border: 1px solid var(--line-strong);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
   cursor: pointer;
-  opacity: 1; /* Always visible */
-  transform: translateY(0);
-  transition: opacity 180ms ease, transform 180ms ease;
+  transition: border-color 180ms ease, color 180ms ease;
   pointer-events: auto;
   -webkit-tap-highlight-color: transparent;
   touch-action: manipulation;
 
   &:hover {
-    transform: translateY(-2px);
-    background: rgba(0, 0, 0, 0.8);
-  }
-
-  &:active {
-    transform: translateY(0);
-    background: rgba(0, 0, 0, 0.9);
+    border-color: var(--accent);
+    color: var(--text);
   }
 
   @media (max-width: 900px) {
     /* slightly smaller on mobile */
     width: 40px;
     height: 40px;
-    background: rgba(0, 0, 0, 0.8);
   }
 `;
