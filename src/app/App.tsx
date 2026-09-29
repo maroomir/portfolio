@@ -1,7 +1,7 @@
 import { BrowserRouter } from 'react-router-dom'
 import { ThemeProvider } from '@/theme/ThemeProvider';
 import Navbar from '@/components/Navbar'
-import AppRoutes from './routes/AppRoutes';
+import AppRoutes from './AppRoutes';
 import Footer from '@/components/Footer';
 import FrameCorners from '@/components/FrameCorners';
 import NavigationController from '@/components/NavigationController';
