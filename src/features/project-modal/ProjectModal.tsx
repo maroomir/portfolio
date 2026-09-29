@@ -10,16 +10,18 @@ interface IProjectModalProps {
   readonly project: IProject;
   readonly onClose: () => void;
   readonly noAttachmentText: string;
+  readonly returnFocusTo?: HTMLElement | null;
 }
 
 /** Detail dialog for one project: title, badges, description, release date and attachments. */
-export function ProjectModal({ project, onClose, noAttachmentText }: IProjectModalProps) {
+export function ProjectModal({ project, onClose, noAttachmentText, returnFocusTo }: IProjectModalProps) {
   const attachments = project.attachments ?? [];
 
   return (
     <Modal
       label={`${project.title} 상세 모달`}
       onClose={onClose}
+      returnFocusTo={returnFocusTo}
       header={
         <TitleGroup>
           <h2>{project.title}</h2>
