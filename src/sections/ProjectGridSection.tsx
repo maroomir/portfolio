@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import Chip from '@/ui/Chip';
 import { HudLabel } from '@/ui/Hud';
 import { HudAnchor } from '@/ui/Link';
-import { Card, CardDescription, CardFooter, CardGrid, CardMeta, CardTitle } from '@/ui/Card';
+import { Card, CardDescription, CardFooter, CardGrid, CardMeta, CardTitle, CardTrigger } from '@/ui/Card';
 import { ProjectBadges } from '@/components/ProjectBadges';
 import { useProjectExplorer } from '@/features/project-explorer/useProjectExplorer';
 import { tokens } from '@/theme/tokens';
@@ -15,7 +15,7 @@ export interface IProjectGridSectionProps {
   readonly showOpenLink: boolean;
 }
 
-/** Filtered, sorted project cards; clicking a card opens the detail modal. */
+/** Filtered, sorted project cards; clicking a card (or its title button) opens the detail modal. */
 export function ProjectGridSection({ showStackChips, showCategory, showOpenLink }: IProjectGridSectionProps) {
   const { filter, modal } = useProjectExplorer();
   const { state, dispatch, visible } = filter;
@@ -26,26 +26,22 @@ export function ProjectGridSection({ showStackChips, showCategory, showOpenLink 
   return (
     <CardGrid $minWidth={tokens.layout.projectCardMinWidth}>
       {visible.map(({ project, frameNo }) => (
-        <Card
-          key={project.name}
-          $interactive
-          role="button"
-          tabIndex={0}
-          onClick={(e) => modal.openFrom(project, e.target)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              modal.openFrom(project, e.target);
-            }
-          }}
-          aria-label={`${project.title} 상세 보기`}
-        >
+        <Card key={project.name} $interactive>
           <CardMeta>
             <span>FRAME {String(frameNo).padStart(3, '0')}</span>
             <span>{project.release.date}</span>
           </CardMeta>
           <ProjectHeader>
-            <CardTitle>{project.title}</CardTitle>
+            <CardTitle>
+              <CardTrigger
+                type="button"
+                data-card-trigger
+                aria-haspopup="dialog"
+                onClick={(e) => modal.open(project, e.currentTarget)}
+              >
+                {project.title}
+              </CardTrigger>
+            </CardTitle>
             <ProjectBadges project={project} />
           </ProjectHeader>
           <CardDescription>{project.description}</CardDescription>
@@ -60,10 +56,7 @@ export function ProjectGridSection({ showStackChips, showCategory, showOpenLink 
                     key={framework}
                     active={isTechActive(framework)}
                     aria-pressed={isTechActive(framework)}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      toggleTech(framework);
-                    }}
+                    onClick={() => toggleTech(framework)}
                   >
                     {framework}
                   </Chip>
@@ -76,7 +69,7 @@ export function ProjectGridSection({ showStackChips, showCategory, showOpenLink 
             <CardFooter>
               <Category>{showCategory ? project.category : ''}</Category>
               {showOpenLink && project.release.status === 'public' && project.release.link && (
-                <HudAnchor href={project.release.link} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
+                <HudAnchor href={project.release.link} target="_blank" rel="noopener noreferrer">
                   OPEN →
                 </HudAnchor>
               )}

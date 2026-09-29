@@ -5,7 +5,9 @@ import { tokens } from '@/theme/tokens';
 /**
  * Frame card primitives (a "frame" is one project in the viewfinder metaphor)
  * - CardGrid: responsive auto-fit grid, `$minWidth` in px
- * - Card: bordered surface; `$interactive` adds pointer/focus styles for clickable cards
+ * - Card: bordered surface; `$interactive` makes the whole card clickable through a CardTrigger
+ * - CardTrigger: the one button that activates the card; its ::after stretches over the card,
+ *   while links/buttons inside the card stay separately clickable above it (no nested controls)
  * - CardMeta: FRAME 001 · date row
  * - CardTitle / CardDescription / CardFooter
  */
@@ -21,6 +23,7 @@ export const CardGrid = styled.div<{ $minWidth: number }>`
 `;
 
 export const Card = styled.article<{ $interactive?: boolean }>`
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -28,13 +31,22 @@ export const Card = styled.article<{ $interactive?: boolean }>`
   border: 1px solid var(--line);
   background: var(--surface);
   transition: border-color ${tokens.motion.fast}ms ease;
-  ${(p) => p.$interactive && 'cursor: pointer;'}
+  ${(p) =>
+    p.$interactive &&
+    `
+    cursor: pointer;
+
+    a, button:not([data-card-trigger]) {
+      position: relative;
+      z-index: 1;
+    }
+  `}
 
   &:hover {
     border-color: var(--accent);
   }
 
-  &:focus-visible {
+  &:has([data-card-trigger]:focus-visible) {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
   }
@@ -75,4 +87,20 @@ export const CardFooter = styled.div`
   margin-top: auto;
   padding-top: 0.75rem;
   border-top: 1px solid var(--line);
+`;
+
+/** Unstyled button that fills the card (via ::after) and opens it; wrap the card title in it. */
+export const CardTrigger = styled.button`
+  all: unset;
+  cursor: pointer;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
 `;
