@@ -6,7 +6,7 @@ import { sortByStart } from "@/model/career";
 import { groupByAgency } from "@/model/project";
 import { mq } from "@/theme/mq";
 import { tokens } from "@/theme/tokens";
-import { HudLabel } from "@/styles/hud";
+import { HudLabel } from "@/ui/Hud";
 
 /**
  * Timeline - 렌즈 눈금자 형태의 경력 타임라인
