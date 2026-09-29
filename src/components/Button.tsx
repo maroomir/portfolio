@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import { tokens } from '@/theme/tokens';
 
 /** 앰버 단색의 주요 행동 버튼 (뷰파인더 셔터 느낌의 각진 형태) */
 const Button = styled.button`
@@ -14,7 +15,7 @@ const Button = styled.button`
   font-weight: 700;
   letter-spacing: 0.04em;
   cursor: pointer;
-  transition: background 150ms ease, color 150ms ease;
+  transition: background ${tokens.motion.fast}ms ease, color ${tokens.motion.fast}ms ease;
 
   &::after {
     content: "→";

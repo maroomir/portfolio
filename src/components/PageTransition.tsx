@@ -1,10 +1,11 @@
 import type { ReactNode } from "react";
 import { motion } from "framer-motion";
+import { tokens } from "@/theme/tokens";
 
 /**
  * PageTransition
  * - Wrap each page with this component to enable enter/exit animations.
- * - Simple horizontal slide + fade (320ms).
+ * - Simple horizontal slide + fade (tokens.motion.pageTransition).
  *
  * Usage:
  * <AnimatePresence exitBeforeEnter>
@@ -26,7 +27,7 @@ type Props = {
   duration?: number;
 };
 
-export default function PageTransition({ children, duration = 0.32 }: Props) {
+export default function PageTransition({ children, duration = tokens.motion.pageTransition }: Props) {
   return (
     <motion.div
       variants={variants}
