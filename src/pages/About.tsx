@@ -1,12 +1,13 @@
 import styled from "@emotion/styled";
 import { useMemo } from "react";
-import data from "@/data/data.json"
+import { portfolio, content } from "@/data/repository";
 import Seo from "@/components/Seo";
 import { Link } from "react-router-dom";
 import { HudLabel } from "@/styles/hud";
 
 export default function About() {
-  const { about, projects } = data
+  const { about, projects } = portfolio;
+  const copy = content.about;
 
   const langsSorted = useMemo(() => {
     const counts: Record<string, number> = {};
@@ -65,18 +66,18 @@ export default function About() {
 
   return (
     <Container>
-      <Seo title={`소개 | ${data.home?.name} 포트폴리오`} description="보유 기술과 경력을 소개합니다." />
+      <Seo title={`${copy.seoTitle} | ${portfolio.home.name} ${content.site.titleSuffix}`} description={copy.seoDescription} />
       <Content>
         <Heading>
-          <HudLabel>Subject data</HudLabel>
-          <Title>About Me</Title>
+          <HudLabel>{copy.eyebrow}</HudLabel>
+          <Title>{copy.title}</Title>
         </Heading>
 
         <Section>
-          <SectionTitle>기술 스택</SectionTitle>
+          <SectionTitle>{copy.techTitle}</SectionTitle>
           <TechGrid>
             <TechGroup>
-              <GroupTitle>Lang</GroupTitle>
+              <GroupTitle>{copy.langGroup}</GroupTitle>
               <TechList>
                 {langsSorted.map((lang) => (
                   <TagLink key={lang} to={`/projects?lang=${encodeURIComponent(lang)}`} aria-label={`Filter by language ${lang}`}>
@@ -86,7 +87,7 @@ export default function About() {
               </TechList>
             </TechGroup>
             <TechGroup>
-              <GroupTitle>Stack</GroupTitle>
+              <GroupTitle>{copy.stackGroup}</GroupTitle>
               <TechList>
                 {skillsSorted.map((skill) => (
                   <TagLink key={skill} to={`/projects?tech=${encodeURIComponent(skill)}`} aria-label={`Filter by tech ${skill}`}>
@@ -99,7 +100,7 @@ export default function About() {
         </Section>
 
         <Section>
-          <SectionTitle>이력</SectionTitle>
+          <SectionTitle>{copy.resumeTitle}</SectionTitle>
           <ResumeList>
             {about.resume.map((item, idx) => (
               <ResumeCard
@@ -115,7 +116,7 @@ export default function About() {
                   <Department>{item.department}</Department>
                   <Role>{item.role}</Role>
                 </ResumeBody>
-                <ProjectCount data-project-count>{String(agencyCounts[item.company] ?? 0).padStart(2, "0")} FRAMES →</ProjectCount>
+                <ProjectCount data-project-count>{String(agencyCounts[item.company] ?? 0).padStart(2, "0")} {copy.framesSuffix}</ProjectCount>
               </ResumeCard>
             ))}
           </ResumeList>

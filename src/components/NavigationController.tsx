@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import styled from "@emotion/styled";
 import { useNavigate, useLocation } from "react-router-dom";
+import { ROUTE_PATHS } from "@/config/routes";
 
 /**
  * NavigationController
@@ -8,12 +9,12 @@ import { useNavigate, useLocation } from "react-router-dom";
  * - Desktop: floating left/right arrow buttons to navigate
  *
  * Behavior:
- * - Routes order is taken from a fixed array: ['/', '/about', '/projects']
+ * - Routes order is taken from ROUTE_PATHS in config/routes
  * - Swipe threshold: 50px horizontal movement (default)
  * - Debounce navigation while navigating (600ms)
  */
 
-const ROUTES = ["/", "/about", "/projects"];
+const ROUTES = ROUTE_PATHS;
 const SWIPE_THRESHOLD = 50;
 const NAV_DEBOUNCE_MS = 600;
 

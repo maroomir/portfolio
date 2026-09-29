@@ -2,18 +2,17 @@ import styled from "@emotion/styled";
 import { Link } from "react-router-dom";
 import Seo from "@/components/Seo";
 import { HudLabel } from "@/styles/hud";
+import { content } from "@/data/repository";
 
 export default function NotFound() {
   return (
     <Container>
       <Seo title="페이지를 찾을 수 없음 | 404" description="요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다." />
       <Content>
-        <HudLabel>No signal · Error 404</HudLabel>
-        <Title>페이지를 찾을 수 없어요</Title>
-        <Description>
-          요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.
-        </Description>
-        <HomeLink to="/">홈으로 돌아가기 →</HomeLink>
+        <HudLabel>{content.notFound.eyebrow}</HudLabel>
+        <Title>{content.notFound.title}</Title>
+        <Description>{content.notFound.description}</Description>
+        <HomeLink to="/">{content.notFound.homeLabel}</HomeLink>
       </Content>
     </Container>
   );

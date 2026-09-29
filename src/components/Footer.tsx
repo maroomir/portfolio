@@ -1,9 +1,9 @@
 import styled from "@emotion/styled";
-import data from "@/data/data.json";
+import { portfolio, content } from "@/data/repository";
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const owner = data.home?.name ?? "Owner";
+  const owner = portfolio.home.name;
 
   return (
     <Wrapper role="contentinfo">
@@ -15,8 +15,8 @@ export default function Footer() {
         </ExposureMeter>
         <Row>
           <span>© {year} {owner}</span>
-          <Link href="https://github.com/maroomir" target="_blank" rel="noopener noreferrer" aria-label="GitHub 프로필로 이동">
-            GITHUB →
+          <Link href={content.site.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub 프로필로 이동">
+            {content.site.githubLabel}
           </Link>
         </Row>
       </Inner>

@@ -1,12 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
-import data from "@/data/data.json";
-
-const NAV_ITEMS = [
-  { to: "/", label: "홈" },
-  { to: "/about", label: "소개" },
-  { to: "/projects", label: "프로젝트" },
-];
+import { portfolio, content } from "@/data/repository";
+import { ROUTES } from "@/config/routes";
 
 /**
  * Navbar - 뷰파인더 상단 HUD 바
@@ -14,24 +9,24 @@ const NAV_ITEMS = [
  */
 function Navbar() {
   const location = useLocation();
-  const careerYears = getCareerYears(data.about.resume.flatMap((r) => r.period));
+  const careerYears = getCareerYears(portfolio.about.resume.flatMap((r) => r.period));
 
   return (
     <Wrapper>
       <Inner>
         <RecGroup aria-hidden>
           <RecDot />
-          <span>REC · MAROOMIR</span>
+          <span>{content.navbar.rec}</span>
         </RecGroup>
-        <Menu aria-label="주요 메뉴">
-          {NAV_ITEMS.map((item) => (
-            <StyledLink key={item.to} to={item.to} $isActive={location.pathname === item.to}>
+        <Menu aria-label={content.navbar.menuAriaLabel}>
+          {ROUTES.map((item) => (
+            <StyledLink key={item.path} to={item.path} $isActive={location.pathname === item.path}>
               [ {item.label} ]
             </StyledLink>
           ))}
         </Menu>
         <Readout aria-label="경력 기간">
-          AF · {careerYears.start} → {careerYears.end} · {careerYears.span}Y
+          {content.navbar.afPrefix} · {careerYears.start} → {careerYears.end} · {careerYears.span}Y
         </Readout>
       </Inner>
     </Wrapper>

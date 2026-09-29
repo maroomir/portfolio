@@ -3,17 +3,17 @@ import { Typewriter } from "react-simple-typewriter";
 import styled from "@emotion/styled";
 import { Link, useNavigate } from "react-router-dom";
 import Button from "@/components/Button";
-import data from "@/data/data.json";
+import { portfolio, content } from "@/data/repository";
 import Seo from "@/components/Seo";
 import Timeline from "@/components/Timeline";
 import { HudLabel, MonoText } from "@/styles/hud";
-import type { IProject, IResume } from "@/data/data";
+import type { IResume } from "@/data/schema";
 
 const READOUT_LIMIT = 3;
 
 function Home() {
-  const { home, about } = data;
-  const projects = data.projects as IProject[];
+  const { home, about, projects } = portfolio;
+  const copy = content.home;
   const navigate = useNavigate();
 
   const topLanguages = useMemo(() => rankByCount(projects.map((p) => p.ability.language)), [projects]);
@@ -32,17 +32,17 @@ function Home() {
 
   return (
     <Container>
-      <Seo title={`홈 | ${home.name} 포트폴리오`} description={home.bio} />
+      <Seo title={`${copy.seoTitle} | ${home.name} ${content.site.titleSuffix}`} description={home.bio} />
       <Inner>
         <HeroGrid>
           <Readouts aria-label="프로필 요약">
-            <Readout><HudLabel>Projects</HudLabel><BigValue>{projects.length}</BigValue></Readout>
-            <Readout><HudLabel>Lang</HudLabel><Value>{topLanguages.join(" · ")}</Value></Readout>
-            <Readout><HudLabel>Stack</HudLabel><Value>{topFrameworks.join(" · ")}</Value></Readout>
+            <Readout><HudLabel>{copy.readouts.projects}</HudLabel><BigValue>{projects.length}</BigValue></Readout>
+            <Readout><HudLabel>{copy.readouts.lang}</HudLabel><Value>{topLanguages.join(" · ")}</Value></Readout>
+            <Readout><HudLabel>{copy.readouts.stack}</HudLabel><Value>{topFrameworks.join(" · ")}</Value></Readout>
           </Readouts>
 
           <Hero>
-            <HudLabel>Focus locked · Subject</HudLabel>
+            <HudLabel>{copy.subjectLabel}</HudLabel>
             <FocusBox>
               <h1>{home.name}</h1>
             </FocusBox>
@@ -58,22 +58,22 @@ function Home() {
                 delaySpeed={1500}
               />
             </TypeEffect>
-            <Button onClick={() => navigate("/projects")}>프로젝트 보기</Button>
+            <Button onClick={() => navigate("/projects")}>{copy.ctaLabel}</Button>
           </Hero>
 
           <Readouts $align="right" aria-label="현재 소속">
-            <Readout><HudLabel>Current</HudLabel><Value>{currentJob.company} · {currentJob.department}</Value></Readout>
-            {education && <Readout><HudLabel>Edu</HudLabel><Value>{education.company} · {education.role}</Value></Readout>}
-            <Readout><HudLabel>Mode</HudLabel><Value $accent>ON-DEVICE</Value></Readout>
+            <Readout><HudLabel>{copy.readouts.current}</HudLabel><Value>{currentJob.company} · {currentJob.department}</Value></Readout>
+            {education && <Readout><HudLabel>{copy.readouts.edu}</HudLabel><Value>{education.company} · {education.role}</Value></Readout>}
+            <Readout><HudLabel>{copy.readouts.mode}</HudLabel><Value $accent>{copy.modeValue}</Value></Readout>
           </Readouts>
         </HeroGrid>
 
-        <Timeline items={about.resume} />
+        <Timeline items={about.resume} projects={projects} />
 
         <Section>
           <SectionHeader>
-            <HudLabel>Pinned frames · {String(pinnedFrames.length).padStart(2, "0")} / {projects.length}</HudLabel>
-            <AllLink to="/projects">ALL PROJECTS →</AllLink>
+            <HudLabel>{copy.pinnedLabel} · {String(pinnedFrames.length).padStart(2, "0")} / {projects.length}</HudLabel>
+            <AllLink to="/projects">{copy.allProjectsLabel}</AllLink>
           </SectionHeader>
           <FrameGrid>
             {pinnedFrames.map(({ project, frameNo }) => (
