@@ -2,13 +2,14 @@ import styled from "@emotion/styled";
 import { useMemo, useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Seo from "@/components/Seo";
-import data from "@/data/data.json";
+import { portfolio, content } from "@/data/repository";
 import Chip from '@/components/Chip';
 import { keyframes } from "@emotion/react";
 import { HudLabel } from "@/styles/hud";
 
 function Projects() {
-  const { projects } = data;
+  const { projects } = portfolio;
+  const copy = content.projects;
   type ProjectItem = (typeof projects)[number];
 
   const location = useLocation();
@@ -120,12 +121,12 @@ function Projects() {
 
   return (
     <Container>
-      <Seo title={`프로젝트 | ${data.home?.name} 포트폴리오`} description="프로젝트 목록을 검색하고 필터링할 수 있습니다." />
+      <Seo title={`${copy.seoTitle} | ${portfolio.home.name} ${content.site.titleSuffix}`} description={copy.seoDescription} />
       <Content>
         <TitleRow>
           <Heading>
-            <HudLabel>Project frames · {String(filtered.length).padStart(2, '0')} / {projects.length}</HudLabel>
-            <Title>Projects</Title>
+            <HudLabel>{copy.eyebrow} · {String(filtered.length).padStart(2, '0')} / {projects.length}</HudLabel>
+            <Title>{copy.title}</Title>
           </Heading>
           <InlineMobileSearchButton
             type="button"
@@ -143,7 +144,7 @@ function Projects() {
               <MobileSearchInput
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="프로젝트 검색..."
+                placeholder={copy.searchPlaceholder}
                 aria-label="모바일 프로젝트 검색"
                 autoFocus
               />
@@ -160,7 +161,7 @@ function Projects() {
           <SearchInput
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="프로젝트 검색..."
+            placeholder={copy.searchPlaceholder}
             aria-label="프로젝트 검색"
           />
           <Select
@@ -340,7 +341,7 @@ function Projects() {
                     ))}
                   </AttachmentGrid>
                 ) : (
-                  <NoAttachmentText>첨부된 이미지가 없습니다.</NoAttachmentText>
+                  <NoAttachmentText>{copy.noAttachment}</NoAttachmentText>
                 )}
               </ModalBody>
             </ModalCard>

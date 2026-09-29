@@ -1,0 +1,56 @@
+{
+  "site": {
+    "titleSuffix": "포트폴리오",
+    "githubUrl": "https://github.com/maroomir",
+    "githubLabel": "GITHUB →"
+  },
+  "navbar": {
+    "rec": "REC · MAROOMIR",
+    "menuAriaLabel": "주요 메뉴",
+    "afPrefix": "AF"
+  },
+  "home": {
+    "seoTitle": "홈",
+    "subjectLabel": "Focus locked · Subject",
+    "ctaLabel": "프로젝트 보기",
+    "readouts": {
+      "projects": "Projects",
+      "lang": "Lang",
+      "stack": "Stack",
+      "current": "Current",
+      "edu": "Edu",
+      "mode": "Mode"
+    },
+    "modeValue": "ON-DEVICE",
+    "pinnedLabel": "Pinned frames",
+    "allProjectsLabel": "ALL PROJECTS →"
+  },
+  "timeline": {
+    "label": "Career timeline"
+  },
+  "about": {
+    "seoTitle": "소개",
+    "seoDescription": "보유 기술과 경력을 소개합니다.",
+    "eyebrow": "Subject data",
+    "title": "About Me",
+    "techTitle": "기술 스택",
+    "resumeTitle": "이력",
+    "langGroup": "Lang",
+    "stackGroup": "Stack",
+    "framesSuffix": "FRAMES →"
+  },
+  "projects": {
+    "seoTitle": "프로젝트",
+    "seoDescription": "프로젝트 목록을 검색하고 필터링할 수 있습니다.",
+    "eyebrow": "Project frames",
+    "title": "Projects",
+    "searchPlaceholder": "프로젝트 검색...",
+    "noAttachment": "첨부된 이미지가 없습니다."
+  },
+  "notFound": {
+    "eyebrow": "No signal · Error 404",
+    "title": "페이지를 찾을 수 없어요",
+    "description": "요청하신 페이지가 존재하지 않거나 이동되었을 수 있습니다.",
+    "homeLabel": "홈으로 돌아가기 →"
+  }
+}

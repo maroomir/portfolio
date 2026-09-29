@@ -97,10 +97,13 @@
           "2023/02"
         ],
         "highlights": [
-          "MMSCtrl",
-          "RobotIntegrateVision",
-          "KESBarista",
-          "JCIManager"
+          "FastMRI",
+          "BraTS3D",
+          "yolov5_the_eye",
+          "ScoopLearner",
+          "MetaArtGallery",
+          "MetaArtServer",
+          "MetaArtClient"
         ]
       },
       {
@@ -276,7 +279,7 @@
         "name": "LG전자",
         "url": "https://www.lge.co.kr/"
       },
-      "category": "Rototics Soultion",
+      "category": "Robotics Solution",
       "ability": {
         "language": "C#",
         "framework": [
@@ -297,7 +300,7 @@
         "name": "LG전자",
         "url": "https://www.lge.co.kr/"
       },
-      "category": "Rototics Vision",
+      "category": "Robotics Vision",
       "pinned": true,
       "ability": {
         "language": "C#",
@@ -320,7 +323,7 @@
         "name": "LG전자",
         "url": "https://www.lge.co.kr/"
       },
-      "category": "Robotics Soultion",
+      "category": "Robotics Solution",
       "ability": {
         "language": "C",
         "framework": [
@@ -957,25 +960,6 @@
         "date": "2025/11",
         "status": "private",
         "link": ""
-      }
-    },
-    {
-      "name": "Picktion",
-      "title": "AI 픽션 작성 도구",
-      "description": "React, TypeScript로 개발한 AI 기반 픽션 작성 지원 웹 애플리케이션",
-      "ability": {
-        "language": "Typescript",
-        "framework": [
-          "React",
-          "Vite",
-          "Electron"
-        ]
-      },
-      "category": "Web Site",
-      "release": {
-        "date": "2026/01",
-        "status": "public",
-        "link": "https://picktion.vercel.app/"
       }
     },
     {

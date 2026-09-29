@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import styled from "@emotion/styled";
-import { IProject, IResume } from "@/data/data";
-import data from "@/data/data.json";
+import type { IProject, IResume } from "@/data/schema";
+import { content } from "@/data/repository";
 import { HudLabel } from "@/styles/hud";
 
 /**
@@ -11,6 +11,7 @@ import { HudLabel } from "@/styles/hud";
  *
  * Props:
  * - items: IResume[]
+ * - projects: IProject[] (grouped by agency name under each item)
  *
  * 동작:
  * - 각 항목 하단에 해당 회사에서 수행한 프로젝트 제목을 나열 (public 프로젝트는 깃허브 링크)
@@ -18,16 +19,16 @@ import { HudLabel } from "@/styles/hud";
  */
 
 type Props = {
-  items: IResume[];
+  items: readonly IResume[];
+  projects: readonly IProject[];
 };
 
-export default function Timeline({ items }: Props) {
+export default function Timeline({ items, projects }: Props) {
   const sorted = useMemo(
     () => [...items].sort((a, b) => (a.period[0] ?? "").localeCompare(b.period[0] ?? "")),
     [items]
   );
 
-  const projects = data.projects as IProject[];
   const projectsByCompany = useMemo(() => {
     const map: Record<string, IProject[]> = {};
     projects.forEach((p) => {
@@ -44,7 +45,7 @@ export default function Timeline({ items }: Props) {
   return (
     <Wrapper aria-label="경력 타임라인">
       <Header>
-        <HudLabel>Career timeline</HudLabel>
+        <HudLabel>{content.timeline.label}</HudLabel>
         <HudLabel>{startYear} ———— {endYear}</HudLabel>
       </Header>
       <Ruler $count={sorted.length}>
