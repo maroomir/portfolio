@@ -1,5 +1,5 @@
 import { BrowserRouter } from 'react-router-dom'
-import { GlobalStyles } from 'styles/globalStyles'
+import { GlobalStyles } from '@/styles/globalStyles'
 import Navbar from '@/components/Navbar'
 import AppRoutes from './routes/AppRoutes';
 // import ScrollToTop from '@/components/ScrollToTop'; // ScrollControls가 대체
