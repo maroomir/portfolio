@@ -2,6 +2,8 @@ import { useMemo } from "react";
 import styled from "@emotion/styled";
 import type { IProject, IResume } from "@/data/schema";
 import { content } from "@/data/repository";
+import { sortByStart } from "@/model/career";
+import { groupByAgency } from "@/model/project";
 import { HudLabel } from "@/styles/hud";
 
 /**
@@ -24,20 +26,8 @@ type Props = {
 };
 
 export default function Timeline({ items, projects }: Props) {
-  const sorted = useMemo(
-    () => [...items].sort((a, b) => (a.period[0] ?? "").localeCompare(b.period[0] ?? "")),
-    [items]
-  );
-
-  const projectsByCompany = useMemo(() => {
-    const map: Record<string, IProject[]> = {};
-    projects.forEach((p) => {
-      const name = (p.agency?.name ?? "").toLowerCase();
-      if (!map[name]) map[name] = [];
-      map[name].push(p);
-    });
-    return map;
-  }, [projects]);
+  const sorted = useMemo(() => sortByStart(items), [items]);
+  const projectsByCompany = useMemo(() => groupByAgency(projects), [projects]);
 
   const startYear = sorted[0]?.period[0]?.slice(0, 4);
   const endYear = sorted[sorted.length - 1]?.period[1]?.slice(0, 4);
@@ -51,7 +41,7 @@ export default function Timeline({ items, projects }: Props) {
       <Ruler $count={sorted.length}>
         {sorted.map((it, idx) => {
           const companyKey = (it.company ?? "").toLowerCase();
-          const companyProjects = projectsByCompany[companyKey] || [];
+          const companyProjects = projectsByCompany.get(companyKey) ?? [];
           const isLatest = idx === sorted.length - 1;
 
           return (

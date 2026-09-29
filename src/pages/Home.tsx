@@ -7,7 +7,9 @@ import { portfolio, content } from "@/data/repository";
 import Seo from "@/components/Seo";
 import Timeline from "@/components/Timeline";
 import { HudLabel, MonoText } from "@/styles/hud";
-import type { IResume } from "@/data/schema";
+import { rankTop } from "@/model/collections";
+import { countByFramework, countByLanguage, selectPinnedFrames } from "@/model/project";
+import { findEducation, findLatestJob } from "@/model/career";
 
 const READOUT_LIMIT = 3;
 
@@ -16,19 +18,11 @@ function Home() {
   const copy = content.home;
   const navigate = useNavigate();
 
-  const topLanguages = useMemo(() => rankByCount(projects.map((p) => p.ability.language)), [projects]);
-  const topFrameworks = useMemo(() => rankByCount(projects.flatMap((p) => p.ability.framework)), [projects]);
+  const topLanguages = useMemo(() => rankTop(countByLanguage(projects), READOUT_LIMIT), [projects]);
+  const topFrameworks = useMemo(() => rankTop(countByFramework(projects), READOUT_LIMIT), [projects]);
   const currentJob = useMemo(() => findLatestJob(about.resume), [about.resume]);
-  const education = about.resume.find((r) => /대학/.test(r.company));
-
-  const pinnedFrames = useMemo(
-    () =>
-      projects
-        .map((project, index) => ({ project, frameNo: index + 1 }))
-        .filter(({ project }) => project.pinned)
-        .sort((a, b) => b.project.release.date.localeCompare(a.project.release.date)),
-    [projects]
-  );
+  const education = useMemo(() => findEducation(about.resume), [about.resume]);
+  const pinnedFrames = useMemo(() => selectPinnedFrames(projects), [projects]);
 
   return (
     <Container>
@@ -62,7 +56,7 @@ function Home() {
           </Hero>
 
           <Readouts $align="right" aria-label="현재 소속">
-            <Readout><HudLabel>{copy.readouts.current}</HudLabel><Value>{currentJob.company} · {currentJob.department}</Value></Readout>
+            {currentJob && <Readout><HudLabel>{copy.readouts.current}</HudLabel><Value>{currentJob.company} · {currentJob.department}</Value></Readout>}
             {education && <Readout><HudLabel>{copy.readouts.edu}</HudLabel><Value>{education.company} · {education.role}</Value></Readout>}
             <Readout><HudLabel>{copy.readouts.mode}</HudLabel><Value $accent>{copy.modeValue}</Value></Readout>
           </Readouts>
@@ -95,22 +89,6 @@ function Home() {
 }
 
 export default Home
-
-/** 등장 횟수 순으로 상위 항목을 반환 */
-function rankByCount(values: string[]): string[] {
-  const counts = new Map<string, number>();
-  values.forEach((v) => counts.set(v, (counts.get(v) ?? 0) + 1));
-  return [...counts.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, READOUT_LIMIT)
-    .map(([value]) => value);
-}
-
-/** 학업을 제외하고 종료 시점이 가장 늦은 경력 */
-function findLatestJob(resume: IResume[]): IResume {
-  const jobs = resume.filter((r) => !/대학/.test(r.company));
-  return [...jobs].sort((a, b) => (b.period[1] ?? "").localeCompare(a.period[1] ?? ""))[0] ?? resume[0];
-}
 
 const Container = styled.div`
   width: 100%;

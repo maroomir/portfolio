@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import styled from "@emotion/styled";
 import { portfolio, content } from "@/data/repository";
 import { ROUTES } from "@/config/routes";
+import { careerSpan } from "@/model/career";
 
 /**
  * Navbar - 뷰파인더 상단 HUD 바
@@ -9,7 +10,7 @@ import { ROUTES } from "@/config/routes";
  */
 function Navbar() {
   const location = useLocation();
-  const careerYears = getCareerYears(portfolio.about.resume.flatMap((r) => r.period));
+  const careerYears = careerSpan(portfolio.about.resume);
 
   return (
     <Wrapper>
@@ -25,24 +26,17 @@ function Navbar() {
             </StyledLink>
           ))}
         </Menu>
-        <Readout aria-label="경력 기간">
-          {content.navbar.afPrefix} · {careerYears.start} → {careerYears.end} · {careerYears.span}Y
-        </Readout>
+        {careerYears && (
+          <Readout aria-label="경력 기간">
+            {content.navbar.afPrefix} · {careerYears.start} → {careerYears.end} · {careerYears.span}Y
+          </Readout>
+        )}
       </Inner>
     </Wrapper>
   );
 }
 
 export default Navbar;
-
-function getCareerYears(periods: string[]) {
-  const years = periods
-    .map((p) => parseInt(p.slice(0, 4), 10))
-    .filter((y) => !Number.isNaN(y));
-  const start = Math.min(...years);
-  const end = Math.max(...years);
-  return { start, end, span: end - start };
-}
 
 const Wrapper = styled.nav`
   position: fixed;
