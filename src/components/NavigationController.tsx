@@ -1,111 +1,20 @@
-import { useRef, useEffect } from "react";
 import styled from "@emotion/styled";
-import { useNavigate, useLocation } from "react-router-dom";
-import { ROUTE_PATHS } from "@/config/routes";
+import { useSwipeNavigation } from "@/features/page-navigation/useSwipeNavigation";
 
 /**
  * NavigationController
- * - Mobile: horizontal swipe to navigate between routes
+ * - Mobile: horizontal swipe to navigate between routes (see useSwipeNavigation)
  * - Desktop: floating left/right arrow buttons to navigate
- *
- * Behavior:
- * - Routes order is taken from ROUTE_PATHS in config/routes
- * - Swipe threshold: 50px horizontal movement (default)
- * - Debounce navigation while navigating (600ms)
  */
-
-const ROUTES = ROUTE_PATHS;
-const SWIPE_THRESHOLD = 50;
-const NAV_DEBOUNCE_MS = 600;
-
 export default function NavigationController() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const startX = useRef<number | null>(null);
-  const startY = useRef<number | null>(null);
-  const navigating = useRef(false);
-  const lastNav = useRef<number>(0);
-
-  // Determine current index (best-effort by pathname startWith)
-  const currentIndex = ROUTES.findIndex((r) => r === location.pathname) >= 0
-    ? ROUTES.findIndex((r) => r === location.pathname)
-    : ROUTES.findIndex((r) => location.pathname.startsWith(r)) || 0;
-
-  const doNavigate = (targetIndex: number) => {
-    if (navigating.current) return;
-    if (targetIndex < 0 || targetIndex >= ROUTES.length) return;
-    const now = Date.now();
-    if (now - lastNav.current < NAV_DEBOUNCE_MS) return;
-    lastNav.current = now;
-    navigating.current = true;
-    navigate(ROUTES[targetIndex]);
-    setTimeout(() => { navigating.current = false; }, NAV_DEBOUNCE_MS);
-  };
-
-  const handleTouchStart = (e: TouchEvent) => {
-    if (e.touches.length !== 1) return;
-    startX.current = e.touches[0].clientX;
-    startY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchEnd = (e: TouchEvent) => {
-    if (startX.current === null || startY.current === null) return;
-    const touch = e.changedTouches[0];
-    const dx = touch.clientX - startX.current;
-    const dy = touch.clientY - startY.current;
-    startX.current = null;
-    startY.current = null;
-
-    // ignore if vertical movement dominates
-    if (Math.abs(dy) > Math.abs(dx)) return;
-    if (Math.abs(dx) < SWIPE_THRESHOLD) return;
-
-    if (dx < 0) {
-      // swipe left => move forward (right direction)
-      doNavigate(currentIndex + 1);
-    } else {
-      // swipe right => move backward (left direction)
-      doNavigate(currentIndex - 1);
-    }
-  };
-
-  useEffect(() => {
-    // Attach passive listeners to document for mobile swipes
-    document.addEventListener("touchstart", handleTouchStart, { passive: true });
-    document.addEventListener("touchend", handleTouchEnd, { passive: true });
-    return () => {
-      document.removeEventListener("touchstart", handleTouchStart);
-      document.removeEventListener("touchend", handleTouchEnd);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]);
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") doNavigate(currentIndex - 1);
-      if (e.key === "ArrowRight") doNavigate(currentIndex + 1);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentIndex]);
+  const { goPrev, goNext } = useSwipeNavigation();
 
   return (
     <>
-      <ArrowButtonLeft
-        role="button"
-        aria-label="이전 섹션"
-        onClick={() => doNavigate(currentIndex - 1)}
-        $visible
-      >
+      <ArrowButtonLeft role="button" aria-label="이전 섹션" onClick={goPrev} $visible>
         ‹
       </ArrowButtonLeft>
-      <ArrowButtonRight
-        role="button"
-        aria-label="다음 섹션"
-        onClick={() => doNavigate(currentIndex + 1)}
-        $visible
-      >
+      <ArrowButtonRight role="button" aria-label="다음 섹션" onClick={goNext} $visible>
         ›
       </ArrowButtonRight>
     </>
