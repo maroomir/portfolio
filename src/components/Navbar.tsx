@@ -3,6 +3,8 @@ import styled from "@emotion/styled";
 import { portfolio, content } from "@/data/repository";
 import { ROUTES } from "@/config/routes";
 import { careerSpan } from "@/model/career";
+import { mq } from "@/theme/mq";
+import { tokens } from "@/theme/tokens";
 
 /**
  * Navbar - 뷰파인더 상단 HUD 바
@@ -45,7 +47,7 @@ const Wrapper = styled.nav`
   right: 0;
   height: var(--nav-height);
   z-index: 100;
-  background: rgba(11, 12, 14, 0.92);
+  background: var(--glass-strong);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--accent-dim);
   font-family: var(--font-mono);
@@ -72,7 +74,7 @@ const RecGroup = styled.div`
   gap: 0.75rem;
   white-space: nowrap;
 
-  @media (max-width: 600px) {
+  ${mq.sm} {
     span { display: none; }
   }
 `;
@@ -96,7 +98,7 @@ const StyledLink = styled(Link, {
   padding: 0.5rem 0.25rem;
   color: ${(props) => (props.$isActive ? 'var(--accent)' : 'var(--muted)')};
   white-space: nowrap;
-  transition: color 0.2s ease;
+  transition: color ${tokens.motion.fast}ms ease;
 
   &:hover {
     color: var(--text);
@@ -106,7 +108,7 @@ const StyledLink = styled(Link, {
 const Readout = styled.span`
   white-space: nowrap;
 
-  @media (max-width: 900px) {
+  ${mq.md} {
     display: none;
   }
 `;

@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTE_PATHS } from '@/config/routes';
+import { tokens } from '@/theme/tokens';
 
 /** Minimum horizontal travel to count a touch as a swipe. [px] */
-const SWIPE_THRESHOLD = 50;
+const SWIPE_THRESHOLD = tokens.behavior.swipeThreshold;
 /** Ignore further navigation requests for this long after one fires. [ms] */
-const NAV_DEBOUNCE_MS = 600;
+const NAV_DEBOUNCE_MS = tokens.behavior.navDebounce;
 
 export interface ISwipeNavigation {
   readonly goPrev: () => void;

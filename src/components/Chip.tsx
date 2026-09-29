@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
+import { tokens } from "@/theme/tokens";
 
 type ChipProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
   readonly?: boolean;
@@ -32,14 +33,14 @@ const Wrapper = styled.button<{ $readonly?: boolean; $active?: boolean }>`
   gap: 0.4rem;
   padding: 0.3rem 0.7rem;
   border-radius: 0;
-  background: ${(props) => (props.$active ? "rgba(245,165,36,0.12)" : "transparent")};
+  background: ${(props) => (props.$active ? "var(--accent-soft)" : "transparent")};
   color: ${(props) => (props.$active ? "var(--accent)" : "var(--text-soft)")};
   border: 1px solid ${(props) => (props.$active ? "var(--accent)" : "var(--line-strong)")};
   font-family: var(--font-mono);
   font-size: 0.75rem;
   letter-spacing: 0.04em;
   cursor: ${(props) => (props.$readonly ? "default" : "pointer")};
-  transition: border-color 160ms ease, color 160ms ease, background 160ms ease;
+  transition: border-color ${tokens.motion.fast}ms ease, color ${tokens.motion.fast}ms ease, background ${tokens.motion.fast}ms ease;
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 

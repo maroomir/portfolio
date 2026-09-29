@@ -1,4 +1,9 @@
 import styled from "@emotion/styled";
+import { mq } from "@/theme/mq";
+import { tokens } from "@/theme/tokens";
+
+const OFFSET = tokens.size.frameCornerOffset;
+const STROKE = tokens.size.frameCornerStroke;
 
 /**
  * FrameCorners - 뷰파인더 화면 네 모서리의 브래킷 장식
@@ -7,23 +12,23 @@ import styled from "@emotion/styled";
 export default function FrameCorners() {
   return (
     <>
-      <Corner aria-hidden style={{ top: "calc(var(--nav-height) + 24px)", left: 24, borderTopWidth: 3, borderLeftWidth: 3 }} />
-      <Corner aria-hidden style={{ top: "calc(var(--nav-height) + 24px)", right: 24, borderTopWidth: 3, borderRightWidth: 3 }} />
-      <Corner aria-hidden style={{ bottom: 24, left: 24, borderBottomWidth: 3, borderLeftWidth: 3 }} />
-      <Corner aria-hidden style={{ bottom: 24, right: 24, borderBottomWidth: 3, borderRightWidth: 3 }} />
+      <Corner aria-hidden style={{ top: `calc(var(--nav-height) + ${OFFSET}px)`, left: OFFSET, borderTopWidth: STROKE, borderLeftWidth: STROKE }} />
+      <Corner aria-hidden style={{ top: `calc(var(--nav-height) + ${OFFSET}px)`, right: OFFSET, borderTopWidth: STROKE, borderRightWidth: STROKE }} />
+      <Corner aria-hidden style={{ bottom: OFFSET, left: OFFSET, borderBottomWidth: STROKE, borderLeftWidth: STROKE }} />
+      <Corner aria-hidden style={{ bottom: OFFSET, right: OFFSET, borderBottomWidth: STROKE, borderRightWidth: STROKE }} />
     </>
   );
 }
 
 const Corner = styled.div`
   position: fixed;
-  width: 40px;
-  height: 40px;
+  width: ${tokens.size.frameCorner}px;
+  height: ${tokens.size.frameCorner}px;
   border: 0 solid var(--accent);
   pointer-events: none;
   z-index: 50;
 
-  @media (max-width: 900px) {
+  ${mq.md} {
     display: none;
   }
 `;

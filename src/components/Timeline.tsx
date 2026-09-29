@@ -4,6 +4,8 @@ import type { IProject, IResume } from "@/data/schema";
 import { content } from "@/data/repository";
 import { sortByStart } from "@/model/career";
 import { groupByAgency } from "@/model/project";
+import { mq } from "@/theme/mq";
+import { tokens } from "@/theme/tokens";
 import { HudLabel } from "@/styles/hud";
 
 /**
@@ -45,7 +47,7 @@ export default function Timeline({ items, projects }: Props) {
           const isLatest = idx === sorted.length - 1;
 
           return (
-            <Item key={idx} $isLatest={isLatest} style={{ animationDelay: `${idx * 80}ms` }}>
+            <Item key={idx} $isLatest={isLatest} style={{ animationDelay: `${idx * tokens.motion.timelineStagger}ms` }}>
               <Period>{it.period[0]}{isLatest ? " →" : ""}</Period>
               <Company>{it.company}</Company>
               <Role>
@@ -98,7 +100,7 @@ const Ruler = styled.div<{ $count: number }>`
   gap: 1rem;
   border-top: 2px solid var(--line);
 
-  @media (max-width: 900px) {
+  ${mq.md} {
     grid-template-columns: 1fr;
     border-top: none;
     border-left: 2px solid var(--line);
@@ -128,7 +130,7 @@ const Item = styled.div<{ $isLatest?: boolean }>`
   /* entrance animation */
   opacity: 0;
   transform: translateY(8px);
-  animation: fadeUp 420ms ease forwards;
+  animation: fadeUp ${tokens.motion.timelineFadeIn}ms ease forwards;
 
   @keyframes fadeUp {
     to {
@@ -137,7 +139,7 @@ const Item = styled.div<{ $isLatest?: boolean }>`
     }
   }
 
-  @media (max-width: 900px) {
+  ${mq.md} {
     padding-top: 0;
     padding-left: 1.25rem;
 
