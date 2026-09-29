@@ -4,65 +4,18 @@ import { portfolio, content } from "@/data/repository";
 import Seo from "@/components/Seo";
 import { Link } from "react-router-dom";
 import { HudLabel } from "@/styles/hud";
+import { orderByUsage } from "@/model/collections";
+import { countByAgency, countByFramework, countByLanguage } from "@/model/project";
 
 export default function About() {
   const { about, projects } = portfolio;
   const copy = content.about;
 
-  const langsSorted = useMemo(() => {
-    const counts: Record<string, number> = {};
-    projects.forEach((p: any) => {
-      const lang = p?.ability?.language;
-      if (lang) counts[lang] = (counts[lang] || 0) + 1;
-    });
-    return about.languages
-      .map((l: string, idx: number) => ({ l, idx, count: counts[l] || 0 }))
-      .sort((a, b) => (b.count - a.count) || (a.idx - b.idx))
-      .map(x => x.l);
-  }, [about, projects]);
-
-  const skillsSorted = useMemo(() => {
-    const counts: Record<string, number> = {};
-    projects.forEach((p: any) => {
-      const frameworks = p?.ability?.framework ?? [];
-      frameworks.forEach((f: string) => {
-        if (f) counts[f] = (counts[f] || 0) + 1;
-      });
-    });
-    return about.skills
-      .map((s: string, idx: number) => ({ s, idx, count: counts[s] || 0 }))
-      .sort((a, b) => (b.count - a.count) || (a.idx - b.idx))
-      .map(x => x.s);
-  }, [about, projects]);
-
-  const langCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    projects.forEach((p: any) => {
-      const lang = p?.ability?.language;
-      if (lang) counts[lang] = (counts[lang] || 0) + 1;
-    });
-    return counts;
-  }, [projects]);
-
-  const skillCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    projects.forEach((p: any) => {
-      const frameworks = p?.ability?.framework ?? [];
-      frameworks.forEach((f: string) => {
-        if (f) counts[f] = (counts[f] || 0) + 1;
-      });
-    });
-    return counts;
-  }, [projects]);
-
-  const agencyCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    projects.forEach((p: any) => {
-      const agency = (p?.agency?.name ?? '').toString();
-      if (agency) counts[agency] = (counts[agency] || 0) + 1;
-    });
-    return counts;
-  }, [projects]);
+  const langCounts = useMemo(() => countByLanguage(projects), [projects]);
+  const skillCounts = useMemo(() => countByFramework(projects), [projects]);
+  const agencyCounts = useMemo(() => countByAgency(projects), [projects]);
+  const langsSorted = useMemo(() => orderByUsage(about.languages, langCounts), [about.languages, langCounts]);
+  const skillsSorted = useMemo(() => orderByUsage(about.skills, skillCounts), [about.skills, skillCounts]);
 
   return (
     <Container>
@@ -81,7 +34,7 @@ export default function About() {
               <TechList>
                 {langsSorted.map((lang) => (
                   <TagLink key={lang} to={`/projects?lang=${encodeURIComponent(lang)}`} aria-label={`Filter by language ${lang}`}>
-                    <LangIcon /> {lang}<SmallCount>{langCounts[lang] ?? 0}</SmallCount>
+                    <LangIcon /> {lang}<SmallCount>{langCounts.get(lang) ?? 0}</SmallCount>
                   </TagLink>
                 ))}
               </TechList>
@@ -91,7 +44,7 @@ export default function About() {
               <TechList>
                 {skillsSorted.map((skill) => (
                   <TagLink key={skill} to={`/projects?tech=${encodeURIComponent(skill)}`} aria-label={`Filter by tech ${skill}`}>
-                    <ToolIcon /> {skill}<SmallCount>{skillCounts[skill] ?? 0}</SmallCount>
+                    <ToolIcon /> {skill}<SmallCount>{skillCounts.get(skill) ?? 0}</SmallCount>
                   </TagLink>
                 ))}
               </TechList>
@@ -116,7 +69,7 @@ export default function About() {
                   <Department>{item.department}</Department>
                   <Role>{item.role}</Role>
                 </ResumeBody>
-                <ProjectCount data-project-count>{String(agencyCounts[item.company] ?? 0).padStart(2, "0")} {copy.framesSuffix}</ProjectCount>
+                <ProjectCount data-project-count>{String(agencyCounts.get(item.company) ?? 0).padStart(2, "0")} {copy.framesSuffix}</ProjectCount>
               </ResumeCard>
             ))}
           </ResumeList>
