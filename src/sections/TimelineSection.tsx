@@ -1,34 +1,25 @@
 import { useMemo } from "react";
 import styled from "@emotion/styled";
-import type { IProject, IResume } from "@/data/schema";
-import { content } from "@/data/repository";
+import { portfolio, content } from "@/data/repository";
 import { sortByStart } from "@/model/career";
 import { groupByAgency } from "@/model/project";
+import { HudLabel } from "@/ui/Hud";
 import { mq } from "@/theme/mq";
 import { tokens } from "@/theme/tokens";
-import { HudLabel } from "@/ui/Hud";
+
+export interface ITimelineSectionProps {
+  /** List each company's project titles under its entry (public ones link to GitHub). */
+  readonly showProjects: boolean;
+}
 
 /**
- * Timeline - 렌즈 눈금자 형태의 경력 타임라인
- * - 데스크탑: 가로 눈금자 위에 시작 시점 순(오래된 → 최신)으로 배치
- * - 모바일: 왼쪽 세로 레일에 같은 순서로 스택
- *
- * Props:
- * - items: IResume[]
- * - projects: IProject[] (grouped by agency name under each item)
- *
- * 동작:
- * - 각 항목 하단에 해당 회사에서 수행한 프로젝트 제목을 나열 (public 프로젝트는 깃허브 링크)
- * - 하이라이트 및 프로젝트 설명은 표시하지 않음 (요청에 따라 프로젝트 제목만 노출)
+ * TimelineSection - career timeline drawn as a lens ruler
+ * - Desktop: items along a horizontal ruler, oldest → newest
+ * - Mobile: same order stacked on a vertical rail
  */
-
-type Props = {
-  items: readonly IResume[];
-  projects: readonly IProject[];
-};
-
-export default function Timeline({ items, projects }: Props) {
-  const sorted = useMemo(() => sortByStart(items), [items]);
+export function TimelineSection({ showProjects }: ITimelineSectionProps) {
+  const { about, projects } = portfolio;
+  const sorted = useMemo(() => sortByStart(about.resume), [about.resume]);
   const projectsByCompany = useMemo(() => groupByAgency(projects), [projects]);
 
   const startYear = sorted[0]?.period[0]?.slice(0, 4);
@@ -43,7 +34,7 @@ export default function Timeline({ items, projects }: Props) {
       <Ruler $count={sorted.length}>
         {sorted.map((it, idx) => {
           const companyKey = (it.company ?? "").toLowerCase();
-          const companyProjects = projectsByCompany.get(companyKey) ?? [];
+          const companyProjects = showProjects ? projectsByCompany.get(companyKey) ?? [] : [];
           const isLatest = idx === sorted.length - 1;
 
           return (
