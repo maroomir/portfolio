@@ -11,7 +11,7 @@ npm test          # vitest run (src/**/*.test.ts)
 npm run lint      # eslint (0 오류 0 경고 유지)
 ```
 
-변경 후 게이트: `npm test && npx tsc -b && npm run lint && npm run build` 모두 통과.
+변경 후 게이트: `npm test && npx tsc -b && npm run lint && npm run build` 모두 통과. 같은 게이트가 `.github/workflows/ci.yml`에서 PR과 main 푸시마다 실행된다(Node 버전은 `.nvmrc`).
 
 ## 구조 맵
 
@@ -40,7 +40,7 @@ src/
     project-filter/         filterReducer(순수) + useProjectFilter(URL 파라미터 결합)
     project-modal/          useProjectModal + ProjectModal
     project-explorer/       Projects 섹션들이 공유하는 Context(Provider/useProjectExplorer)
-    page-navigation/        useSwipeNavigation(스와이프·방향키)
+    page-navigation/        useSwipeNavigation(스와이프·방향키) + navigationGuards(입력·스크롤 영역·모달에서 무시하는 순수 판정)
   sections/                 site.config에서 참조하는 페이지 블록(각자 data/model/ui만 의존)
   ui/                       도메인 무관 프리미티브(PageShell, Section, Card, Badge, Control, Modal, Hud, HudButton, Link, Button, Chip)
   components/               앱 고정 위젯(Navbar, Footer, FrameCorners, ScrollControls, NavigationController, PageTransition, Seo, ProjectBadges)
