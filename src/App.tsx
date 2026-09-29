@@ -7,10 +7,9 @@ import Footer from '@/components/Footer';
 import FrameCorners from '@/components/FrameCorners';
 import NavigationController from '@/components/NavigationController';
 import ScrollControls from '@/components/ScrollControls';
+import { APP_SCROLL_CONTAINER_ID } from '@/lib/scroll';
 
 function App() {
-  console.log('App Rendering...')
-
   return (
     <BrowserRouter>
       <GlobalStyles />
@@ -18,7 +17,7 @@ function App() {
       <Navbar />
       <FrameCorners />
       <NavigationController />
-      <div id="app-scroll-container" style={{ overflowY: 'auto', height: '100vh' }}>
+      <div id={APP_SCROLL_CONTAINER_ID} style={{ overflowY: 'auto', height: '100vh' }}>
         <AppRoutes />
         <Footer />
       </div>

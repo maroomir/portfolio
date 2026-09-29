@@ -1,123 +1,29 @@
 import styled from "@emotion/styled";
-import { useMemo, useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import Seo from "@/components/Seo";
 import { portfolio, content } from "@/data/repository";
 import Chip from '@/components/Chip';
 import { keyframes } from "@emotion/react";
 import { HudLabel } from "@/styles/hud";
+import type { IProject, ReleaseStatus } from "@/data/schema";
+import type { SortOrder } from "@/model/project";
+import { useProjectFilter } from "@/features/project-filter/useProjectFilter";
+import { useProjectModal } from "@/features/project-modal/useProjectModal";
+import { useMediaQuery } from "@/lib/useMediaQuery";
+
+const MOBILE_QUERY = '(max-width: 600px)';
 
 function Projects() {
   const { projects } = portfolio;
   const copy = content.projects;
-  type ProjectItem = (typeof projects)[number];
 
-  const location = useLocation();
-  const params = new URLSearchParams(location.search);
-  const langFilter = params.get('lang') ?? '';
-  const techFilter = params.get('tech') ?? '';
-  const agencyFilter = params.get('agency') ?? '';
-
-  const [query, setQuery] = useState('');
-  const [status, setStatus] = useState<'all' | 'public' | 'private'>('all');
-  const [sort, setSort] = useState<'newest' | 'oldest'>('newest');
-  const [activeTechs, setActiveTechs] = useState<string[]>([]);
-  const [filterMode, setFilterMode] = useState<'and' | 'or'>('and');
+  const isMobile = useMediaQuery(MOBILE_QUERY);
+  const { state, dispatch, url, clearAgency, visible } = useProjectFilter(projects, { forceAndMode: isMobile });
+  const modal = useProjectModal();
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
 
-  const navigate = useNavigate();
-  const [agencySelected, setAgencySelected] = useState<string>(agencyFilter);
-
-  useEffect(() => {
-    setAgencySelected(agencyFilter);
-  }, [agencyFilter]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || !window.matchMedia) return;
-    const mql = window.matchMedia('(max-width: 600px)');
-    const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    setIsMobile(mql.matches);
-    if (mql.addEventListener) mql.addEventListener('change', onChange);
-    else if ((mql as any).addListener) (mql as any).addListener(onChange);
-    return () => {
-      if (mql.removeEventListener) mql.removeEventListener('change', onChange);
-      else if ((mql as any).removeListener) (mql as any).removeListener(onChange);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!selectedProject || typeof window === 'undefined') return;
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
-        setSelectedProject(null);
-      }
-    };
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    window.addEventListener('keydown', handleEscape);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener('keydown', handleEscape);
-    };
-  }, [selectedProject]);
-
-  const shouldIgnoreCardOpen = (target: EventTarget | null) => {
-    if (!(target instanceof HTMLElement)) return false;
-    return Boolean(target.closest('a, button, input, select, textarea, [data-no-modal="true"]'));
-  };
-
-  const openProjectModal = (project: ProjectItem, target: EventTarget | null) => {
-    if (shouldIgnoreCardOpen(target)) return;
-    setSelectedProject(project);
-  };
-
-  const closeProjectModal = () => setSelectedProject(null);
-
-  const filtered = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const getDateKey = (p: any) => {
-      const d = p.release?.date ?? '';
-      const digits = d.toString().replace(/\D/g, '');
-      return digits ? parseInt(digits, 10) : 0;
-    };
-    const sorted = [...projects].sort((a, b) => {
-      const pinnedDiff = Number(Boolean((b as any).pinned)) - Number(Boolean((a as any).pinned));
-      if (pinnedDiff !== 0) return pinnedDiff;
-      const ka = getDateKey(a);
-      const kb = getDateKey(b);
-      if (sort === 'newest') return kb - ka;
-      return ka - kb;
-    });
-    const mode = isMobile ? 'and' : filterMode;
-    return sorted.filter((p) => {
-      const statusOk = status === 'all' || p.release?.status === status;
-      const text = ((p as any).title + ' ' + (p as any).description).toLowerCase();
-      const textOk = q === '' || text.includes(q);
-      const langOk = !langFilter || ((p as any).ability?.language === langFilter);
-    const urlTechs = techFilter ? techFilter.split(',').map(s => decodeURIComponent(s)) : [];
-    const effective = [...urlTechs, ...activeTechs];
-
-    const agencyOk = !agencySelected || ((p as any).agency?.name ?? '').toLowerCase() === agencySelected.toLowerCase();
-
-    let techOk = true;
-    if (effective.length === 0) {
-      techOk = true;
-    } else if (mode === 'and') {
-      // AND: 모든 선택된 기술을 포함해야 통과
-      techOk = effective.every((t: string) => ((p as any).ability?.framework?.includes(t) || (p as any).ability?.language === t));
-    } else {
-      // OR: 하나라도 포함하면 통과
-      techOk = effective.some((t: string) => ((p as any).ability?.framework?.includes(t) || (p as any).ability?.language === t));
-    }
-
-    return statusOk && textOk && langOk && agencyOk && techOk;
-  });
-  }, [projects, query, status, sort, langFilter, techFilter, activeTechs, agencySelected, filterMode, isMobile]);
+  const isTechActive = (tech: string) => state.activeTechs.includes(tech);
+  const toggleTech = (tech: string) => dispatch({ type: 'toggleTech', tech });
 
   return (
     <Container>
@@ -125,7 +31,7 @@ function Projects() {
       <Content>
         <TitleRow>
           <Heading>
-            <HudLabel>{copy.eyebrow} · {String(filtered.length).padStart(2, '0')} / {projects.length}</HudLabel>
+            <HudLabel>{copy.eyebrow} · {String(visible.length).padStart(2, '0')} / {projects.length}</HudLabel>
             <Title>{copy.title}</Title>
           </Heading>
           <InlineMobileSearchButton
@@ -142,8 +48,8 @@ function Projects() {
           {mobileSearchOpen && (
             <MobileSearchBar role="search" aria-hidden={!mobileSearchOpen}>
               <MobileSearchInput
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                value={state.query}
+                onChange={(e) => dispatch({ type: 'setQuery', query: e.target.value })}
                 placeholder={copy.searchPlaceholder}
                 aria-label="모바일 프로젝트 검색"
                 autoFocus
@@ -159,21 +65,21 @@ function Projects() {
           )}
 
           <SearchInput
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            value={state.query}
+            onChange={(e) => dispatch({ type: 'setQuery', query: e.target.value })}
             placeholder={copy.searchPlaceholder}
             aria-label="프로젝트 검색"
           />
           <Select
-            value={status}
-            onChange={(e) => setStatus(e.target.value as 'all' | 'public' | 'private')}
+            value={state.status}
+            onChange={(e) => dispatch({ type: 'setStatus', status: e.target.value as ReleaseStatus | 'all' })}
             aria-label="공개 여부 필터"
           >
             <option value="all">전체</option>
             <option value="public">공개</option>
             <option value="private">비공개</option>
           </Select>
-          <SortSelect value={sort} onChange={(e) => setSort(e.target.value as 'newest' | 'oldest')} aria-label="정렬 필터">
+          <SortSelect value={state.sort} onChange={(e) => dispatch({ type: 'setSort', sort: e.target.value as SortOrder })} aria-label="정렬 필터">
             <option value="newest">최신</option>
             <option value="oldest">오래된</option>
           </SortSelect>
@@ -182,19 +88,19 @@ function Projects() {
             <ModeLabel>매칭</ModeLabel>
             <ModeButton
               type="button"
-              $active={filterMode === 'and'}
-              onClick={() => setFilterMode('and')}
+              $active={state.mode === 'and'}
+              onClick={() => dispatch({ type: 'setMode', mode: 'and' })}
               role="tab"
-              aria-selected={filterMode === 'and'}
+              aria-selected={state.mode === 'and'}
             >
               AND
             </ModeButton>
             <ModeButton
               type="button"
-              $active={filterMode === 'or'}
-              onClick={() => setFilterMode('or')}
+              $active={state.mode === 'or'}
+              onClick={() => dispatch({ type: 'setMode', mode: 'or' })}
               role="tab"
-              aria-selected={filterMode === 'or'}
+              aria-selected={state.mode === 'or'}
             >
               OR
             </ModeButton>
@@ -202,69 +108,54 @@ function Projects() {
         </Controls>
 
         <ActiveFilters>
-          {/* URL 기반 agency 필터 또는 내부 선택된 agency 표시 */}
-          {agencySelected && (
-            <Chip
-              active
-              onClick={() => {
-                // clear agency from state and URL
-                setAgencySelected('');
-                const newParams = new URLSearchParams(location.search);
-                newParams.delete('agency');
-                navigate(`${location.pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`, { replace: true });
-              }}
-              aria-pressed={false}
-            >
-              {agencySelected}
+          {/* URL 기반 agency 필터 (About 페이지 링크에서 진입) */}
+          {url.agency && (
+            <Chip active onClick={clearAgency} aria-pressed={false}>
+              {url.agency}
             </Chip>
           )}
 
           {/* URL 기반 tech 필터 표시 (읽기 전용) */}
-          {techFilter && (
+          {url.techs.length > 0 && (
             <Chip readonly aria-hidden>
-              URL 필터: {decodeURIComponent(techFilter)}
+              URL 필터: {url.techs.join(',')}
             </Chip>
           )}
 
           {/* 활성화된 태그 필터(토글로 적용/해제 가능) */}
-          {activeTechs.map((t) => (
-            <Chip
-              key={t}
-              active={activeTechs.includes(t)}
-              onClick={() => setActiveTechs(prev => prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t])}
-              aria-pressed={activeTechs.includes(t)}
-            >
+          {state.activeTechs.map((t) => (
+            <Chip key={t} active onClick={() => toggleTech(t)} aria-pressed>
               {t}
             </Chip>
           ))}
-          {activeTechs.length > 0 && (
-            <ClearButton onClick={() => setActiveTechs([])}>필터 초기화</ClearButton>
+          {state.activeTechs.length > 0 && (
+            <ClearButton onClick={() => dispatch({ type: 'clearTechs' })}>필터 초기화</ClearButton>
           )}
         </ActiveFilters>
 
         <ProjectGrid>
-          {filtered.map((project) => (
+          {visible.map(({ project, frameNo }) => (
             <Card
               key={project.name}
               role="button"
               tabIndex={0}
-              onClick={(e) => openProjectModal(project, e.target)}
+              onClick={(e) => modal.openFrom(project, e.target)}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
                   e.preventDefault();
-                  openProjectModal(project, e.target);
+                  modal.openFrom(project, e.target);
                 }
               }}
               aria-label={`${project.title} 상세 보기`}
             >
               <FrameMeta>
-                <span>FRAME {String(projects.indexOf(project) + 1).padStart(3, '0')}</span>
+                <span>FRAME {String(frameNo).padStart(3, '0')}</span>
                 <span>{project.release.date}</span>
               </FrameMeta>
               <ProjectHeader>
                 <h3>{project.title}</h3>
                 <HeaderRight>
-                  {(project as any).pinned && <PinnedBadge>PINNED</PinnedBadge>}
+                  {project.pinned && <PinnedBadge>PINNED</PinnedBadge>}
                   <Status $status={project.release.status}>
                     {project.release.status === 'public' ? 'PUBLIC' : 'PRIVATE'}
                   </Status>
@@ -276,15 +167,15 @@ function Projects() {
                 <TechLabel>Stack</TechLabel>
                 <TechTags>
                   <TechTag>{project.ability.language}</TechTag>
-                  {project.ability.framework.map((framework, idx) => (
+                  {project.ability.framework.map((framework) => (
                     <Chip
-                      key={idx}
-                      active={activeTechs.includes(framework)}
+                      key={framework}
+                      active={isTechActive(framework)}
                       onClick={(e) => {
                         e.stopPropagation();
-                        setActiveTechs(prev => prev.includes(framework) ? prev.filter(x => x !== framework) : [...prev, framework]);
+                        toggleTech(framework);
                       }}
-                      aria-pressed={activeTechs.includes(framework)}
+                      aria-pressed={isTechActive(framework)}
                     >
                       {framework}
                     </Chip>
@@ -309,50 +200,60 @@ function Projects() {
           ))}
         </ProjectGrid>
 
-        {selectedProject && (
-          <ModalOverlay role="dialog" aria-modal="true" aria-label={`${selectedProject.title} 상세 모달`} onClick={closeProjectModal}>
-            <ModalCard onClick={(e) => e.stopPropagation()}>
-              <ModalHeader>
-                <ModalTitleGroup>
-                  <h2>{selectedProject.title}</h2>
-                  <ModalMeta>
-                    {(selectedProject as any).pinned && <PinnedBadge>PINNED</PinnedBadge>}
-                    <Status $status={selectedProject.release.status}>
-                      {selectedProject.release.status === 'public' ? 'PUBLIC' : 'PRIVATE'}
-                    </Status>
-                  </ModalMeta>
-                </ModalTitleGroup>
-                <ModalCloseButton type="button" aria-label="모달 닫기" onClick={closeProjectModal}>
-                  ✕
-                </ModalCloseButton>
-              </ModalHeader>
-
-              <ModalBody>
-                <Description>{selectedProject.description}</Description>
-                <ReleaseDate>{selectedProject.release.date}</ReleaseDate>
-
-                {(selectedProject as any).attachments?.length > 0 ? (
-                  <AttachmentGrid>
-                    {(selectedProject as any).attachments.map((attachment: any, idx: number) => (
-                      <AttachmentFigure key={`${selectedProject.name}-attachment-${idx}`}>
-                        <AttachmentImage src={attachment.src} alt={attachment.caption || `${selectedProject.title} 첨부 이미지 ${idx + 1}`} loading="lazy" />
-                        {attachment.caption && <AttachmentCaption>{attachment.caption}</AttachmentCaption>}
-                      </AttachmentFigure>
-                    ))}
-                  </AttachmentGrid>
-                ) : (
-                  <NoAttachmentText>{copy.noAttachment}</NoAttachmentText>
-                )}
-              </ModalBody>
-            </ModalCard>
-          </ModalOverlay>
-        )}
+        {modal.selected && <ProjectModal project={modal.selected} onClose={modal.close} noAttachmentText={copy.noAttachment} />}
       </Content>
     </Container>
   );
 }
 
 export default Projects;
+
+type ProjectModalProps = {
+  project: IProject;
+  onClose: () => void;
+  noAttachmentText: string;
+};
+
+function ProjectModal({ project, onClose, noAttachmentText }: ProjectModalProps) {
+  return (
+    <ModalOverlay role="dialog" aria-modal="true" aria-label={`${project.title} 상세 모달`} onClick={onClose}>
+      <ModalCard onClick={(e) => e.stopPropagation()}>
+        <ModalHeader>
+          <ModalTitleGroup>
+            <h2>{project.title}</h2>
+            <ModalMeta>
+              {project.pinned && <PinnedBadge>PINNED</PinnedBadge>}
+              <Status $status={project.release.status}>
+                {project.release.status === 'public' ? 'PUBLIC' : 'PRIVATE'}
+              </Status>
+            </ModalMeta>
+          </ModalTitleGroup>
+          <ModalCloseButton type="button" aria-label="모달 닫기" onClick={onClose}>
+            ✕
+          </ModalCloseButton>
+        </ModalHeader>
+
+        <ModalBody>
+          <Description>{project.description}</Description>
+          <ReleaseDate>{project.release.date}</ReleaseDate>
+
+          {project.attachments && project.attachments.length > 0 ? (
+            <AttachmentGrid>
+              {project.attachments.map((attachment, idx) => (
+                <AttachmentFigure key={`${project.name}-attachment-${idx}`}>
+                  <AttachmentImage src={attachment.src} alt={attachment.caption || `${project.title} 첨부 이미지 ${idx + 1}`} loading="lazy" />
+                  {attachment.caption && <AttachmentCaption>{attachment.caption}</AttachmentCaption>}
+                </AttachmentFigure>
+              ))}
+            </AttachmentGrid>
+          ) : (
+            <NoAttachmentText>{noAttachmentText}</NoAttachmentText>
+          )}
+        </ModalBody>
+      </ModalCard>
+    </ModalOverlay>
+  );
+}
 
 
 const Container = styled.div`

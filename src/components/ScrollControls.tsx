@@ -1,4 +1,5 @@
 import styled from "@emotion/styled";
+import { scrollToBottom, scrollToTop } from "@/lib/scroll";
 
 /**
  * ScrollControls
@@ -13,68 +14,26 @@ import styled from "@emotion/styled";
  */
 
 export default function ScrollControls() {
-  const toTop = () => {
-    const appScroller = document.getElementById('app-scroll-container');
-    const scroller: any = appScroller || document.documentElement || document.body;
-
-    try {
-      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        scroller.scrollTo(0, 0);
-      } else {
-        scroller.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    } catch (error) {
-      console.error('Scroll to top failed:', error);
-      try { scroller.scrollTop = 0; } catch {} // fallback
-    }
-  };
-
-  const toBottom = () => {
-    const appScroller = document.getElementById('app-scroll-container');
-    const scroller: any = appScroller || document.documentElement || document.body;
-
-    const documentHeight = Math.max(
-      scroller.scrollHeight, // 스크롤러의 실제 높이 사용
-      document.body.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.clientHeight,
-      document.documentElement.scrollHeight,
-      document.documentElement.offsetHeight
-    );
-
-    try {
-      if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        scroller.scrollTo(0, documentHeight);
-      } else {
-        scroller.scrollTo({ top: documentHeight, behavior: "smooth" });
-      }
-    } catch (error) {
-      console.error(`Scroll to bottom failed on ${scroller.tagName || scroller.id}:`, error);
-      try { scroller.scrollTop = documentHeight; } catch {} // fallback
-    }
-  };
-
-
   return (
     <>
       <TopTapArea 
         role="button" 
         aria-label="스크롤 상단으로 이동" 
-        onClick={toTop}
-        onTouchStart={toTop}
+        onClick={scrollToTop}
+        onTouchStart={scrollToTop}
       />
       <FloatingGroup>
         <FloatingButton 
           aria-label="페이지 상단으로 이동" 
-          onClick={toTop}
-          onTouchStart={toTop}
+          onClick={scrollToTop}
+          onTouchStart={scrollToTop}
         >
           ▲
         </FloatingButton>
         <FloatingButton 
           aria-label="페이지 하단으로 이동" 
-          onClick={toBottom}
-          onTouchStart={toBottom}
+          onClick={scrollToBottom}
+          onTouchStart={scrollToBottom}
         >
           ▼
         </FloatingButton>

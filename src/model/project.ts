@@ -68,12 +68,16 @@ export function compareByRelease(order: SortOrder): (a: IProject, b: IProject) =
 }
 
 /** Pinned projects first, then by release date. */
-export function sortProjects(projects: readonly IProject[], order: SortOrder): IProject[] {
+export function compareProjects(order: SortOrder): (a: IProject, b: IProject) => number {
   const byRelease = compareByRelease(order);
-  return [...projects].sort((a, b) => {
+  return (a, b) => {
     const pinnedDiff = Number(Boolean(b.pinned)) - Number(Boolean(a.pinned));
     return pinnedDiff !== 0 ? pinnedDiff : byRelease(a, b);
-  });
+  };
+}
+
+export function sortProjects(projects: readonly IProject[], order: SortOrder): IProject[] {
+  return [...projects].sort(compareProjects(order));
 }
 
 export function selectPinnedFrames(projects: readonly IProject[]): IFramedProject[] {
