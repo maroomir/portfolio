@@ -1,4 +1,5 @@
-import type { ReactNode } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
+import { createPortal } from 'react-dom';
 import styled from '@emotion/styled';
 import { keyframes } from '@emotion/react';
 import { tokens } from '@/theme/tokens';
@@ -9,22 +10,72 @@ interface IModalProps {
   readonly onClose: () => void;
   readonly header: ReactNode;
   readonly children: ReactNode;
+  /** Focus target after the dialog closes; defaults to whatever was focused when it opened. */
+  readonly returnFocusTo?: HTMLElement | null;
 }
 
-/** Centered dialog over a blurred scrim; clicking the scrim or the ✕ closes it. Escape handling is the caller's. */
-export function Modal({ label, onClose, header, children }: IModalProps) {
-  return (
-    <Overlay role="dialog" aria-modal="true" aria-label={label} onClick={onClose}>
-      <Panel onClick={(event) => event.stopPropagation()}>
+/** App root made inert while a dialog is open so Tab and screen readers stay inside the dialog. */
+const APP_ROOT_ID = 'root';
+
+const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * Accessible dialog rendered into <body> over a blurred scrim.
+ * - Focus moves to the close button on open, Tab cycles inside, focus is restored on close
+ * - The app root is `inert` while open
+ * - Clicking the scrim or ✕ closes; Escape handling is the caller's
+ */
+export function Modal({ label, onClose, header, children, returnFocusTo }: IModalProps) {
+  const panelRef = useRef<HTMLDivElement>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    const previouslyFocused = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const restoreTarget = returnFocusTo ?? previouslyFocused;
+    const appRoot = document.getElementById(APP_ROOT_ID);
+    appRoot?.setAttribute('inert', '');
+    closeButtonRef.current?.focus();
+
+    return () => {
+      appRoot?.removeAttribute('inert');
+      restoreTarget?.focus();
+    };
+    // Run once per open; the restore target is captured at open time.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const trapTab = (event: React.KeyboardEvent) => {
+    if (event.key !== 'Tab' || !panelRef.current) {
+      return;
+    }
+    const focusable = [...panelRef.current.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)];
+    if (focusable.length === 0) {
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  };
+
+  return createPortal(
+    <Overlay role="dialog" aria-modal="true" aria-label={label} onClick={onClose} onKeyDown={trapTab}>
+      <Panel ref={panelRef} onClick={(event) => event.stopPropagation()}>
         <Header>
           <div>{header}</div>
-          <CloseButton type="button" aria-label="모달 닫기" onClick={onClose}>
+          <CloseButton ref={closeButtonRef} type="button" aria-label="모달 닫기" onClick={onClose}>
             ✕
           </CloseButton>
         </Header>
         <Body>{children}</Body>
       </Panel>
-    </Overlay>
+    </Overlay>,
+    document.body,
   );
 }
 

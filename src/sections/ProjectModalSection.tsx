@@ -8,5 +8,12 @@ export function ProjectModalSection() {
   if (!modal.selected) {
     return null;
   }
-  return <ProjectModal project={modal.selected} onClose={modal.close} noAttachmentText={content.projects.noAttachment} />;
+  return (
+    <ProjectModal
+      project={modal.selected}
+      onClose={modal.close}
+      noAttachmentText={content.projects.noAttachment}
+      returnFocusTo={modal.returnFocusTo}
+    />
+  );
 }
