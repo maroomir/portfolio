@@ -4,8 +4,6 @@ import { ControlButton } from '@/ui/Control';
 import { useProjectExplorer } from '@/features/project-explorer/useProjectExplorer';
 import { mq } from '@/theme/mq';
 
-export type IProjectActiveFiltersSectionProps = Record<string, never>;
-
 /** Chips for the URL agency/tech filters and the toggled tech tags, plus a clear button. */
 export function ProjectActiveFiltersSection() {
   const { filter } = useProjectExplorer();
