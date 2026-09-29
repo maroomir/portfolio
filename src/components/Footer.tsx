@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { portfolio, content } from "@/data/repository";
+import { HudAnchor } from "@/ui/Link";
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -15,9 +16,9 @@ export default function Footer() {
         </ExposureMeter>
         <Row>
           <span>© {year} {owner}</span>
-          <Link href={content.site.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub 프로필로 이동">
+          <HudAnchor href={content.site.githubUrl} target="_blank" rel="noopener noreferrer" aria-label="GitHub 프로필로 이동">
             {content.site.githubLabel}
-          </Link>
+          </HudAnchor>
         </Row>
       </Inner>
     </Wrapper>
@@ -59,13 +60,4 @@ const Row = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-`;
-
-const Link = styled.a`
-  color: var(--accent);
-  transition: color 0.2s ease;
-
-  &:hover {
-    color: var(--text);
-  }
 `;

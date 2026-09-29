@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
-import { ThemeProvider as EmotionThemeProvider, useTheme } from '@emotion/react';
+import { ThemeProvider as EmotionThemeProvider } from '@emotion/react';
 import { GlobalStyles } from './GlobalStyles';
-import { tokens, type ITokens } from './tokens';
+import { tokens } from './tokens';
 
 const theme = { tokens };
 
@@ -13,9 +13,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       {children}
     </EmotionThemeProvider>
   );
-}
-
-/** Typed access to the tokens from any component or hook under ThemeProvider. */
-export function useTokens(): ITokens {
-  return useTheme().tokens;
 }

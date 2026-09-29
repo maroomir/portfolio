@@ -1,129 +1,111 @@
 import { useMemo } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import styled from "@emotion/styled";
-import { Link, useNavigate } from "react-router-dom";
-import Button from "@/components/Button";
+import { useNavigate } from "react-router-dom";
+import Button from "@/ui/Button";
 import { portfolio, content } from "@/data/repository";
 import Seo from "@/components/Seo";
 import Timeline from "@/components/Timeline";
-import { HudLabel, MonoText } from "@/styles/hud";
+import { HudLabel, MonoText, Readout, ReadoutBigValue, ReadoutList, ReadoutValue } from "@/ui/Hud";
+import { PageShell } from "@/ui/PageShell";
+import { Section, SectionHeader } from "@/ui/Section";
+import { Card, CardDescription, CardGrid, CardMeta, CardTitle } from "@/ui/Card";
+import { HudLink } from "@/ui/Link";
 import { rankTop } from "@/model/collections";
 import { countByFramework, countByLanguage, selectPinnedFrames } from "@/model/project";
 import { findEducation, findLatestJob } from "@/model/career";
-
-const READOUT_LIMIT = 3;
+import { mq } from "@/theme/mq";
+import { tokens } from "@/theme/tokens";
 
 function Home() {
   const { home, about, projects } = portfolio;
   const copy = content.home;
   const navigate = useNavigate();
+  const { readoutLimit, typewriter } = tokens.behavior;
 
-  const topLanguages = useMemo(() => rankTop(countByLanguage(projects), READOUT_LIMIT), [projects]);
-  const topFrameworks = useMemo(() => rankTop(countByFramework(projects), READOUT_LIMIT), [projects]);
+  const topLanguages = useMemo(() => rankTop(countByLanguage(projects), readoutLimit), [projects, readoutLimit]);
+  const topFrameworks = useMemo(() => rankTop(countByFramework(projects), readoutLimit), [projects, readoutLimit]);
   const currentJob = useMemo(() => findLatestJob(about.resume), [about.resume]);
   const education = useMemo(() => findEducation(about.resume), [about.resume]);
   const pinnedFrames = useMemo(() => selectPinnedFrames(projects), [projects]);
 
   return (
-    <Container>
+    <PageShell>
       <Seo title={`${copy.seoTitle} | ${home.name} ${content.site.titleSuffix}`} description={home.bio} />
-      <Inner>
-        <HeroGrid>
-          <Readouts aria-label="프로필 요약">
-            <Readout><HudLabel>{copy.readouts.projects}</HudLabel><BigValue>{projects.length}</BigValue></Readout>
-            <Readout><HudLabel>{copy.readouts.lang}</HudLabel><Value>{topLanguages.join(" · ")}</Value></Readout>
-            <Readout><HudLabel>{copy.readouts.stack}</HudLabel><Value>{topFrameworks.join(" · ")}</Value></Readout>
-          </Readouts>
+      <HeroGrid>
+        <HeroReadouts aria-label="프로필 요약">
+          <Readout><HudLabel>{copy.readouts.projects}</HudLabel><ReadoutBigValue>{projects.length}</ReadoutBigValue></Readout>
+          <Readout><HudLabel>{copy.readouts.lang}</HudLabel><ReadoutValue>{topLanguages.join(" · ")}</ReadoutValue></Readout>
+          <Readout><HudLabel>{copy.readouts.stack}</HudLabel><ReadoutValue>{topFrameworks.join(" · ")}</ReadoutValue></Readout>
+        </HeroReadouts>
 
-          <Hero>
-            <HudLabel>{copy.subjectLabel}</HudLabel>
-            <FocusBox>
-              <h1>{home.name}</h1>
-            </FocusBox>
-            <Bio>{home.bio}</Bio>
-            <TypeEffect aria-live="polite">
-              <Typewriter
-                words={home.keywords}
-                loop={0}
-                cursor
-                cursorStyle="_"
-                typeSpeed={70}
-                deleteSpeed={40}
-                delaySpeed={1500}
-              />
-            </TypeEffect>
-            <Button onClick={() => navigate("/projects")}>{copy.ctaLabel}</Button>
-          </Hero>
+        <Hero>
+          <HudLabel>{copy.subjectLabel}</HudLabel>
+          <FocusBox>
+            <h1>{home.name}</h1>
+          </FocusBox>
+          <Bio>{home.bio}</Bio>
+          <TypeEffect aria-live="polite">
+            <Typewriter
+              words={home.keywords}
+              loop={0}
+              cursor
+              cursorStyle="_"
+              typeSpeed={typewriter.typeSpeed}
+              deleteSpeed={typewriter.deleteSpeed}
+              delaySpeed={typewriter.delaySpeed}
+            />
+          </TypeEffect>
+          <Button onClick={() => navigate("/projects")}>{copy.ctaLabel}</Button>
+        </Hero>
 
-          <Readouts $align="right" aria-label="현재 소속">
-            {currentJob && <Readout><HudLabel>{copy.readouts.current}</HudLabel><Value>{currentJob.company} · {currentJob.department}</Value></Readout>}
-            {education && <Readout><HudLabel>{copy.readouts.edu}</HudLabel><Value>{education.company} · {education.role}</Value></Readout>}
-            <Readout><HudLabel>{copy.readouts.mode}</HudLabel><Value $accent>{copy.modeValue}</Value></Readout>
-          </Readouts>
-        </HeroGrid>
+        <HeroReadouts $align="right" aria-label="현재 소속">
+          {currentJob && <Readout><HudLabel>{copy.readouts.current}</HudLabel><ReadoutValue>{currentJob.company} · {currentJob.department}</ReadoutValue></Readout>}
+          {education && <Readout><HudLabel>{copy.readouts.edu}</HudLabel><ReadoutValue>{education.company} · {education.role}</ReadoutValue></Readout>}
+          <Readout><HudLabel>{copy.readouts.mode}</HudLabel><ReadoutValue $accent>{copy.modeValue}</ReadoutValue></Readout>
+        </HeroReadouts>
+      </HeroGrid>
 
-        <Timeline items={about.resume} projects={projects} />
+      <Timeline items={about.resume} projects={projects} />
 
-        <Section>
-          <SectionHeader>
-            <HudLabel>{copy.pinnedLabel} · {String(pinnedFrames.length).padStart(2, "0")} / {projects.length}</HudLabel>
-            <AllLink to="/projects">{copy.allProjectsLabel}</AllLink>
-          </SectionHeader>
-          <FrameGrid>
-            {pinnedFrames.map(({ project, frameNo }) => (
-              <Frame key={project.name}>
-                <FrameMeta>
-                  <span>FRAME {String(frameNo).padStart(3, "0")}</span>
-                  <span>{project.release.date}</span>
-                </FrameMeta>
-                <h3>{project.title}</h3>
-                <FrameDescription>{project.description}</FrameDescription>
-                <MonoText>{[project.ability.language, ...project.ability.framework].join(" · ")}</MonoText>
-              </Frame>
-            ))}
-          </FrameGrid>
-        </Section>
-      </Inner>
-    </Container>
+      <Section>
+        <SectionHeader>
+          <HudLabel>{copy.pinnedLabel} · {String(pinnedFrames.length).padStart(2, "0")} / {projects.length}</HudLabel>
+          <HudLink to="/projects">{copy.allProjectsLabel}</HudLink>
+        </SectionHeader>
+        <CardGrid $minWidth={tokens.layout.pinnedCardMinWidth}>
+          {pinnedFrames.map(({ project, frameNo }) => (
+            <Card key={project.name}>
+              <CardMeta>
+                <span>FRAME {String(frameNo).padStart(3, "0")}</span>
+                <span>{project.release.date}</span>
+              </CardMeta>
+              <CardTitle>{project.title}</CardTitle>
+              <CardDescription>{project.description}</CardDescription>
+              <MonoText>{[project.ability.language, ...project.ability.framework].join(" · ")}</MonoText>
+            </Card>
+          ))}
+        </CardGrid>
+      </Section>
+    </PageShell>
   );
 }
 
 export default Home
 
-const Container = styled.div`
-  width: 100%;
-  min-height: 100vh;
-  padding: calc(var(--nav-height) + clamp(2rem, 5vw, 4rem)) 0 clamp(2rem, 4vw, 3rem);
-`;
-
-const Inner = styled.div`
-  width: 100%;
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 0 clamp(1rem, 4vw, 2.5rem);
-  display: flex;
-  flex-direction: column;
-  gap: clamp(3rem, 6vw, 5rem);
-`;
-
 const HeroGrid = styled.div`
   display: grid;
-  grid-template-columns: 200px minmax(0, 1fr) 200px;
+  grid-template-columns: ${tokens.layout.heroSideColumn}px minmax(0, 1fr) ${tokens.layout.heroSideColumn}px;
   gap: 2rem;
   align-items: center;
 
-  @media (max-width: 1024px) {
+  ${mq.lg} {
     grid-template-columns: 1fr;
   }
 `;
 
-const Readouts = styled.div<{ $align?: "right" }>`
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  text-align: ${(p) => (p.$align === "right" ? "right" : "left")};
-
-  @media (max-width: 1024px) {
+const HeroReadouts = styled(ReadoutList)`
+  ${mq.lg} {
     order: 1;
     flex-direction: row;
     flex-wrap: wrap;
@@ -131,26 +113,6 @@ const Readouts = styled.div<{ $align?: "right" }>`
     gap: 1rem 2rem;
     text-align: center;
   }
-`;
-
-const Readout = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-`;
-
-const Value = styled.div<{ $accent?: boolean }>`
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.06em;
-  color: ${(p) => (p.$accent ? "var(--accent)" : "var(--text)")};
-`;
-
-const BigValue = styled.div`
-  font-family: var(--font-mono);
-  font-size: 1.75rem;
-  color: var(--text);
-  line-height: 1.2;
 `;
 
 const Hero = styled.section`
@@ -161,7 +123,7 @@ const Hero = styled.section`
   text-align: center;
 `;
 
-/* 이름을 감싸는 포커스 박스: 네 모서리 브래킷 */
+/* Focus box around the name: four corner brackets */
 const FocusBox = styled.div`
   position: relative;
   padding: clamp(1.25rem, 3vw, 2.25rem) clamp(1.5rem, 5vw, 4rem);
@@ -170,8 +132,8 @@ const FocusBox = styled.div`
   h1::before, h1::after {
     content: "";
     position: absolute;
-    width: 28px;
-    height: 28px;
+    width: ${tokens.size.focusBracket}px;
+    height: ${tokens.size.focusBracket}px;
     border: 0 solid var(--text);
   }
   &::before { top: 0; left: 0; border-top-width: 2px; border-left-width: 2px; }
@@ -206,69 +168,4 @@ const TypeEffect = styled.div`
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--accent);
-`;
-
-const Section = styled.section`
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-`;
-
-const SectionHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 1rem;
-`;
-
-const AllLink = styled(Link)`
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  letter-spacing: 0.1em;
-  color: var(--accent);
-
-  &:hover {
-    color: var(--text);
-  }
-`;
-
-const FrameGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-`;
-
-const Frame = styled.article`
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  padding: 1.4rem;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  transition: border-color 160ms ease;
-
-  &:hover {
-    border-color: var(--accent);
-  }
-
-  h3 {
-    font-family: var(--font-body);
-    font-size: 1.1rem;
-  }
-`;
-
-const FrameMeta = styled.div`
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.06em;
-  color: var(--accent);
-`;
-
-const FrameDescription = styled.p`
-  flex-grow: 1;
-  font-size: 0.85rem;
-  line-height: 1.55;
-  color: var(--muted);
 `;
