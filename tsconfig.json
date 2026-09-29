@@ -12,12 +12,7 @@
     /* Path */
     "baseUrl": "./src",
     "paths": {
-      "@/assets/*": ["./assets/*"],
-      "@/components/*": ["./components/*"],
-      "@/pages/*": ["./pages/*"],
-      "@/routes/*": ["./routes/*"],
-      "@/data/*": ["./data/*"],
-      "@/styles/*": ["./styles/*"]
+      "@/*": ["./*"]
     },
 
     /* Bundler mode */

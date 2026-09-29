@@ -25,6 +25,7 @@ const globalStyles = css`
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     --nav-height: 64px;
     --max-width: 1200px;
+    color-scheme: dark;
   }
 
   * {
@@ -43,6 +44,7 @@ const globalStyles = css`
   }
 
   body {
+    min-width: 320px;
     font-family: var(--font-body);
     color: var(--text);
     line-height: 1.6;
@@ -62,6 +64,7 @@ const globalStyles = css`
 
   a {
     text-decoration: none;
+    font-weight: 500;
     color: inherit;
   }
 
