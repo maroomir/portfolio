@@ -14,6 +14,7 @@ npm test         # 셀렉터·리듀서 단위 테스트 + JSON 스키마 검증
 | 바꾸고 싶은 것 | 파일 | 예 |
 |---|---|---|
 | 이름·소개·경력·프로젝트 | `src/data/data.json` | 프로젝트 추가, `pinned: true`로 홈에 노출 |
+| 프로젝트 모달 이미지 | `public/projects/<프로젝트>/` + `data.json` → `projects[].attachments` | `{ "src": "/projects/brats3d/unet.png", "caption": "U-Net 모델 구조" }` |
 | HUD 문구·라벨·링크 | `src/data/content.json` | `navbar.rec`, `home.modeValue`, `site.githubUrl` |
 | 색·서체·간격·크기 | `src/theme/tokens.ts` → `color`, `font`, `space`, `size` | 강조색 `accent`, 네비 높이 `navHeight` |
 | 반응형 분기점 | `src/theme/tokens.ts` → `breakpoint` | `sm 600 / md 900 / lg 1024` |
@@ -30,6 +31,7 @@ npm test         # 셀렉터·리듀서 단위 테스트 + JSON 스키마 검증
 - `projects[].release.date`는 `YYYY/MM`
 - `projects[].release.status`는 `public | private`
 - `projects[].name`은 React key로 쓰이므로 고유해야 함
+- `projects[].attachments[]`는 `{ src, caption? }`. 이미지는 `public/projects/<프로젝트>/`에 두고 `src`는 `/projects/...` 절대 경로로 적음. `caption`은 alt 텍스트로도 쓰임
 - `about.resume[].period`는 `[시작, 끝]` 두 개
 
 ### 페이지 구성 예
