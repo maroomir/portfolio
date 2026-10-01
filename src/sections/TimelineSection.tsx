@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import styled from "@emotion/styled";
 import { portfolio, content } from "@/data/repository";
-import { sortByStart } from "@/model/career";
+import { careerSpan, sortByStart } from "@/model/career";
 import { groupByAgency } from "@/model/project";
 import { HudLabel } from "@/ui/Hud";
 import { mq } from "@/theme/mq";
@@ -22,14 +22,13 @@ export function TimelineSection({ showProjects }: ITimelineSectionProps) {
   const sorted = useMemo(() => sortByStart(about.resume), [about.resume]);
   const projectsByCompany = useMemo(() => groupByAgency(projects), [projects]);
 
-  const startYear = sorted[0]?.period[0]?.slice(0, 4);
-  const endYear = sorted[sorted.length - 1]?.period[1]?.slice(0, 4);
+  const span = careerSpan(about.resume);
 
   return (
     <Wrapper aria-label="경력 타임라인">
       <Header>
         <HudLabel>{content.timeline.label}</HudLabel>
-        <HudLabel>{startYear} ———— {endYear}</HudLabel>
+        <HudLabel>{span?.start} ———— {span?.end}</HudLabel>
       </Header>
       <Ruler $count={sorted.length}>
         {sorted.map((it, idx) => {
