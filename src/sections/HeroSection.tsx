@@ -41,7 +41,17 @@ function useReadouts(): Partial<Record<ReadoutKey, IReadoutView>> {
       lang: { label: copy.readouts.lang, value: rankTop(countByLanguage(projects), readoutLimit).join(' · ') },
       stack: { label: copy.readouts.stack, value: rankTop(countByFramework(projects), readoutLimit).join(' · ') },
       current: currentJob && { label: copy.readouts.current, value: `${currentJob.company} · ${currentJob.department}` },
-      edu: education && { label: copy.readouts.edu, value: `${education.company} · ${education.role}` },
+      edu: education && {
+        label: copy.readouts.edu,
+        // Company and role on separate lines: one line is too wide for the side column and wraps mid-word.
+        value: (
+          <>
+            {education.company}
+            <br />
+            {education.role}
+          </>
+        ),
+      },
       mode: { label: copy.readouts.mode, value: copy.modeValue, accent: true },
     };
   }, [about.resume, projects, copy, readoutLimit]);
