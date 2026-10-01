@@ -804,9 +804,9 @@
       }
     },
     {
-      "name": "yoonimage",
-      "title": "이미지 처리 유틸리티 라이브러리",
-      "description": "컬러 변환·필터·간단한 전처리 기능을 제공하는 C++ 영상 유틸 라이브러리",
+      "name": "yoonvision",
+      "title": "비전·카메라 라이브러리",
+      "description": "이미지 처리, 카메라 스트림 추상화, HTTP 영상 스트리밍과 웹 뷰어를 제공하는 CMake 기반 C++ 비전 라이브러리",
       "agency": {
         "name": "maroomir",
         "url": "https://github.com/maroomir/"
@@ -814,12 +814,12 @@
       "category": "Library",
       "ability": {
         "language": "C++",
-        "framework": []
+        "framework": ["CMake"]
       },
       "release": {
         "date": "2023/12",
-        "status": "private",
-        "link": ""
+        "status": "public",
+        "link": "https://github.com/maroomir/yoonvision"
       }
     },
     {
@@ -963,22 +963,23 @@
       }
     },
     {
-      "name": "Picktion",
-      "title": "AI 픽션 작성 도구",
-      "description": "React, TypeScript로 개발한 AI 기반 픽션 작성 지원 웹 애플리케이션",
+      "name": "Storyboard",
+      "title": "AI 장편 소설 작성 도구",
+      "description": "작품 설정부터 씬 단위 생성·검수·원고 조립까지 장편 소설 집필을 단계별로 돕는 CLI·VS Code 확장·데스크톱 앱",
       "ability": {
         "language": "Typescript",
         "framework": [
           "React",
           "Vite",
-          "Electron"
+          "Electron",
+          "VS Code Extension"
         ]
       },
-      "category": "Web Site",
+      "category": "Web Application",
       "release": {
         "date": "2026/01",
         "status": "public",
-        "link": "https://picktion.vercel.app/"
+        "link": "https://github.com/maroomir/storyboard"
       }
     },
     {
@@ -989,11 +990,30 @@
         "language": "C++",
         "framework": ["ROS2", "Linux", "OpenCV", "Onnx"]
       },
-      "category": "Web Site",
+      "category": "Robotics Vision",
       "release": {
         "date": "2026/03",
+        "status": "private",
+        "link": ""
+      }
+    },
+    {
+      "name": "Remote AI Coder",
+      "title": "텔레그램 원격 AI 코딩 도구",
+      "description": "텔레그램 메시지로 로컬 개발 머신의 Claude Code·Codex·Gemini·Ollama를 실행하고, 요청별 Git worktree에서 작업한 결과를 브랜치로 커밋해 알려주는 도구",
+      "ability": {
+        "language": "Python",
+        "framework": [
+          "FastAPI",
+          "Pydantic",
+          "Telegram Bot API"
+        ]
+      },
+      "category": "Web Application",
+      "release": {
+        "date": "2026/04",
         "status": "public",
-        "link": "https://picktion.vercel.app/"
+        "link": "https://github.com/maroomir/remote-coder"
       }
     }
   ]
