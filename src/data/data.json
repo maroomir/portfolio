@@ -141,7 +141,17 @@
         "date": "2025/06",
         "status": "public",
         "link": "https://github.com/maroomir/portfolio"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/portfolio/home.png",
+          "caption": "뷰파인더 HUD 테마의 홈 화면"
+        },
+        {
+          "src": "/projects/portfolio/projects.png",
+          "caption": "필터·검색이 있는 프로젝트 목록 화면"
+        }
+      ]
     },
     {
       "name": "Mobile wedding invitation",
@@ -161,7 +171,17 @@
         "date": "2025/03",
         "status": "public",
         "link": "https://yscj-mobile-wedding-invitation.vercel.app/"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/mobile-wedding-invitation/demo.gif",
+          "caption": "모바일 청첩장 스크롤 데모"
+        },
+        {
+          "src": "/projects/mobile-wedding-invitation/thumbnail.jpeg",
+          "caption": "청첩장 대표 썸네일 사진"
+        }
+      ]
     },
     {
       "name": "LCVision",
@@ -358,7 +378,17 @@
         "date": "2021/01",
         "status": "public",
         "link": "https://github.com/maroomir/YoonFactory"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/yoonfactory/cognex-inspection.png",
+          "caption": "Cognex 검사 설정 화면"
+        },
+        {
+          "src": "/projects/yoonfactory/image-viewer.png",
+          "caption": "RealSense 깊이 영상 뷰어"
+        }
+      ]
     },
     {
       "name": "YoonFactory.Java",
@@ -434,7 +464,17 @@
         "date": "2021/06",
         "status": "public",
         "link": "https://github.com/maroomir/BraTS3D"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/brats3d/nnunet.png",
+          "caption": "3D nnU-Net 모델 구조"
+        },
+        {
+          "src": "/projects/brats3d/unet.png",
+          "caption": "U-Net 모델 구조"
+        }
+      ]
     },
     {
       "name": "YoonFactory.Net",
@@ -534,7 +574,17 @@
         "date": "2021/12",
         "status": "public",
         "link": "https://github.com/maroomir/ScoopLearner"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/scooplearner/concept.png",
+          "caption": "아이스크림 정량 스쿱 솔루션 개념도"
+        },
+        {
+          "src": "/projects/scooplearner/results.png",
+          "caption": "DDPG 학습 전후 스쿱 성능 비교"
+        }
+      ]
     },
     {
       "name": "RobotArmSimulator",
@@ -553,7 +603,17 @@
         "date": "2022/03",
         "status": "public",
         "link": "https://github.com/maroomir/RobotArmSimulator"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/robotarmsimulator/gripper-move.gif",
+          "caption": "티칭 모드 관절·그리퍼 조작 데모"
+        },
+        {
+          "src": "/projects/robotarmsimulator/teaching-director.png",
+          "caption": "티칭 모드 로봇 팔 자세 화면"
+        }
+      ]
     },
     {
       "name": "RobotArmScooper",
@@ -573,7 +633,13 @@
         "date": "2022/04",
         "status": "public",
         "link": "https://github.com/maroomir/RobotArmScooper"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/robotarmscooper/figure.png",
+          "caption": "Unity 병렬 스쿱 시뮬레이션 환경"
+        }
+      ]
     },
     {
       "name": "MetaArtGallery",
@@ -592,7 +658,17 @@
         "date": "2022/10",
         "status": "public",
         "link": "https://github.com/maroomir/MetaArtGallery"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/metaartgallery/meshshot.jpg",
+          "caption": "갤러리에 전시된 3D 작품과 캐릭터"
+        },
+        {
+          "src": "/projects/metaartgallery/overview.png",
+          "caption": "메타버스 갤러리·커버플로우 기능 소개"
+        }
+      ]
     },
     {
       "name": "MetaArtServer",
@@ -611,7 +687,17 @@
         "date": "2022/11",
         "status": "public",
         "link": "https://github.com/maroomir/MetaArtServer/tree/dalle"
-      }
+      },
+      "attachments": [
+        {
+          "src": "/projects/metaartserver/architecture.png",
+          "caption": "DALL-E·NeRF 백엔드 시스템 구조도"
+        },
+        {
+          "src": "/projects/metaartserver/dalle-colab-demo.gif",
+          "caption": "Colab에서 DALL-E 이미지 생성 요청 데모"
+        }
+      ]
     },
     {
       "name": "MetaArtClient",

@@ -51,6 +51,8 @@ src/
     GlobalStyles.tsx, ThemeProvider.tsx, useTokens.ts, emotion.d.ts
   lib/                      useMediaQuery, scroll 헬퍼
   pages/NotFound.tsx        설정 밖 고정 페이지
+public/
+  projects/<프로젝트>/      프로젝트 모달 첨부 이미지(data.json attachments[].src = /projects/...)
 ```
 
 ★ = 사용자 편집 진입점. 편집 가이드는 README.md 참고.
