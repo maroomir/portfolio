@@ -78,7 +78,7 @@ const AttachmentImage = styled.img`
   display: block;
   width: 100%;
   max-height: 240px;
-  object-fit: cover;
+  object-fit: contain;
 `;
 
 const AttachmentCaption = styled.figcaption`
