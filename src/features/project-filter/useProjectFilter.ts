@@ -2,7 +2,7 @@ import { useCallback, useMemo, useReducer } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import type { IProject } from '@/data/schema';
 import {
-  compareProjects,
+  compareByRelease,
   matchesCriteria,
   withFrameNumbers,
   type IFramedProject,
@@ -71,7 +71,7 @@ export function useProjectFilter(
 
   const framed = useMemo(() => withFrameNumbers(projects), [projects]);
   const visible = useMemo(() => {
-    const compare = compareProjects(state.sort);
+    const compare = compareByRelease(state.sort);
     return [...framed]
       .sort((a, b) => compare(a.project, b.project))
       .filter((frame) => matchesCriteria(frame.project, criteria));

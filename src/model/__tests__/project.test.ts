@@ -39,9 +39,10 @@ describe('project ordering', () => {
     expect(releaseDateKey(makeProject({ name: 'x', release: { date: '2021/03', status: 'public' } }))).toBe(202103);
   });
 
-  it('sorts pinned first then by release date', () => {
-    expect(names(sortProjects(PROJECTS, 'newest'))).toEqual(['delta', 'beta', 'alpha', 'gamma']);
-    expect(names(sortProjects(PROJECTS, 'oldest'))).toEqual(['beta', 'delta', 'gamma', 'alpha']);
+  it('sorts by release date regardless of pinned', () => {
+    const projects = [...PROJECTS, makeProject({ name: 'epsilon', release: { date: '2025/02', status: 'public' } })];
+    expect(names(sortProjects(projects, 'newest'))).toEqual(['epsilon', 'delta', 'beta', 'alpha', 'gamma']);
+    expect(names(sortProjects(projects, 'oldest'))).toEqual(['gamma', 'alpha', 'beta', 'delta', 'epsilon']);
   });
 
   it('selects pinned frames newest first with original frame numbers', () => {
