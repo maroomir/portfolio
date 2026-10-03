@@ -52,6 +52,7 @@ src/
   lib/                      useMediaQuery, scroll 헬퍼
   pages/NotFound.tsx        설정 밖 고정 페이지
 public/
+  favicon.svg               파비콘(뷰파인더 브래킷 + REC 점, 색은 tokens.ts와 수동 동기화)
   projects/<프로젝트>/      프로젝트 모달 첨부 이미지(data.json attachments[].src = /projects/...)
 ```
 
