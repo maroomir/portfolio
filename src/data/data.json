@@ -1071,6 +1071,10 @@
       "name": "HumanoidVision",
       "title": "휴머노이드 비전 스택",
       "description": "카메라 캡처·객체 인식·물체 위치 추정 등 휴머노이드의 눈 역할을 수행하는 비전 스택",
+      "agency": {
+        "name": "삼성전자",
+        "url": "https://www.samsung.com/sec/"
+      },
       "ability": {
         "language": "C++",
         "framework": ["ROS2", "Linux", "OpenCV", "Onnx"]
