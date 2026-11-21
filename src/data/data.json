@@ -1070,19 +1070,76 @@
     {
       "name": "HumanoidVision",
       "title": "휴머노이드 비전 스택",
-      "description": "카메라 캡처·객체 인식·물체 위치 추정 등 휴머노이드의 눈 역할을 수행하는 비전 스택",
+      "description": "카메라·LiDAR 입력부터 객체·마커 감지, 6D 포즈 추정, 센서 기록·재생, ROS2·웹 시각화까지 휴머노이드의 눈 역할을 수행하는 통합 비전 스택",
       "agency": {
         "name": "삼성전자",
         "url": "https://www.samsung.com/sec/"
       },
       "ability": {
         "language": "C++",
-        "framework": ["ROS2", "Linux", "OpenCV", "Onnx"]
+        "framework": ["ROS2", "Linux", "OpenCV", "Onnx", "TensorRT"]
       },
       "category": "Robotics Vision",
       "pinned": true,
       "release": {
         "date": "2026/03",
+        "status": "private",
+        "link": ""
+      }
+    },
+    {
+      "name": "HumanoidPerceptionBridge",
+      "title": "휴머노이드 작업 인지 브리지",
+      "description": "SLAM의 로봇 자세와 비전의 박스 관측을 결합해 작업 대상의 상대·월드 자세를 발행하고, 웹 UI로 박스·목적지 위치를 관리하는 ROS2 패키지",
+      "agency": {
+        "name": "삼성전자",
+        "url": "https://www.samsung.com/sec/"
+      },
+      "ability": {
+        "language": "C++",
+        "framework": ["ROS2", "Linux", "Eigen", "Three.js"]
+      },
+      "category": "ROS Application",
+      "release": {
+        "date": "2026/09",
+        "status": "private",
+        "link": ""
+      }
+    },
+    {
+      "name": "HumanoidBoxDetector",
+      "title": "휴머노이드 박스 검출 파이프라인",
+      "description": "카메라 영상에서 박스를 검출하고 6D 자세를 추정해 ROS2로 발행하는 GPU 추론 파이프라인과 독립 웹 뷰어",
+      "agency": {
+        "name": "삼성전자",
+        "url": "https://www.samsung.com/sec/"
+      },
+      "ability": {
+        "language": "C++",
+        "framework": ["ROS2", "Linux", "TensorRT", "CUDA", "Onnx", "MuJoCo"]
+      },
+      "category": "Robotics Vision",
+      "release": {
+        "date": "2026/11",
+        "status": "private",
+        "link": ""
+      }
+    },
+    {
+      "name": "HumanoidPerceptionAnalyzer",
+      "title": "휴머노이드 인지 로그 분석 도구",
+      "description": "녹화된 MCAP bag을 시계열로 재생하며 맵뷰·그래프·카메라 영상으로 인지 문제 상황을 재연하는 분석 웹 UI",
+      "agency": {
+        "name": "삼성전자",
+        "url": "https://www.samsung.com/sec/"
+      },
+      "ability": {
+        "language": "Python",
+        "framework": ["FastAPI", "MCAP", "Numpy"]
+      },
+      "category": "Web Application",
+      "release": {
+        "date": "2026/11",
         "status": "private",
         "link": ""
       }
