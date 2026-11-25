@@ -680,7 +680,7 @@
       },
       "category": "Deep Learning",
       "ability": {
-        "language": "python",
+        "language": "Python",
         "framework": ["dJango"]
       },
       "release": {
@@ -709,7 +709,7 @@
       },
       "category": "Deep Learning",
       "ability": {
-        "language": "python",
+        "language": "Python",
         "framework": ["Pytorch"]
       },
       "release": {
@@ -1088,6 +1088,25 @@
       }
     },
     {
+      "name": "Remote AI Coder",
+      "title": "텔레그램 원격 AI 코딩 도구",
+      "description": "텔레그램 메시지로 로컬 개발 머신의 Claude Code·Codex·Gemini·Ollama를 실행하고, 요청별 Git worktree에서 작업한 결과를 브랜치로 커밋해 알려주는 도구",
+      "ability": {
+        "language": "Python",
+        "framework": [
+          "FastAPI",
+          "Pydantic",
+          "Telegram Bot API"
+        ]
+      },
+      "category": "Web Application",
+      "release": {
+        "date": "2026/04",
+        "status": "public",
+        "link": "https://github.com/maroomir/remote-coder"
+      }
+    },
+    {
       "name": "HumanoidPerceptionBridge",
       "title": "휴머노이드 작업 인지 브리지",
       "description": "SLAM의 로봇 자세와 비전의 박스 관측을 결합해 작업 대상의 상대·월드 자세를 발행하고, 웹 UI로 박스·목적지 위치를 관리하는 ROS2 패키지",
@@ -1142,25 +1161,6 @@
         "date": "2026/11",
         "status": "private",
         "link": ""
-      }
-    },
-    {
-      "name": "Remote AI Coder",
-      "title": "텔레그램 원격 AI 코딩 도구",
-      "description": "텔레그램 메시지로 로컬 개발 머신의 Claude Code·Codex·Gemini·Ollama를 실행하고, 요청별 Git worktree에서 작업한 결과를 브랜치로 커밋해 알려주는 도구",
-      "ability": {
-        "language": "Python",
-        "framework": [
-          "FastAPI",
-          "Pydantic",
-          "Telegram Bot API"
-        ]
-      },
-      "category": "Web Application",
-      "release": {
-        "date": "2026/04",
-        "status": "public",
-        "link": "https://github.com/maroomir/remote-coder"
       }
     }
   ]
